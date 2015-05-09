@@ -83,7 +83,6 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
         holder.bAuthour.setText(book.getAuthor());
 
 
-
         return convertView;
 
     }

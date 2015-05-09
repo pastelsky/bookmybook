@@ -2,106 +2,101 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_marginTop="4dp"
     android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
 
 
     >
 
     <RelativeLayout
+        android:id="@+id/bCard"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
         android:background="@drawable/card"
-      android:id="@+id/bCard"
 
 
         >
 
         <ImageView
+            android:id="@+id/bCover"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:src="@drawable/sample_cover"
-            android:id="@+id/bCover"
             android:layout_alignParentLeft="true"
             android:scaleType="fitXY"
-            />
+            android:src="@drawable/sample_cover" />
 
         <RelativeLayout
             android:id="@+id/bInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingTop="8dp"
-            android:paddingRight="16dp"
             android:layout_toRightOf="@id/bCover"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
 
-        <TextView
-            android:id="@+id/bName"
-            android:layout_width="wrap_content"
-            android:textColor="@color/grey_800"
-            android:textSize="14dp"
-            android:text="Sample"
-            android:textStyle="bold"
-            android:maxLines="2"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/bName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="Sample"
+                android:textColor="@color/grey_800"
+                android:textSize="14dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/bAuthor"
                 android:layout_width="wrap_content"
-                android:textColor="@color/grey_600"
-                android:textSize="14dp"
-                android:text="Author"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/bName"
-                android:layout_height="wrap_content" />
+                android:text="Author"
+                android:textColor="@color/grey_600"
+                android:textSize="14dp" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_below="@id/bInfo"
             android:layout_toRightOf="@id/bCover"
-            android:layout_alignParentBottom="true"
             android:background="@color/grey_200">
 
             <LinearLayout
+                android:id="@+id/priceBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingLeft="16dp"
                 android:layout_centerVertical="true"
-                android:id="@+id/priceBox"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
                     android:text="Starting from:"
                     android:textColor="@color/color2"
-                    />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="28sp"
                     android:text="\u20B9499"
                     android:textColor="@color/color2"
-                    />
+                    android:textSize="28sp" />
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/grey_300"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_toRightOf="@id/priceBox"
-                />
-
+                android:background="@color/grey_300" />
 
 
         </RelativeLayout>
