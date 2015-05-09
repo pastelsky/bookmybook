@@ -1,5 +1,8 @@
 package com.example.shubhamkanodia.bookmybook;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -23,9 +27,10 @@ import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-//wkwkwk
+
 public class MainActivity extends ActionBarActivity {
 
+    final String BOOKS_LABEL = "Test";
     ArrayList<BookItem> books = new ArrayList<BookItem>();
     BookListingAdapter bAdapter;
     AlphaInAnimationAdapter animationAdapter;
@@ -61,7 +66,10 @@ public class MainActivity extends ActionBarActivity {
 
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-                "Test");
+                BOOKS_LABEL);
+
+        if (!isNetworkOnline())
+            query.fromLocalDatastore();
 
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> bookList, ParseException e) {
@@ -72,10 +80,24 @@ public class MainActivity extends ActionBarActivity {
                 }
 
                 bAdapter = new BookListingAdapter(MainActivity.this, R.layout.book_item, books);
-
+                final List<ParseObject> bList = bookList;
                 animationAdapter = new AlphaInAnimationAdapter(bAdapter);
                 animationAdapter.setAbsListView(listView);
                 listView.setAdapter(animationAdapter);
+
+                // Release any objects previously pinned for this query.
+                ParseObject.unpinAllInBackground(BOOKS_LABEL, bookList, new DeleteCallback() {
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            // There was some error.
+                            return;
+                        }
+
+
+                        // Add the latest results for this query to the cache.
+                        ParseObject.pinAllInBackground(BOOKS_LABEL, bList);
+                    }
+                });
 
             }
         });
@@ -105,5 +127,25 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isNetworkOnline() {
+        boolean status = false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getNetworkInfo(0);
+            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
+                status = true;
+            } else {
+                netInfo = cm.getNetworkInfo(1);
+                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED)
+                    status = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return status;
+
     }
 }
