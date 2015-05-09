@@ -7,12 +7,11 @@ public class BookItem {
 
     private String book_name;
     private String book_author;
-private boolean isAnimated;
+    private boolean isAnimated;
 
 
     public BookItem(){
         isAnimated = true;
-
     }
 
     public void setAnimation(boolean a){
