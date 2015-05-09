@@ -5,19 +5,13 @@
     android:layout_marginBottom="4dp"
     android:layout_marginTop="4dp"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-
-
-    >
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:id="@+id/bCard"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
-        android:background="@drawable/card"
-
-
-        >
+        android:background="@drawable/card">
 
         <ImageView
             android:id="@+id/bCover"

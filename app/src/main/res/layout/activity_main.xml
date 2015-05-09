@@ -1,28 +1,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainrel"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_100"
-    android:id="@+id/mainrel"
- tools:context=".MainActivity">
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main_toolbar"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:minHeight="?attr/actionBarSize"
-    android:background="@color/color1" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color1"
+        android:minHeight="?attr/actionBarSize" />
 
     <ProgressBar
-        android:layout_centerInParent="true"
         android:id="@+id/progress_horizontal"
-        android:indeterminate="true"
-        android:minHeight="34dip"
-        android:maxHeight="34dip"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
         android:indeterminateTint="@color/color2"
-        android:layout_height="wrap_content"/>
-
+        android:maxHeight="34dip"
+        android:minHeight="34dip" />
 
 
     <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
@@ -32,10 +32,10 @@
         android:layout_marginTop="60dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         fab:button_color="@color/color3"
 
         />
@@ -46,11 +46,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        fab:image="@mipmap/add_book"
+        android:layout_marginRight="@dimen/fab_margin"
         fab:button_color="@color/color3"
-        fab:show_animation="@anim/fab_roll_from_down"
-        />
+        fab:image="@mipmap/add_book"
+        fab:show_animation="@anim/fab_roll_from_down" />
 
 </RelativeLayout>
