@@ -23,7 +23,7 @@ import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//this is so crazy man
 public class MainActivity extends ActionBarActivity {
 
     ArrayList<BookItem> books = new ArrayList<BookItem>();
