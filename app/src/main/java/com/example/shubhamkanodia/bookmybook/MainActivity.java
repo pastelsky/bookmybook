@@ -14,10 +14,13 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
@@ -33,6 +36,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +48,8 @@ public class MainActivity extends ActionBarActivity {
     ArrayList<BookItem> books = new ArrayList<BookItem>();
     BookListingAdapter bAdapter;
     AlphaInAnimationAdapter animationAdapter;
+    RelativeLayout mainrel;
+    ActionButton addBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,56 +59,24 @@ public class MainActivity extends ActionBarActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-//        toolbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                if (Build.VERSION.SDK_INT >= 16) {
-//                    toolbar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                } else {
-//                    toolbar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-//                }
-//                toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-//            }
-//        });
+         mainrel = (RelativeLayout) findViewById(R.id.mainrel);
+         addBook = (ActionButton) findViewById(R.id.add_book);
 
+         final ListView listView = (ListView) findViewById(R.id.dynamiclistview);
 
-
-
-        final ListView listView = (ListView) findViewById(R.id.dynamiclistview);
-
-        listView.setOnScrollListener(new ListView.OnScrollListener() {
-            int mLastFirstVisibleItem = 0;
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {   }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (view.getId() == listView.getId()) {
-                    final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
-
-                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-                        toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                        listView.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-
-
-                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                        toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                        listView.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-
-                    }
-
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                }
-            }
-        });
+        ScaleAnimation zoomButton = new ScaleAnimation(
+                0f, 1f, // Start and end values for the X axis scaling
+                0f, 1f, // Start and end values for the Y axis scaling
+                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
+                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
+        zoomButton.setFillAfter(true); // Needed to keep the result of the animation
+        zoomButton.setDuration(700);
+        addBook.startAnimation(zoomButton);
 
 
         //Init already done  in Application.java
         ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-
-
 
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(

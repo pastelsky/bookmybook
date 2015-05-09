@@ -6,33 +6,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shubhamkanodia.bookmybook.R;
 import com.nhaarman.listviewanimations.util.Insertable;
 
 import java.util.ArrayList;
+
 import android.widget.ArrayAdapter;
+
 /**
  * Created by shubhamkanodia on 09/05/15.
  */
 
 
-public class BookListingAdapter extends ArrayAdapter<BookItem>  {
+public class BookListingAdapter extends ArrayAdapter<BookItem> {
 
 
     // declaring our ArrayList of items
     private ArrayList<BookItem> books;
-    private int lastPosition = -1;
+    boolean[] animationStates;
+
+    static class ViewHolder {
+        TextView bName;
+        TextView bAuthour;
+        ImageView bCover;
+        int position;
+    }
 
 
     public BookListingAdapter(Context context, int textViewResourceId, ArrayList<BookItem> objects) {
         super(context, textViewResourceId, objects);
+        animationStates = new boolean[objects.size()];
         this.books = objects;
     }
 
 	/*
-	 * we are overriding the getView method here - this is what defines how each
+     * we are overriding the getView method here - this is what defines how each
 	 * list item will look.
 	 */
 
@@ -40,42 +51,41 @@ public class BookListingAdapter extends ArrayAdapter<BookItem>  {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
+        ViewHolder holder;
 
+        if (convertView == null)
 
-
-
-        View v = convertView;
-
-        if (v == null) {
+        {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.book_item, null);
-        }
+            convertView = vi.inflate(R.layout.book_item, null);
+            holder = new ViewHolder();
+            holder.bName = (TextView) convertView.findViewById(R.id.bName);
+            holder.bAuthour = (TextView) convertView.findViewById(R.id.bAuthor);
+            convertView.setTag(holder);
+            if (!animationStates[position]) {
+                animationStates[position] = true;
+                Animation animationListView = AnimationUtils.loadAnimation(getContext(), R.anim.up_from_bottom);
+                animationListView.setStartOffset((position * 80));
+                convertView.startAnimation(animationListView);
 
-        BookItem p = getItem(position);
-
-        if (p != null) {
-            TextView tt1 = (TextView) v.findViewById(R.id.bName);
-            TextView tt2 = (TextView) v.findViewById(R.id.bAuthor);
-
-            if (tt1 != null) {
-                tt1.setText(p.getName());
-            }
-
-            if (tt2 != null) {
-                tt2.setText(p.getAuthor());
             }
 
 
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+
         }
 
-            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.up_from_bottom);
-            animation.setStartOffset((position * 80));
-            v.startAnimation(animation);
-            lastPosition = position;
+        BookItem book = getItem(position);
+
+        holder.bName.setText(book.getName());
+        holder.bAuthour.setText(book.getAuthor());
 
 
-        return v;
+
+        return convertView;
+
     }
 
 }
