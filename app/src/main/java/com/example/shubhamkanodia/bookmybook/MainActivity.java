@@ -23,7 +23,6 @@ import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-//sasdasd
 
 public class MainActivity extends ActionBarActivity {
 
