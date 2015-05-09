@@ -23,7 +23,7 @@ import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//sasdasd
 
 public class MainActivity extends ActionBarActivity {
 
@@ -41,10 +41,10 @@ public class MainActivity extends ActionBarActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        mainrel = (RelativeLayout) findViewById(R.id.mainrel);
-        addBook = (ActionButton) findViewById(R.id.add_book);
+         mainrel = (RelativeLayout) findViewById(R.id.mainrel);
+         addBook = (ActionButton) findViewById(R.id.add_book);
 
-        final ListView listView = (ListView) findViewById(R.id.dynamiclistview);
+         final ListView listView = (ListView) findViewById(R.id.dynamiclistview);
 
         ScaleAnimation zoomButton = new ScaleAnimation(
                 0f, 1f, // Start and end values for the X axis scaling
@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+
 
 
     @Override
