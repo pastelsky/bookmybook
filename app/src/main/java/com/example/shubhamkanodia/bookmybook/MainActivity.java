@@ -1,45 +1,27 @@
 package com.example.shubhamkanodia.bookmybook;
 
-import android.animation.ValueAnimator;
-import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -89,7 +71,6 @@ public class MainActivity extends ActionBarActivity {
                     BookItem toPush = new BookItem(book.getString("text"), book.getString("author"));
                     books.add(toPush);
                 }
-
 
                 bAdapter = new BookListingAdapter(MainActivity.this, R.layout.book_item, books);
 
