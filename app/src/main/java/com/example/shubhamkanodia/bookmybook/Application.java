@@ -1,7 +1,5 @@
 package com.example.shubhamkanodia.bookmybook;
 
-import android.support.v7.widget.Toolbar;
-
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
 
@@ -14,7 +12,6 @@ public class Application extends android.app.Application {
             ParseCrashReporting.enable(this);
 
         Parse.initialize(this, "0aUlwpoTCVRhQnmACWQ6SvmnE9huiT8HwJL6UMyG", "3HEKP2rsi16yjkbKDESI65qth7DTgoF18bZfN6Wu");
-
 
     }
 
