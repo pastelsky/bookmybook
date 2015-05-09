@@ -77,8 +77,10 @@ public class MainActivity extends ActionBarActivity {
                 animationAdapter = new AlphaInAnimationAdapter(bAdapter);
                 animationAdapter.setAbsListView(listView);
                 listView.setAdapter(animationAdapter);
+
             }
         });
+
 
     }
 
