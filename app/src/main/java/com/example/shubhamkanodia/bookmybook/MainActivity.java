@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
             public void done(List<ParseObject> bookList, ParseException e) {
                 for (ParseObject book : bookList) {
 
-                    BookItem toPush = new BookItem(book.getString("text"), book.getString("author"));
+                    BookItem toPush = new BookItem(book.getString("text"), book.getString("author"), book.getString("cover"));
                     books.add(toPush);
                 }
 

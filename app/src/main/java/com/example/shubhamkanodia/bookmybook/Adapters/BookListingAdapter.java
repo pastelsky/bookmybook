@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shubhamkanodia.bookmybook.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class BookListingAdapter extends ArrayAdapter<BookItem> {
 
-
+    Context context;
     boolean[] animationStates;
     // declaring our ArrayList of items
     private ArrayList<BookItem> books;
@@ -30,6 +31,7 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
         super(context, textViewResourceId, objects);
         animationStates = new boolean[objects.size()];
         this.books = objects;
+        this.context = context;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
 
         holder.bName.setText(book.getName());
         holder.bAuthour.setText(book.getAuthor());
-
+        Picasso.with(this.context).load(book.getCoverURL()).into(holder.bCover);
 
         return convertView;
 

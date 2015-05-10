@@ -8,39 +8,49 @@ public class BookItem {
     private String book_name;
     private String book_author;
     private boolean isAnimated;
+    private String coverURL;
 
 
     public BookItem(){
         isAnimated = true;
     }
 
-    public void setAnimation(boolean a){
-        isAnimated = a;
+    public BookItem(String n, String a, String u) {
+        this.book_author = a;
+        this.book_name = n;
+        this.coverURL = u;
     }
 
     public boolean getAnimation(){
         return isAnimated;
     }
 
-    public BookItem(String n, String a){
-        this.book_author = a;
-        this.book_name = n;
+    public void setAnimation(boolean a) {
+        isAnimated = a;
+    }
+
+    public String getCoverURL() {
+        return this.coverURL;
+    }
+
+    public void setCoverURL(String c) {
+        this.coverURL = c;
+    }
+
+    public String getName() {
+        return book_name;
     }
 
   public void setName(String n){
       book_name = n;
   }
 
-    public void setAuthor(String a){
-        book_name = a;
-    }
-
-    public String getName(){
-        return book_name;
-    }
-
     public String getAuthor(){
         return book_author;
+    }
+
+    public void setAuthor(String a) {
+        book_name = a;
     }
 
 }
