@@ -2,9 +2,13 @@ package com.example.shubhamkanodia.bookmybook;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,6 +17,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -28,6 +33,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.software.shell.fab.ActionButton;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
     AlphaInAnimationAdapter animationAdapter;
     RelativeLayout mainrel;
     ActionButton addBook;
+    ImageView ivBookCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
 
         mainrel = (RelativeLayout) findViewById(R.id.mainrel);
         addBook = (ActionButton) findViewById(R.id.add_book);
+
 
         final ListView listView = (ListView) findViewById(R.id.dynamiclistview);
 
@@ -106,10 +114,30 @@ public class MainActivity extends ActionBarActivity {
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
             // @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+
+                ivBookCover = (ImageView) v.findViewById(R.id.ivBookCover);
+                ivBookCover.buildDrawingCache();
+
                 Intent intent = new Intent(MainActivity.this, DisplayBookListing.class);
-                startActivity(intent);
+
+                Bitmap bmp = ivBookCover.getDrawingCache();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                intent.putExtra("bookCover", byteArray);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(MainActivity.this, ivBookCover, "bookCover");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());
+                else
+                    startActivity(intent);
             }
         });
 

@@ -13,18 +13,19 @@
         android:background="@drawable/card">
 
         <ImageView
-            android:id="@+id/bCover"
+            android:id="@+id/ivBookCover"
             android:layout_width="@dimen/book_cover_width"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:scaleType="fitXY"
-            android:src="@drawable/sample_cover" />
+            android:src="@drawable/sample_cover10"
+            android:transitionName="bookCover" />
 
         <RelativeLayout
             android:id="@+id/bInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/bCover"
+            android:layout_toRightOf="@id/ivBookCover"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
+                android:minLines="2"
                 android:text="Sample"
                 android:textColor="@color/grey_800"
                 android:textSize="14dp"
@@ -56,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/bInfo"
-            android:layout_toRightOf="@id/bCover"
+            android:layout_toRightOf="@id/ivBookCover"
             android:background="@color/grey_200">
 
             <LinearLayout

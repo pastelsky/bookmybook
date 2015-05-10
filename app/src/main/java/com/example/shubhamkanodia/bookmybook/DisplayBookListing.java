@@ -1,5 +1,7 @@
 package com.example.shubhamkanodia.bookmybook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -29,6 +31,13 @@ public class DisplayBookListing extends ActionBarActivity {
         //Set Toolbar color
         final Toolbar toolbar = (Toolbar) findViewById(R.id.extended_toolbar);
         setSupportActionBar(toolbar);
+
+        Bundle extras = getIntent().getExtras();
+        byte[] byteArray = extras.getByteArray("bookCover");
+
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        ivBookCover.setImageBitmap(bmp);
+
 
         Palette palette = Palette.generate(((BitmapDrawable) ivBookCover.getDrawable()).getBitmap());
         int vibrant = palette.getVibrantColor(0x000000);
