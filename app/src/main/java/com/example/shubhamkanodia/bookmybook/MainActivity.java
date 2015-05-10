@@ -1,6 +1,7 @@
 package com.example.shubhamkanodia.bookmybook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -99,6 +102,14 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
 
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, DisplayBookListing.class);
+                startActivity(intent);
             }
         });
 
