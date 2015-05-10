@@ -3,6 +3,7 @@ package com.example.shubhamkanodia.bookmybook;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -120,13 +121,14 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
 
                 ivBookCover = (ImageView) v.findViewById(R.id.ivBookCover);
-                ivBookCover.buildDrawingCache();
 
                 Intent intent = new Intent(MainActivity.this, DisplayBookListing.class);
 
-                Bitmap bmp = ivBookCover.getDrawingCache();
+                BitmapDrawable drawable = (BitmapDrawable) ivBookCover.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
 
                 intent.putExtra("bookCover", byteArray);
