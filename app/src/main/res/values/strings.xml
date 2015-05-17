@@ -4,4 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_display_book_listing">DisplayBookListing</string>
+
+
+    <!--        URLS        -->
+
+
 </resources>

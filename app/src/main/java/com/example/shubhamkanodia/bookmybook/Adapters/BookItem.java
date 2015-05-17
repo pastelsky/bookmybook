@@ -5,52 +5,20 @@ package com.example.shubhamkanodia.bookmybook.Adapters;
  */
 public class BookItem {
 
-    private String book_name;
-    private String book_author;
-    private boolean isAnimated;
-    private String coverURL;
+    public String book_name;
+    public String book_author;
+    public String book_cover_URL;
+    public String book_ISBN;
 
+    public String book_seller_count;
+    public String book_min_offer_price;
 
-    public BookItem(){
-        isAnimated = true;
-    }
 
     public BookItem(String n, String a, String u) {
         this.book_author = a;
         this.book_name = n;
-        this.coverURL = u;
-    }
+        this.book_cover_URL = u;
 
-    public boolean getAnimation(){
-        return isAnimated;
-    }
-
-    public void setAnimation(boolean a) {
-        isAnimated = a;
-    }
-
-    public String getCoverURL() {
-        return this.coverURL;
-    }
-
-    public void setCoverURL(String c) {
-        this.coverURL = c;
-    }
-
-    public String getName() {
-        return book_name;
-    }
-
-  public void setName(String n){
-      book_name = n;
-  }
-
-    public String getAuthor(){
-        return book_author;
-    }
-
-    public void setAuthor(String a) {
-        book_name = a;
     }
 
 }

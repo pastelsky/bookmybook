@@ -14,20 +14,42 @@
             android:id="@+id/extended_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color1" />
+            android:background="@color/color1"
+            android:transitionName="toolbar" />
 
 
     </FrameLayout>
 
-    <ImageView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/book_vertical_shift"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+
+        >
+
+        <ImageView
         android:id="@+id/ivBookCover"
         android:layout_width="@dimen/book_cover_width"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/book_vertical_shift"
         android:adjustViewBounds="true"
         android:src="@drawable/sample_cover8"
         android:transitionName="bookCover" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@+id/ivBookCover"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-condensed"
+            android:maxLines="3"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:text="In order to achieve smooth transitions and animations, a browser needs. The key to great animation performance is keeping the number of areas.."
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

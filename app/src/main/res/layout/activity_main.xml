@@ -1,32 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainrel"
+    android:id="@+id/rvMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_100"
     tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/main_toolbar"
+        android:id="@+id/tbMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color1"
-        android:minHeight="?attr/actionBarSize" />
-
-    <ProgressBar
-        android:id="@+id/progress_horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/color2"
-        android:maxHeight="34dip"
-        android:minHeight="34dip" />
+        android:minHeight="?attr/actionBarSize"
+        android:transitionName="toolbar" />
 
 
     <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
-        android:id="@+id/dynamiclistview"
+        android:id="@+id/lvBooks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -43,7 +34,7 @@
         />
 
     <com.software.shell.fab.ActionButton
-        android:id="@+id/add_book"
+        android:id="@+id/bAddBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
