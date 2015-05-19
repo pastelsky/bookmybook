@@ -54,8 +54,8 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
             targetListView = (ListView) parent;
 
             holder = new ViewHolder();
-            holder.bName = (TextView) convertView.findViewById(R.id.bName);
-            holder.bAuthour = (TextView) convertView.findViewById(R.id.bAuthor);
+            holder.bName = (TextView) convertView.findViewById(R.id.tvBookName);
+            holder.bAuthour = (TextView) convertView.findViewById(R.id.tvBookAuthor);
             holder.bCover = (ImageView) convertView.findViewById(R.id.ivBookCover);
             convertView.setTag(holder);
             if (!animationStates[position]) {

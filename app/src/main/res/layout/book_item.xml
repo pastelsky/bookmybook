@@ -2,15 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
     <RelativeLayout
-        android:id="@+id/bCard"
+        android:id="@+id/rvBookCard"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
-        android:background="@drawable/card">
+        android:background="@drawable/card"
+        android:transitionName="tExpandCard">
 
         <ImageView
             android:id="@+id/ivBookCover"
@@ -22,7 +23,7 @@
             android:transitionName="bookCover" />
 
         <RelativeLayout
-            android:id="@+id/bInfo"
+            android:id="@+id/rvBookInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ivBookCover"
@@ -32,7 +33,7 @@
             android:paddingTop="8dp">
 
             <TextView
-                android:id="@+id/bName"
+                android:id="@+id/tvBookName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
@@ -40,16 +41,18 @@
                 android:text="Sample"
                 android:textColor="@color/grey_800"
                 android:textSize="14dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:transitionName="tBookName" />
 
             <TextView
-                android:id="@+id/bAuthor"
+                android:id="@+id/tvBookAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/bName"
+                android:layout_below="@+id/tvBookName"
                 android:text="Author"
                 android:textColor="@color/grey_600"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:transitionName="tBookAuthor" />
 
         </RelativeLayout>
 
@@ -57,12 +60,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/bInfo"
+            android:layout_below="@id/rvBookInfo"
             android:layout_toRightOf="@id/ivBookCover"
             android:background="@color/grey_200">
 
             <LinearLayout
-                android:id="@+id/priceBox"
+                android:id="@+id/llPriceBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -90,7 +93,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_toRightOf="@id/priceBox"
+                android:layout_toRightOf="@id/llPriceBox"
                 android:background="@color/grey_300" />
 
 

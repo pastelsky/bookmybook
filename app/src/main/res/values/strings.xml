@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_display_book_listing">DisplayBookListing</string>
+    <string name="title_activity_add_books">AddBooksActivity</string>
 
 
     <!--        URLS        -->
