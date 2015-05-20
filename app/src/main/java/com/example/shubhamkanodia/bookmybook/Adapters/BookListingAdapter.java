@@ -3,6 +3,7 @@ package com.example.shubhamkanodia.bookmybook.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.squareup.picasso.Picasso;
 
@@ -29,6 +31,8 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
     Context context;
     boolean[] animationStates;
     ListView targetListView;
+    ViewHolder holder;
+    View v;
     // declaring our ArrayList of items
     private ArrayList<BookItem> books;
 
@@ -41,9 +45,7 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
-        ViewHolder holder;
+        v = convertView;
 
         if (convertView == null)
 
@@ -58,6 +60,8 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
             holder.bAuthour = (TextView) convertView.findViewById(R.id.tvBookAuthor);
             holder.bCover = (ImageView) convertView.findViewById(R.id.ivBookCover);
             convertView.setTag(holder);
+
+
             if (!animationStates[position]) {
                 animationStates[position] = true;
                 Animation animationListView = AnimationUtils.loadAnimation(getContext(), R.anim.up_from_bottom);
@@ -77,6 +81,19 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
         holder.bName.setText(book.book_name);
         holder.bAuthour.setText(book.book_author);
         Picasso.with(this.context).load(book.book_cover_URL).into(holder.bCover);
+
+        holder.bName.post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCnt = holder.bName.getLineCount();
+
+                if (lineCnt > 1)
+                    holder.bCover.getLayoutParams().height = v.getLayoutParams().height;
+                Log.e("Linecount:", "is " + Helper.pxToDp(120));
+
+                // Perform any actions you want based on the line count here.
+            }
+        });
 
         return convertView;
 

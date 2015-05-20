@@ -13,12 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
@@ -64,8 +64,11 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     ObservableListView lvBooks;
     @ViewById
     CardView tbMainContainer;
+    @ViewById
+    ProgressBar pbLoading;
 
-    int hideOffset;
+
+    int hideOffset = 45;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;
 
@@ -87,10 +90,15 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         hideOffset = Helper.getDeviceHeight() / 8;
         verticalThresholdExceeded = false;
 
+        lvBooks.setEmptyView(findViewById(R.id.rvEmptyLv));
+
         zoomInAddButton();
         queryBooks();
 
     }
+
+
+    /* Click Handlers */
 
     @Click
     void bAddBook() {
@@ -130,24 +138,6 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void zoomInAddButton() {
 
         ScaleAnimation zoomButton = new ScaleAnimation(
@@ -161,18 +151,19 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     }
 
     public void queryBooks() {
-
-
+        pbLoading.setVisibility(View.VISIBLE);
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
                 BOOKS_LABEL);
 
         if (!Helper.isNetworkOnline())
             query.fromLocalDatastore();
 
+
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> bookList, ParseException e) {
+                int bookCounter = 0;
                 for (ParseObject book : bookList) {
-
+                    bookCounter++;
                     BookItem toPush = new BookItem(book.getString("text"), book.getString("author"), book.getString("cover"));
                     books.add(toPush);
                 }
@@ -196,6 +187,9 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
                     }
                 });
 
+                pbLoading.setVisibility(View.GONE);
+
+
             }
         });
 
@@ -211,14 +205,13 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
             if (areControlsHidden)
                 showControls();
         }
-
     }
 
     public void hideControls() {
 
         AnimationSet animSet = new AnimationSet(true);
         animSet.setFillAfter(true);
-        animSet.setDuration(300);
+        animSet.setDuration(350);
         AlphaAnimation alp = new AlphaAnimation(1.0f, 0);
         TranslateAnimation translate = new TranslateAnimation(TranslateAnimation.RELATIVE_TO_SELF, TranslateAnimation.RELATIVE_TO_SELF, TranslateAnimation.RELATIVE_TO_SELF, Helper.getDeviceHeight() / 3);
         animSet.addAnimation(translate);
@@ -228,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
 
         AnimationSet animToolbar = new AnimationSet(true);
         animToolbar.setFillAfter(true);
-        animToolbar.setDuration(300);
+        animToolbar.setDuration(350);
         AlphaAnimation alpToolbar = new AlphaAnimation(1.0f, 0);
         TranslateAnimation translateToolbar = new
                 TranslateAnimation(TranslateAnimation.RELATIVE_TO_SELF,
@@ -243,11 +236,8 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         areControlsHidden = true;
 
         //Set status bar to black;
-        if (Helper.isLollipop()) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.BLACK);
-        }
+        if (Helper.isLollipop())
+            Helper.setStatusBarColor(Color.BLACK);
 
 
     }
@@ -280,11 +270,8 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         areControlsHidden = false;
 
         //Set status bar to original;
-        if (Helper.isLollipop()) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.color2));
-        }
+        if (Helper.isLollipop())
+            Helper.setStatusBarColor(R.color.color2);
 
     }
 
@@ -310,4 +297,20 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         }
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.e("Selected", item.getItemId() + " ok");
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

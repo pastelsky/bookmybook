@@ -1,15 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rvMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_100"
     tools:context=".MainActivity">
 
-
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
         android:id="@+id/tbMainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +23,35 @@
         android:background="@color/color1"
             android:minHeight="@dimen/actionBarSize"
             android:transitionName="toolbar"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/llSearchBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="5dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="5dp"
+            android:visibility="gone">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cvSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/grey_100"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
@@ -34,12 +61,56 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:dividerHeight="@dimen/activityMargin"
+        android:drawSelectorOnTop="true"
         android:paddingBottom="20dp"
+        android:paddingLeft="@dimen/activityMargin"
+        android:paddingRight="@dimen/activityMargin"
         android:paddingTop="76dp"
+        android:scrollbarStyle="outsideOverlay"
         android:transitionName="bookCover"
-
         />
+
+    <RelativeLayout
+        android:id="@+id/rvEmptyLv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/ivEmptyBooks"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/ic_books" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivEmptyBooks"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:singleLine="false"
+            android:text="We're out of books.\n Do come back later!"
+            android:textAlignment="center"
+            android:textColor="@color/grey_500"
+            android:textSize="18sp" />
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/color2"
+            android:indeterminateTintMode="src_in"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
     <com.software.shell.fab.ActionButton
         android:id="@+id/bAddBook"

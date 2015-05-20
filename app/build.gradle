@@ -75,6 +75,7 @@ dependencies {
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.1'
     compile 'com.android.support:cardview-v7:22.1.1+'
+    compile 'com.balysv:material-ripple:1.0.2'
 
     compile fileTree(dir: 'libs', include: 'nine*.jar')
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')

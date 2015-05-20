@@ -7,19 +7,15 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -92,10 +88,7 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
         initialCoverWidth = ivBookCover.getLayoutParams().width;
 
         //weightsum ratuio 1:3
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        initialToolBarHeight = dm.heightPixels / 4;
-
+        initialToolBarHeight = Helper.getDeviceHeight() / 4;
 
         // Defined Array values to show in ListView
         String[] values = new String[]{"Android List View",
@@ -190,11 +183,8 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
         hsv[2] *= 0.8f; // value component
         statusColor = Color.HSVToColor(hsv);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(statusColor);
-        }
+        if (Helper.isLollipop())
+            Helper.setStatusBarColor(statusColor);
     }
 
     @Override
