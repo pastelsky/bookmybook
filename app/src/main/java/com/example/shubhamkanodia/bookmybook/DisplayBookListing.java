@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -64,7 +65,6 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         lvAds.setScrollViewCallbacks(this);
 
-
         if (Helper.isLollipop()) {
             setEnterSharedElementCallback(new SharedElementCallback() {
 
@@ -81,13 +81,12 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
 
         Bundle extras = getIntent().getExtras();
         byte[] byteArray = extras.getByteArray("bookCover");
-
         tvBookName.setText(extras.getString("bookName"));
         tvBookAuthor.setText(extras.getString("bookAuthor"));
 
         initialCoverWidth = ivBookCover.getLayoutParams().width;
 
-        //weightsum ratuio 1:3
+        //weightsum ratio 1:3
         initialToolBarHeight = Helper.getDeviceHeight() / 4;
 
         // Defined Array values to show in ListView
@@ -139,19 +138,15 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_display_book_listing, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -159,20 +154,17 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public void setStatusAndToolbarColor() {
         Palette palette = Palette.generate(((BitmapDrawable) ivBookCover.getDrawable()).getBitmap());
         int vibrantLight = palette.getLightVibrantColor(0x000000);
         int vibrantDark = palette.getDarkVibrantColor(0x000000);
         int mutedLight = palette.getLightMutedColor(0x000000);
 
-        float[] hsv = new float[3];
-        float[] hsv2 = new float[3];
-
-
-        Color.colorToHSV(vibrantLight, hsv);
-        Color.colorToHSV(mutedLight, hsv2);
-
-        int toolbarTextcolor = hsv[2] > hsv2[2] ? vibrantLight : mutedLight;
+        int toolbarTextcolor = vibrantLight;
+        float hsv[];
+        hsv = new float[2];
 
         tbExtended.setBackgroundDrawable(new ColorDrawable(vibrantDark));
         tvBookName.setTextColor(toolbarTextcolor);
@@ -183,8 +175,7 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
         hsv[2] *= 0.8f; // value component
         statusColor = Color.HSVToColor(hsv);
 
-        if (Helper.isLollipop())
-            Helper.setStatusBarColor(statusColor);
+        AnimationHelper.statusBarColorTransition(statusColor, 400);
     }
 
     @Override

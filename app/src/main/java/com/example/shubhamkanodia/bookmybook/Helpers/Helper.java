@@ -1,13 +1,22 @@
 package com.example.shubhamkanodia.bookmybook.Helpers;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
+import android.support.v7.widget.Toolbar;
 
 /**
  * Created by shubhamkanodia on 17/05/15.
@@ -18,13 +27,7 @@ import android.view.WindowManager;
  * 1) boolean isNetworkOnline() : check internet connectivity
  * 2) boolean isLollipop() : check 5.0 and above
  */
-public class Helper {
-
-    static Context context;
-
-    public static void setAndroidContext(Context c) {
-        context = c;
-    }
+public class Helper extends AnimationHelper{
 
     public static boolean isNetworkOnline() {
         boolean status = false;
@@ -47,23 +50,12 @@ public class Helper {
     }
 
 
-    public static boolean isLollipop() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-    }
-
-    public static int getDeviceHeight() {
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels;
-    }
-
-    public static int getDeviceWidth() {
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels;
-    }
 
     public static void setStatusBarColor(int color) {
+
+        if(!isLollipop())
+            return;
+
         Window window = ((Activity) context).getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(color);
@@ -74,4 +66,6 @@ public class Helper {
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         return px / (int) metrics.density;
     }
+
+
 }

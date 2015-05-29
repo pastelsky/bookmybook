@@ -27,11 +27,20 @@
             android:src="@drawable/sample_cover10"
             android:transitionName="bookCover" />
 
+        <View
+            android:id="@+id/vColorBar"
+            android:background="@color/grey_400"
+            android:layout_height="@dimen/card_height"
+            android:layout_width="5dp"
+            android:layout_toRightOf="@id/ivBookCover"
+            />
+
+
         <RelativeLayout
             android:id="@+id/rvBookInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivBookCover"
+            android:layout_toRightOf="@id/vColorBar"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -67,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/rvBookInfo"
-            android:layout_toRightOf="@id/ivBookCover"
+            android:layout_toRightOf="@id/vColorBar"
             android:background="@color/grey_200">
 
             <LinearLayout

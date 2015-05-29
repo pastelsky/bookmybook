@@ -4,6 +4,8 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -13,16 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
+import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.firebase.client.Firebase;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     AlphaInAnimationAdapter animationAdapter;
 
     @ViewById
-    ActionButton bAddBook;
+    FloatingActionButton bAddBook;
     @ViewById
     Toolbar tbMain;
     @ViewById
@@ -63,14 +61,15 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     @ViewById
     ObservableListView lvBooks;
     @ViewById
-    CardView tbMainContainer;
-    @ViewById
     ProgressBar pbLoading;
+    @ViewById
+    TabLayout tabBar;
 
-
-    int hideOffset = 45;
+    final int animDuration = 400;
+    int hideOffset;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,26 +84,32 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+        AnimationHelper.zoomInView(bAddBook, 700);
         setSupportActionBar(tbMain);
+
         areControlsHidden = false;
-        hideOffset = Helper.getDeviceHeight() / 8;
+        hideOffset = Helper.getDeviceHeight() / 10;
         verticalThresholdExceeded = false;
 
         lvBooks.setEmptyView(findViewById(R.id.rvEmptyLv));
+        bAdapter = new BookListingAdapter(this, R.layout.book_item, books);
+//        animationAdapter = new AlphaInAnimationAdapter(bAdapter);
+//        animationAdapter.setAbsListView(lvBooks);
+        lvBooks.setAdapter(bAdapter);
 
-        zoomInAddButton();
+        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.add_book));
+        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.ic_action_content_add));
+        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.ic_search));
         queryBooks();
 
     }
-
 
     /* Click Handlers */
 
     @Click
     void bAddBook() {
         Intent intent = new Intent(this, AddBooksActivity_.class);
-        startActivity(intent);
-
+            startActivity(intent);
     }
 
     @ItemClick
@@ -116,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         intent.putExtra("bookName", bAdapter.getItem(pos).book_name);
         intent.putExtra("bookAuthor", bAdapter.getItem(pos).book_author);
 
-
-
         if (Helper.isLollipop()) {
 
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
@@ -125,73 +128,59 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
             ActivityOptions options = ActivityOptions.
                     makeSceneTransitionAnimation(MainActivity.this,
                             Pair.create(clickedview.findViewById(R.id.ivBookCover), "bookCover"),
-                            Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName")
-                            , Pair.create((View) tbMain, "toolbar"),
+                            Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName"),
                             Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
 
             startActivity(intent, options.toBundle());
 
         } else
             startActivity(intent);
-
-
     }
 
 
-    public void zoomInAddButton() {
-
-        ScaleAnimation zoomButton = new ScaleAnimation(
-                0f, 1f, // Start and end values for the X axis scaling
-                0f, 1f, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-        zoomButton.setFillAfter(true); // Needed to keep the result of the animation
-        zoomButton.setDuration(700);
-        bAddBook.startAnimation(zoomButton);
-    }
 
     public void queryBooks() {
+
+        books = new ArrayList<BookItem>();
         pbLoading.setVisibility(View.VISIBLE);
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
-                BOOKS_LABEL);
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(BOOKS_LABEL);
 
         if (!Helper.isNetworkOnline())
             query.fromLocalDatastore();
 
-
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> bookList, ParseException e) {
-                int bookCounter = 0;
                 for (ParseObject book : bookList) {
-                    bookCounter++;
+
                     BookItem toPush = new BookItem(book.getString("text"), book.getString("author"), book.getString("cover"));
                     books.add(toPush);
                 }
 
-                bAdapter = new BookListingAdapter(MainActivity.this, R.layout.book_item, books);
-                final List<ParseObject> bList = bookList;
-                animationAdapter = new AlphaInAnimationAdapter(bAdapter);
-                animationAdapter.setAbsListView(lvBooks);
-                lvBooks.setAdapter(animationAdapter);
+                final List<ParseObject> newListToPin = bookList;
 
-                // Release any objects previously pinned for this query.
-                ParseObject.unpinAllInBackground(BOOKS_LABEL, bookList, new DeleteCallback() {
+                ParseObject.unpinAllInBackground(BOOKS_LABEL, newListToPin, new DeleteCallback() {
+
                     public void done(ParseException e) {
                         if (e != null) {
                             // There was some error.
                             return;
                         }
-
                         // Add the latest results for this query to the cache.
-                        ParseObject.pinAllInBackground(BOOKS_LABEL, bList);
+                        ParseObject.pinAllInBackground(BOOKS_LABEL, newListToPin);
                     }
                 });
-
+                Log.e("array", books.toString());
+                bAdapter = new BookListingAdapter(MainActivity.this, R.layout.book_item, books);
+                lvBooks.setAdapter(bAdapter);
                 pbLoading.setVisibility(View.GONE);
-
-
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        queryBooks();
 
     }
 
@@ -208,70 +197,18 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     }
 
     public void hideControls() {
-
-        AnimationSet animSet = new AnimationSet(true);
-        animSet.setFillAfter(true);
-        animSet.setDuration(350);
-        AlphaAnimation alp = new AlphaAnimation(1.0f, 0);
-        TranslateAnimation translate = new TranslateAnimation(TranslateAnimation.RELATIVE_TO_SELF, TranslateAnimation.RELATIVE_TO_SELF, TranslateAnimation.RELATIVE_TO_SELF, Helper.getDeviceHeight() / 3);
-        animSet.addAnimation(translate);
-        animSet.addAnimation(alp);
-        bAddBook.startAnimation(animSet);
-
-
-        AnimationSet animToolbar = new AnimationSet(true);
-        animToolbar.setFillAfter(true);
-        animToolbar.setDuration(350);
-        AlphaAnimation alpToolbar = new AlphaAnimation(1.0f, 0);
-        TranslateAnimation translateToolbar = new
-                TranslateAnimation(TranslateAnimation.RELATIVE_TO_SELF,
-                TranslateAnimation.RELATIVE_TO_SELF,
-                TranslateAnimation.RELATIVE_TO_SELF,
-                -getResources().getDimension(R.dimen.actionBarSize)
-        );
-        animToolbar.addAnimation(alpToolbar);
-        animToolbar.addAnimation(translateToolbar);
-        tbMainContainer.startAnimation(animToolbar);
-
-        areControlsHidden = true;
-
-        //Set status bar to black;
-        if (Helper.isLollipop())
-            Helper.setStatusBarColor(Color.BLACK);
-
+//
+//        AnimationHelper.hideViewDown(bAddBook, true, animDuration);
+//        AnimationHelper.hideViewUp(tbMainContainer,true,animDuration);
+//        AnimationHelper.statusBarColorTransition(Color.BLACK, animDuration);
 
     }
 
     public void showControls() {
-
-        AnimationSet animSet = new AnimationSet(true);
-        animSet.setFillAfter(true);
-        animSet.setDuration(300);
-        AlphaAnimation alp = new AlphaAnimation(0, 1);
-        TranslateAnimation translate = new TranslateAnimation(0, 0, Helper.getDeviceHeight() / 3, 0);
-        animSet.addAnimation(translate);
-        animSet.addAnimation(alp);
-        bAddBook.startAnimation(animSet);
-
-
-        AnimationSet animToolbar = new AnimationSet(true);
-        animToolbar.setFillAfter(true);
-        animToolbar.setDuration(300);
-        AlphaAnimation alpToolbar = new AlphaAnimation(0, 1);
-        TranslateAnimation translateToolbar = new
-                TranslateAnimation(0, 0, -getResources().getDimension(R.dimen.actionBarSize), 0
-        );
-        animToolbar.addAnimation(alpToolbar);
-        animToolbar.addAnimation(translateToolbar);
-        tbMainContainer.startAnimation(animToolbar);
-
-        //Compensate the listview - move it up babe!
-
-        areControlsHidden = false;
-
-        //Set status bar to original;
-        if (Helper.isLollipop())
-            Helper.setStatusBarColor(R.color.color2);
+//
+//        AnimationHelper.zoomOutView(bAddBook, animDuration);
+//        AnimationHelper.showView(tbMainContainer, true, animDuration);
+//        AnimationHelper.statusBarColorTransition(getResources().getColor(R.color.color2), animDuration);
 
     }
 
@@ -287,17 +224,17 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
             if (!areControlsHidden) {
                 hideControls();
                 Log.e("Move", "ScrollState Up");
+                areControlsHidden = true;
             }
         } else if (scrollState == ScrollState.DOWN) {
-            if (areControlsHidden) { // TODO Not implemented
-                showControls(); // TODO Not implemented
+            if (areControlsHidden) {
+                showControls(); //
                 Log.e("Move", "ScrollState Down");
-
+                areControlsHidden = false;
             }
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -308,7 +245,12 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Log.e("Selected", item.getItemId() + " ok");
+
+        switch (item.getItemId())
+        {
+            case R.id.search_books:
+                hideControls();
+        }
 
         return super.onOptionsItemSelected(item);
     }

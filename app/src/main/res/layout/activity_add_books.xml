@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -8,9 +9,89 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
-    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
-        android:id="@+id/dynamiclistview"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:transitionName="tAddBook"
+        android:background="@color/color1"
+        android:id="@+id/ivBookCover"
+        />
 
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cvPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="1dp"
+        android:layout_below="@+id/ivBookCover"
+        card_view:cardElevation="1dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+android:id="@+id/tilBookName"
+                >
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:id="@+id/etBookName"
+            android:hint="Book Name"
+            android:inputType="textCapWords"
+            android:textColorHighlight="@color/color3"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:layout_height="wrap_content" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:id="@+id/tilBookAuthor"
+                android:layout_below="@id/tilBookName"
+                >
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:id="@+id/etBookAuthor"
+            android:layout_below="@+id/til2"
+            android:hint="Book Author"
+            android:inputType="textCapWords"
+            android:textColorHighlight="@color/color3"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--<fr.ganfra.materialspinner.MaterialSpinner-->
+                <!--android:id="@+id/spinner"-->
+                <!--app:ms_multiline="false"-->
+                <!--app:ms_hint="hint"-->
+                <!--app:ms_floatingLabelText="floating label"-->
+            <!--app:ms_arrowColor="#0000FF"-->
+            <!--app:ms_arrowSize="16dp"-->
+            <!--app:ms_alignLabels="false"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--app:ms_floatingLabelColor="#00FF00"-->
+            <!--android:layout_width="match_parent"-->
+                <!--android:layout_below="@+id/etBookAuthor"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POST"
+                android:id="@+id/bPostAd"
+                android:layout_below="@id/etBookAuthor"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
 </RelativeLayout>

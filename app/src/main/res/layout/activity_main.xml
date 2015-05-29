@@ -8,52 +8,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/tbMainContainer"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_100"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="4dp">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
-        android:id="@+id/tbMain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color1"
-            android:minHeight="@dimen/actionBarSize"
-            android:transitionName="toolbar"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-
-        </android.support.v7.widget.Toolbar>
-
-        <LinearLayout
-            android:id="@+id/llSearchBox"
+            android:id="@+id/tbMain"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="5dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="5dp"
-            android:visibility="gone">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color1"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvSearch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/grey_100"
-                card_view:cardCornerRadius="4dp"
-                card_view:cardElevation="1dp">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabBar"
+            android:background="@color/color2"
+            android:layout_width="match_parent"
+            app:backgroundTint="@color/green_100"
+            android:foregroundTint="@color/green_100"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
 
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </android.support.v7.widget.CardView>
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/tbMainContainer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/grey_100"-->
+        <!--card_view:cardCornerRadius="0dp"-->
+        <!--card_view:cardElevation="4dp">-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/tbMain"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/color1"-->
+            <!--android:minHeight="@dimen/actionBarSize"-->
+            <!--android:transitionName="toolbar"-->
+            <!--app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+
+
+        <!--</android.support.v7.widget.Toolbar>-->
+
+
+    <!--</android.support.v7.widget.CardView>-->
+
+
+
 
     <com.github.ksoichiro.android.observablescrollview.ObservableListView
         android:id="@+id/lvBooks"
@@ -112,17 +121,35 @@
 
     </RelativeLayout>
 
-    <com.software.shell.fab.ActionButton
-        android:id="@+id/bAddBook"
-        android:layout_width="wrap_content"
+    <!--<com.software.shell.fab.ActionButton-->
+        <!--android:id="@+id/bAddBook"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:transitionName="tAddBook"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="@dimen/fab_margin"-->
+        <!--android:layout_marginRight="@dimen/fab_margin"-->
+        <!--fab:button_color="@color/color3"-->
+        <!--fab:button_colorPressed="#FF007A94"-->
+        <!--fab:image="@mipmap/ic_action_content_add"-->
+        <!--fab:shadow_radius="7.0dp"-->
+        <!--fab:shadow_yOffset="2.0dp" />-->
+
+    <android.support.design.widget.FloatingActionButton
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        fab:button_color="@color/color3"
-        fab:button_colorPressed="#FF007A94"
-        fab:image="@mipmap/ic_action_content_add"
-        fab:shadow_radius="7.0dp"
-        fab:shadow_yOffset="2.0dp" />
+        android:layout_width="wrap_content"
+        android:src="@mipmap/ic_action_content_add"
+        android:layout_margin="@dimen/fab_margin"
+    android:id="@+id/bAddBook"
+    android:layout_alignParentBottom="true"
+    android:transitionName="tAddBook"
+        app:elevation="4dp"
+        app:backgroundTint="@color/color3"
+    android:layout_alignParentRight="true"
+    android:layout_marginBottom="@dimen/fab_margin"
+    android:layout_marginRight="@dimen/fab_margin"
+        app:borderWidth="0dp"
+    android:clickable="true"/>
+        />
 </RelativeLayout>
