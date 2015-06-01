@@ -2,12 +2,10 @@ package com.example.shubhamkanodia.bookmybook;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
@@ -16,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
@@ -34,7 +31,6 @@ import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.software.shell.fab.ActionButton;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -48,24 +44,20 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ObservableScrollViewCallbacks {
 
     final String BOOKS_LABEL = "Test";
+    final int animDuration = 400;
     ArrayList<BookItem> books = new ArrayList<BookItem>();
     BookListingAdapter bAdapter;
     AlphaInAnimationAdapter animationAdapter;
-
     @ViewById
     FloatingActionButton bAddBook;
     @ViewById
     Toolbar tbMain;
-    @ViewById
-    RelativeLayout rvMain;
     @ViewById
     ObservableListView lvBooks;
     @ViewById
     ProgressBar pbLoading;
     @ViewById
     TabLayout tabBar;
-
-    final int animDuration = 400;
     int hideOffset;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;

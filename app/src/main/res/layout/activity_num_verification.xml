@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color1"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="@dimen/activityMargin">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Enter your number:"
+            android:textColor="@color/colorLight"
+            android:textSize="18sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:columnCount="3"
+            android:orientation="horizontal">
+
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="1" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="2" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="3" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="4" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="5" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="6" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="7" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="8" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:text="9" />
+
+            <Button
+                style="@style/numberPadStyle"
+                android:layout_gravity="fill_horizontal"
+                android:text="0" />
+
+        </GridLayout>
+    </LinearLayout>
+</RelativeLayout>

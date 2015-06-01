@@ -1,7 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rvMain"
     android:layout_width="match_parent"
@@ -19,16 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/color1"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabBar"
-            android:background="@color/color2"
             android:layout_width="match_parent"
-            app:backgroundTint="@color/green_100"
-            android:foregroundTint="@color/green_100"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/color2"
+            app:backgroundTint="@color/green_100" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -137,19 +134,19 @@
         <!--fab:shadow_yOffset="2.0dp" />-->
 
     <android.support.design.widget.FloatingActionButton
-        android:layout_height="wrap_content"
+        android:id="@+id/bAddBook"
         android:layout_width="wrap_content"
-        android:src="@mipmap/ic_action_content_add"
-        android:layout_margin="@dimen/fab_margin"
-    android:id="@+id/bAddBook"
-    android:layout_alignParentBottom="true"
-    android:transitionName="tAddBook"
-        app:elevation="4dp"
-        app:backgroundTint="@color/color3"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
     android:layout_marginBottom="@dimen/fab_margin"
-    android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:clickable="true"
+        android:src="@mipmap/ic_action_content_add"
+        android:transitionName="tAddBook"
+        app:backgroundTint="@color/color3"
         app:borderWidth="0dp"
-    android:clickable="true"/>
+        app:elevation="4dp" />
         />
 </RelativeLayout>
