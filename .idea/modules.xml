@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BMB.iml" filepath="$PROJECT_DIR$/BMB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BookMyBook.iml" filepath="$PROJECT_DIR$/BookMyBook.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bookmybook.iml" filepath="$PROJECT_DIR$/bookmybook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cognalys/cognalys.iml" filepath="$PROJECT_DIR$/cognalys/cognalys.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cognalys/cognalys.iml" filepath="$PROJECT_DIR$/cognalys/cognalys.iml" />
     </modules>
   </component>
 </project>
