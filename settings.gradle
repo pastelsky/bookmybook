@@ -1,2 +1,1 @@
 include ':app', ':cognalys'
-include ':cognalys'

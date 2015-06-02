@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 22
+    buildToolsVersion "23.0.0rc1"
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
@@ -93,7 +93,7 @@ dependencies {
     }
     compile 'me.dm7.barcodescanner:zbar:1.7.1'
 
-//    compile fileTree(dir: 'libs', include: 'nine*.jar')
+    compile project(':cognalys')
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
 }

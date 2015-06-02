@@ -49,7 +49,9 @@
 
         <activity
             android:name="com.matesnetwork.Cognalys.VerifyMobile"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+        </activity>
 
         <activity
             android:name=".Login"
@@ -69,7 +71,7 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.matesnetwork.cogdemov2.CognalysVerification">
+        <receiver android:name="com.example.shubhamkanodia.bookmybook.Externals.CognalysVerification">
             <intent-filter>
                 <action android:name="com.matesnetwork.cognalys" />
             </intent-filter>
