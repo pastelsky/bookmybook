@@ -1,3 +1,5 @@
+// Activity to add a new ad
+
 package com.example.shubhamkanodia.bookmybook;
 
 import android.content.Intent;
