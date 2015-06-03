@@ -44,7 +44,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.parse.tools:gradle:1.+'
-        // replace with the current version of the android-apt plugin
         classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
