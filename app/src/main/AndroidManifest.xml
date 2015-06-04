@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.shubhamkanodia.bookmybook">
+    package="com.example.shubhamkanodia.bookmybook" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
 
     <permission
         android:name="com.example.shubhamkanodia.bookmybook.permission.C2D_MESSAGE"
@@ -31,65 +30,69 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:name=".MainActivity_"
+            android:label="@string/app_name" >
+
         </activity>
-
         <activity
             android:name="com.matesnetwork.Cognalys.VerifyMobile"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
-
         <activity
             android:name=".SignUp"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/app_name" >
         </activity>
-
-
         <activity
             android:name=".Login"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/app_name" >
 
-                <category android:name="android.intent.category.DEFAULT" />
+        </activity>
+
+        <activity
+            android:name=".DisplayBookListing_"
+            android:label="@string/title_activity_display_book_listing"
+            android:parentActivityName=".MainActivity_" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity_" />
+        </activity>
+        <activity
+            android:name=".AddBooksActivity_"
+            android:label="@string/title_activity_add_books">
+
+        </activity>
+        <activity
+            android:name=".IntroductionActivity_"
+            android:label="@string/title_activity_introduction" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <service android:name="com.parse.PushService" />
 
-        <receiver android:name="com.parse.ParseBroadcastReceiver">
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.example.shubhamkanodia.bookmybook.Externals.CognalysVerification">
+        <receiver android:name=".Externals.CognalysVerification" >
             <intent-filter>
                 <action android:name="com.matesnetwork.cognalys" />
             </intent-filter>
         </receiver>
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
@@ -98,7 +101,7 @@
         </receiver>
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -108,17 +111,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".DisplayBookListing"
-            android:label="@string/title_activity_display_book_listing"
-            android:parentActivityName=".MainActivity_">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".AddBooksActivity_"
-            android:label="@string/title_activity_add_books"></activity>
     </application>
 
 </manifest>

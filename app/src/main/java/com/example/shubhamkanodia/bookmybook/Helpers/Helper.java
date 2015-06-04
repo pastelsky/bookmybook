@@ -3,6 +3,9 @@ package com.example.shubhamkanodia.bookmybook.Helpers;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -17,6 +20,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.support.v7.widget.Toolbar;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by shubhamkanodia on 17/05/15.
@@ -65,6 +71,55 @@ public class Helper extends AnimationHelper{
         DisplayMetrics metrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         return px / (int) metrics.density;
+    }
+
+        public static Location getLastKnownLocation() {
+
+            LocationManager locMan = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            List<String> providers = locMan.getProviders(true);
+            Location bestLocation = null;
+            for (String provider : providers) {
+                Location l = locMan.getLastKnownLocation(provider);
+
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null
+                        || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    bestLocation = l;
+                }
+            }
+            if (bestLocation == null) {
+                return null;
+            }
+            return bestLocation;
+        }
+
+    public static double[] getCoarseLocation() {
+        // Get the location manager
+
+        double[] gps = new double[2];
+
+        LocationManager locationManager = (LocationManager)
+                context.getSystemService(context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+        try {
+            gps[0] = location.getLatitude();
+            gps[1] = location.getLongitude();
+        } catch (NullPointerException e) {
+            gps[0] = 40.714728;
+            gps[1] = -73.998672;
+        }
+
+        return gps;
+    }
+
+    public static int getRandomBetween(int low, int high)
+    {
+        Random r = new Random();
+        return r.nextInt(high-low) + low;
     }
 
 

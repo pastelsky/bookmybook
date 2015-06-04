@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/flp2"
+    tools:context="com.example.shubhamkanodia.bookmybook.IntroPage2Fragment"
+    android:background="@color/color1">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:id="@+id/ivMapView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/fadegradient_reverse"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/fadegradient"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect with the community \nof booklovers around you!"
+        android:textColor="@color/colorLight"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_margin="@dimen/snackbar_padding_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tvHeading"
+        />
+
+
+    <Button
+        android:id="@+id/bGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:capitalize="characters"
+        android:elevation="0dp"
+        android:textColor="#fff"
+        android:background="#d04313"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="SIGN IN WITH GOOGLE +"/>
+    </RelativeLayout>
+
+</FrameLayout>
