@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <item name="radio_button_1" type="id" />
+    <item name="radio_button_2" type="id" />
+    <item name="radio_button_3" type="id" />
+    <item name="radio_button_4" type="id" />
+    <item name="radio_button_5" type="id" />
+    <item name="radio_button_6" type="id" />
+    <item name="radio_button_7" type="id" />
+    <item name="radio_button_8" type="id" />
+    <item name="radio_button_9" type="id" />
+</resources>
