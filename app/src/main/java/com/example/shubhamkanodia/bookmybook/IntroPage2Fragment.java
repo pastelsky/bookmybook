@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -20,12 +22,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EFragment;
@@ -37,13 +49,22 @@ import jp.wasabeef.picasso.transformations.GrayscaleTransformation;
 import jp.wasabeef.picasso.transformations.gpu.ContrastFilterTransformation;
 
 @EFragment
-public class IntroPage2Fragment extends Fragment {
+public class IntroPage2Fragment extends Fragment implements View.OnClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     final static String staticMapsURL = "https://maps.googleapis.com/maps/api/staticmap?"; //center=40.714728,-73.998672&zoom=14&size=452x800
     static boolean isFirstTimeVisible = true;
 
     private OnFragmentInteractionListener mListener;
+    private static final int RC_SIGN_IN = 0;
+    private static final int PROFILE_PIC_SIZE = 400;
+    private GoogleApiClient mGoogleApiClient;
+
+    private boolean mIntentInProgress;
+    private boolean mSignInClicked;
+
+    private ConnectionResult mConnectionResult;
 
     @ViewById
     FrameLayout flp2;
@@ -95,9 +116,178 @@ public class IntroPage2Fragment extends Fragment {
         Log.e("mapurl", "is " + mapURL);
         Picasso.with(getActivity()).load(mapURL).transform(new GrayscaleTransformation()).into(ivMapView);
         ivMapView.setColorFilter(new PorterDuffColorFilter(getActivity().getResources().getColor(R.color.color1), PorterDuff.Mode.MULTIPLY));
+
+
+        bGoogle.setOnClickListener(this);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
         return v;
 
 
+    }
+
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    private void resolveSignInError() {
+
+        Log.e("resolveSignInError", "G+");
+
+        if (mConnectionResult.hasResolution()) {
+            try {
+                mIntentInProgress = true;
+                mConnectionResult.startResolutionForResult(getActivity(), RC_SIGN_IN);
+            } catch (IntentSender.SendIntentException e) {
+                mIntentInProgress = false;
+                mGoogleApiClient.connect();
+                Log.e("Exception", "G+");
+
+            }
+        }
+    }
+
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.e("Conn failed", "G+");
+
+        if (!result.hasResolution()) {
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), getActivity(),
+                    0).show();
+            return;
+        }
+        if (!mIntentInProgress) {
+            mConnectionResult = result;
+
+            if (mSignInClicked) {
+                resolveSignInError();
+            }
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int responseCode,
+                                    Intent intent) {
+
+        Log.e("Resolved", "G+");
+        if (requestCode == RC_SIGN_IN) {
+            if (responseCode != getActivity().RESULT_OK) {
+                mSignInClicked = false;
+            }
+
+            mIntentInProgress = false;
+
+            if (!mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+
+
+
+    @Override
+    public void onConnected(Bundle arg0) {
+        mSignInClicked = false;
+        Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
+        getProfileInformation();
+
+    }
+
+    private void getProfileInformation() {
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi
+                        .getCurrentPerson(mGoogleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String personPhotoUrl = currentPerson.getImage().getUrl();
+                String personGooglePlusProfile = currentPerson.getUrl();
+                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+                Log.e("TAG", "Name: " + personName + ", plusProfile: "
+                        + personGooglePlusProfile + ", email: " + email
+                        + ", Image: " + personPhotoUrl);
+
+                personPhotoUrl = personPhotoUrl.substring(0,
+                        personPhotoUrl.length() - 2)
+                        + PROFILE_PIC_SIZE;
+
+
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "Person information is null", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        mGoogleApiClient.connect();
+    }
+
+    /**
+     * Button on click listener
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bGoogle:
+                signInWithGplus();
+                break;
+        }
+    }
+
+    /**
+     * Sign-in into google
+     */
+    private void signInWithGplus() {
+        Log.e("Connecting", "g+");
+        if (!mGoogleApiClient.isConnecting()) {
+            mSignInClicked = true;
+            resolveSignInError();
+        }
+    }
+
+    /**
+     * Sign-out from google
+     */
+    private void signOutFromGplus() {
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    /**
+     * Revoking access from google
+     */
+    private void revokeGplusAccess() {
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
+                    .setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status arg0) {
+                            mGoogleApiClient.connect();
+                        }
+
+                    });
+        }
     }
 
     public void createPin(int num) {

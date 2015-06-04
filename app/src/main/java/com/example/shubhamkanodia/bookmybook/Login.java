@@ -39,21 +39,11 @@ public class Login extends Activity implements OnClickListener,
         ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 0;
-    // Logcat tag
-    private static final String TAG = "MainActivity";
-
-    // Profile pic image size in pixels
+    private static final String TAG = "Google-test";
     private static final int PROFILE_PIC_SIZE = 400;
-
-    // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
 
-    /**
-     * A flag indicating that a PendingIntent is in progress and prevents us
-     * from starting further intents.
-     */
     private boolean mIntentInProgress;
-
     private boolean mSignInClicked;
 
     private ConnectionResult mConnectionResult;
@@ -192,7 +182,7 @@ public class Login extends Activity implements OnClickListener,
                 String personGooglePlusProfile = currentPerson.getUrl();
                 String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
-                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                Log.e("TAG", "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
 
