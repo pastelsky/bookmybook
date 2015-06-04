@@ -48,7 +48,7 @@ public class SignUp extends Activity
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignUp.this, MainActivity_.class));
+                startActivity(new Intent(SignUp.this, MainActivity.class));
             }
         });
 

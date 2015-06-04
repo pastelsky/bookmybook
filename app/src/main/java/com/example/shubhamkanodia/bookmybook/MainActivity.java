@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
@@ -40,7 +41,6 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
-@EActivity
 public class MainActivity extends AppCompatActivity implements ObservableScrollViewCallbacks {
 
     final String BOOKS_LABEL = "Test";
@@ -48,16 +48,13 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     ArrayList<BookItem> books = new ArrayList<BookItem>();
     BookListingAdapter bAdapter;
     AlphaInAnimationAdapter animationAdapter;
-    @ViewById
+
     FloatingActionButton bAddBook;
-    @ViewById
     Toolbar tbMain;
-    @ViewById
     ObservableListView lvBooks;
-    @ViewById
     ProgressBar pbLoading;
-    @ViewById
     TabLayout tabBar;
+
     int hideOffset;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;
@@ -68,6 +65,13 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        bAddBook = (FloatingActionButton) findViewById(R.id.bAddBook);
+        tbMain = (Toolbar) findViewById(R.id.tbMain);
+        lvBooks = (ObservableListView) findViewById(R.id.lvBooks);
+        pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
+        tabBar = (TabLayout) findViewById(R.id.tabBar);
 
         Helper.setAndroidContext(this);
         Firebase.setAndroidContext(this);
@@ -94,41 +98,75 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.ic_search));
         queryBooks();
 
+        bAddBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddBooksActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                Intent intent = new Intent(MainActivity.this, DisplayBookListing.class);
+                intent.putExtra("bookCover", bAdapter.getCoverByPosition(pos));
+
+                View clickedview = bAdapter.getViewByPosition(pos);
+                intent.putExtra("bookName", bAdapter.getItem(pos).book_name);
+                intent.putExtra("bookAuthor", bAdapter.getItem(pos).book_author);
+
+                if (Helper.isLollipop()) {
+
+                    View navigationBar = findViewById(android.R.id.navigationBarBackground);
+
+                    ActivityOptions options = ActivityOptions.
+                            makeSceneTransitionAnimation(MainActivity.this,
+                                    Pair.create(clickedview.findViewById(R.id.ivBookCover), "bookCover"),
+                                    Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName"),
+                                    Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+
+                    startActivity(intent, options.toBundle());
+
+                } else
+                    startActivity(intent);
+            }
+        });
+
     }
 
     /* Click Handlers */
 
-    @Click
-    void bAddBook() {
-        Intent intent = new Intent(this, AddBooksActivity_.class);
-            startActivity(intent);
-    }
+//    @Click
+//    void bAddBook() {
+//        Intent intent = new Intent(this, AddBooksActivity_.class);
+//        startActivity(intent);
+//    }
 
-    @ItemClick
-    void lvBooks(int pos) {
-        Intent intent = new Intent(this, DisplayBookListing_.class);
-        intent.putExtra("bookCover", bAdapter.getCoverByPosition(pos));
-
-        View clickedview = bAdapter.getViewByPosition(pos);
-        intent.putExtra("bookName", bAdapter.getItem(pos).book_name);
-        intent.putExtra("bookAuthor", bAdapter.getItem(pos).book_author);
-
-        if (Helper.isLollipop()) {
-
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-
-            ActivityOptions options = ActivityOptions.
-                    makeSceneTransitionAnimation(MainActivity.this,
-                            Pair.create(clickedview.findViewById(R.id.ivBookCover), "bookCover"),
-                            Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName"),
-                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-
-            startActivity(intent, options.toBundle());
-
-        } else
-            startActivity(intent);
-    }
-
+//    @ItemClick
+//    void lvBooks(int pos) {
+//        Intent intent = new Intent(this, DisplayBookListing_.class);
+//        intent.putExtra("bookCover", bAdapter.getCoverByPosition(pos));
+//
+//        View clickedview = bAdapter.getViewByPosition(pos);
+//        intent.putExtra("bookName", bAdapter.getItem(pos).book_name);
+//        intent.putExtra("bookAuthor", bAdapter.getItem(pos).book_author);
+//
+//        if (Helper.isLollipop()) {
+//
+//            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+//
+//            ActivityOptions options = ActivityOptions.
+//                    makeSceneTransitionAnimation(MainActivity.this,
+//                            Pair.create(clickedview.findViewById(R.id.ivBookCover), "bookCover"),
+//                            Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName"),
+//                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+//
+//            startActivity(intent, options.toBundle());
+//
+//        } else
+//            startActivity(intent);
+//    }
 
 
     public void queryBooks() {
@@ -170,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         queryBooks();
 
@@ -238,8 +276,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.search_books:
                 hideControls();
         }

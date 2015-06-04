@@ -36,17 +36,14 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 
-@EActivity
 public class AddBooksActivity extends AppCompatActivity {
 
 
-    @ViewById
     AutoCompleteTextView etBookName;
-    @ViewById
+
     AutoCompleteTextView etBookAuthor;
-    @ViewById
+
     ImageView ivBookCover;
-    @ViewById
     Button bPostAd;
 
 
@@ -62,33 +59,61 @@ public class AddBooksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_books);
 
+        ivBookCover = (ImageView) findViewById(R.id.ivBookCover);
+        etBookAuthor = (AutoCompleteTextView) findViewById(R.id.etBookAuthor);
+        etBookName = (AutoCompleteTextView) findViewById(R.id.etBookName);
+        bPostAd = (Button) findViewById(R.id.bPostAd);
+
         etBookName.setAdapter(new BooksAutocompleteAdapter(this, android.R.layout.simple_list_item_1));
 
+        etBookName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(position);
+                etBookName.setText(clickedItem.book_name);
+                etBookAuthor.setText(clickedItem.book_author);
+                Picasso.with(AddBooksActivity.this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
+                presentURL = clickedItem.book_cover_URL;
+            }
+        });
 
+        bPostAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseObject gameScore = new ParseObject("Test");
+                gameScore.put("text", etBookName.getText().toString());
+                gameScore.put("author", etBookAuthor.getText().toString());
+                gameScore.put("cover", presentURL);
+                gameScore.saveInBackground();
+
+                Intent intent = new Intent(AddBooksActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    @ItemClick
-    public void etBookName(int pos){
+//    @ItemClick
+//    public void etBookName(int pos) {
+//
+//        BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(pos);
+//        etBookName.setText(clickedItem.book_name);
+//        etBookAuthor.setText(clickedItem.book_author);
+//        Picasso.with(this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
+//        presentURL = clickedItem.book_cover_URL;
+//
+//    }
 
-        BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(pos);
-        etBookName.setText(clickedItem.book_name);
-        etBookAuthor.setText(clickedItem.book_author);
-        Picasso.with(this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
-        presentURL = clickedItem.book_cover_URL;
-
-    }
-
-    @Click
-    public void bPostAd(){
-        ParseObject gameScore = new ParseObject("Test");
-        gameScore.put("text", etBookName.getText().toString());
-        gameScore.put("author", etBookAuthor.getText().toString());
-        gameScore.put("cover", presentURL);
-        gameScore.saveInBackground();
-
-        Intent intent = new Intent(this, MainActivity_.class);
-        startActivity(intent);
-    }
+//    @Click
+//    public void bPostAd() {
+//        ParseObject gameScore = new ParseObject("Test");
+//        gameScore.put("text", etBookName.getText().toString());
+//        gameScore.put("author", etBookAuthor.getText().toString());
+//        gameScore.put("cover", presentURL);
+//        gameScore.saveInBackground();
+//
+//        Intent intent = new Intent(this, MainActivity_.class);
+//        startActivity(intent);
+//    }
 
 
     @Override

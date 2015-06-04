@@ -32,24 +32,18 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-@EActivity
 public class DisplayBookListing extends AppCompatActivity implements ObservableScrollViewCallbacks {
 
     static boolean isComplete = false;
-    @ViewById
+
     ImageView ivBookCover;
-    @ViewById
     Toolbar tbExtended;
-    @ViewById
     TextView tvBookName;
-    @ViewById
     TextView tvBookAuthor;
-    @ViewById
     ObservableListView lvAds;
-    @ViewById
     RelativeLayout rvBookPanel;
-    @ViewById
     SwitchCompat switch_compat;
+
     private int initialCoverWidth;
     private int initialToolBarHeight;
 
@@ -57,6 +51,15 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_book_listing);
+
+        ivBookCover = (ImageView) findViewById(R.id.ivBookCover);
+        tbExtended = (Toolbar) findViewById(R.id.tbExtended);
+        tvBookName = (TextView) findViewById(R.id.tvBookName);
+        tvBookAuthor = (TextView) findViewById(R.id.tvBookAuthor);
+        lvAds = (ObservableListView) findViewById(R.id.lvAds);
+        rvBookPanel = (RelativeLayout) findViewById(R.id.rvBookPanel);
+        switch_compat = (SwitchCompat) findViewById(R.id.switch_compat);
+
         isComplete = false;
 
         Helper.setAndroidContext(this);
@@ -153,7 +156,6 @@ public class DisplayBookListing extends AppCompatActivity implements ObservableS
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     public void setStatusAndToolbarColor() {

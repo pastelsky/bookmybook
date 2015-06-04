@@ -1,96 +1,135 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
+    android:gravity="bottom"
+    sothree:umanoDragView="@+id/dragView"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="50dp"
+    sothree:umanoParalaxOffset="100dp"
+    sothree:umanoShadowHeight="4dp">
 
-    <ImageView
-        android:id="@+id/ivBookCover"
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/color1"
-        android:scaleType="centerCrop"
-        android:transitionName="tAddBook"
-        />
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cvPost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivBookCover"
-        card_view:cardCornerRadius="1dp"
-        card_view:cardElevation="1dp">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/ivBookCover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp"
+            android:background="@color/color1"
+            android:scaleType="centerCrop"
+            android:transitionName="tAddBook" />
 
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/tilBookName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                >
-        <AutoCompleteTextView
-            android:id="@+id/etBookName"
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cvPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Book Name"
-            android:inputType="textCapWords"
-            android:textColorHighlight="@color/color3"
-            android:textCursorDrawable="@drawable/cursor_color" />
+            android:layout_below="@+id/ivBookCover"
+            card_view:cardCornerRadius="1dp"
+            card_view:cardElevation="1dp">
 
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/tilBookAuthor"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tilBookName"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                >
-        <AutoCompleteTextView
-            android:id="@+id/etBookAuthor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/til2"
-            android:hint="Book Author"
-            android:inputType="textCapWords"
-            android:textColorHighlight="@color/color3"
-            android:textCursorDrawable="@drawable/cursor_color" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content">
 
-            <!--<fr.ganfra.materialspinner.MaterialSpinner-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilBookName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etBookName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Book Name"
+                        android:inputType="textCapWords"
+                        android:textColorHighlight="@color/color3"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilBookAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tilBookName"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etBookAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/til2"
+                        android:hint="Book Author"
+                        android:inputType="textCapWords"
+                        android:textColorHighlight="@color/color3"
+                        android:textCursorDrawable="@drawable/cursor_color" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--<fr.ganfra.materialspinner.MaterialSpinner-->
                 <!--android:id="@+id/spinner"-->
                 <!--app:ms_multiline="false"-->
                 <!--app:ms_hint="hint"-->
                 <!--app:ms_floatingLabelText="floating label"-->
-            <!--app:ms_arrowColor="#0000FF"-->
-            <!--app:ms_arrowSize="16dp"-->
-            <!--app:ms_alignLabels="false"-->
+                <!--app:ms_arrowColor="#0000FF"-->
+                <!--app:ms_arrowSize="16dp"-->
+                <!--app:ms_alignLabels="false"-->
                 <!--app:met_floatingLabel="highlight"-->
                 <!--app:ms_floatingLabelColor="#00FF00"-->
-            <!--android:layout_width="match_parent"-->
+                <!--android:layout_width="match_parent"-->
                 <!--android:layout_below="@+id/etBookAuthor"-->
                 <!--android:layout_height="wrap_content" />-->
 
-            <Button
-                android:id="@+id/bPostAd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/etBookAuthor"
-                android:text="POST" />
+                <Button
+                    android:id="@+id/bPostAd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/etBookAuthor"
+                    android:text="POST" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-</RelativeLayout>
+    </RelativeLayout>
+
+    <!--Sliding Layout-->
+    <LinearLayout
+        android:id="@+id/dragView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#ffffff"
+        android:clickable="true"
+        android:focusable="false"
+        android:orientation="vertical">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <fragment
+                android:id="@+id/scanner_fragment"
+                android:name="com.example.shubhamkanodia.bookmybook.ScannerFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

@@ -11,4 +11,9 @@
     <item name="radio_button_7" type="id" />
     <item name="radio_button_8" type="id" />
     <item name="radio_button_9" type="id" />
+
+    <item type="id" name="menu_flash" />
+    <item type="id" name="menu_auto_focus" />
+    <item type="id" name="menu_formats" />
+    <item type="id" name="menu_camera_selector" />
 </resources>
