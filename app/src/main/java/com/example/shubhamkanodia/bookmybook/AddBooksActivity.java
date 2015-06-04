@@ -17,12 +17,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BooksAutocompleteAdapter;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.parse.ParseObject;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Background;
@@ -34,6 +36,8 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 
 public class AddBooksActivity extends AppCompatActivity {
@@ -54,16 +58,27 @@ public class AddBooksActivity extends AppCompatActivity {
     ArrayList<String> bookSuggestions = new ArrayList<String>();
     ArrayAdapter bookSuggestionsAdapter;
 
+    SlidingUpPanelLayout suPanelLayout;
+
+    Button bExpandPanel;
+    private ZBarScannerView mScannerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_books);
 
+        mScannerView = (ZBarScannerView) findViewById(R.id.scanner_fragment);
+        mScannerView.startCamera();
+
+        suPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+
         ivBookCover = (ImageView) findViewById(R.id.ivBookCover);
         etBookAuthor = (AutoCompleteTextView) findViewById(R.id.etBookAuthor);
         etBookName = (AutoCompleteTextView) findViewById(R.id.etBookName);
         bPostAd = (Button) findViewById(R.id.bPostAd);
-
+        bExpandPanel = (Button) findViewById(R.id.bExpandPanel);
         etBookName.setAdapter(new BooksAutocompleteAdapter(this, android.R.layout.simple_list_item_1));
 
         etBookName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,7 +105,17 @@ public class AddBooksActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        bExpandPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                mScannerView.startCamera();
+            }
+        });
     }
+
 
 //    @ItemClick
 //    public void etBookName(int pos) {
@@ -115,6 +140,15 @@ public class AddBooksActivity extends AppCompatActivity {
 //        startActivity(intent);
 //    }
 
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        if (suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+//            suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+//        }
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
