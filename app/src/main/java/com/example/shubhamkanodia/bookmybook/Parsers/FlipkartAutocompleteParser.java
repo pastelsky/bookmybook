@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -47,18 +48,19 @@ public class FlipkartAutocompleteParser {
             reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
             receivedJSON = reader.readLine();
 
+            Log.e("JSONPRINT", receivedJSON);
+
             Pattern pattern = Pattern.compile("\"(978[\\d]{10})\",\"([^\"]+)\",\"([^\"]+)\"", Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(receivedJSON);
             while (matcher.find()) {
-                System.out.println("group 1: " + matcher.group(1));
-                System.out.println("group 2: " + matcher.group(2));
-                System.out.println("group 3: " + matcher.group(3));
+                BookItem toInsert = new BookItem();
+                toInsert.book_ISBN_13 = matcher.group(1);
+                toInsert.book_name = matcher.group(2);
+                toInsert.book_author  = GoogleBooksParser.getAuthorFromISBN(toInsert.book_ISBN_13);
+                toInsert.book_cover_URL = matcher.group(3).replaceAll("[0-9]{1,3}x[0-9]{1,3}", "100x100").replace("\\/", "/");
+                Log.e("TEST", toInsert.book_cover_URL);
+bookList.add(toInsert);
             }
-            BookItem toInsert = new BookItem();
-            toInsert.book_name = "ok";
-            toInsert.book_author  = "ok";
-            toInsert.book_cover_URL = "ok";
-            toInsert.book_ISBN_13 = "12";
 
 
         } catch (IOException e) {

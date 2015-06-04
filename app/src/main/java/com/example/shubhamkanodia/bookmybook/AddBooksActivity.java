@@ -73,7 +73,7 @@ public class AddBooksActivity extends AppCompatActivity {
         BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(pos);
         etBookName.setText(clickedItem.book_name);
         etBookAuthor.setText(clickedItem.book_author);
-        Picasso.with(this).load(clickedItem.book_cover_URL.replaceAll("200", "400")).into(ivBookCover);
+        Picasso.with(this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
         presentURL = clickedItem.book_cover_URL;
 
     }

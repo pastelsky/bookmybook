@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.DataWeavePriceParser;
+import com.example.shubhamkanodia.bookmybook.Parsers.FlipkartAutocompleteParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.squareup.picasso.Picasso;
@@ -58,7 +59,7 @@ public class BooksAutocompleteAdapter extends ArrayAdapter<BookItem> implements 
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    bookResults = DataWeavePriceParser.getBookAutocompleteJSON(constraint.toString());
+                    bookResults = FlipkartAutocompleteParser.getBookAutocompleteJSON(constraint.toString());
 
                     filterResults.values = bookResults;
                     filterResults.count = bookResults.size();

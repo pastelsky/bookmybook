@@ -27,6 +27,8 @@ import java.util.ArrayList;
 public class GoogleBooksParser {
 
     final static String apiURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=intitle:";
+    final static String apiAuthorURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(authors))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&projection=lite&prettyPrint=false&q=isbn:";
+
     static String receivedJSON;
 
     public static ArrayList<BookItem> getBookAutocompleteJSON(String query){
@@ -93,6 +95,49 @@ public class GoogleBooksParser {
         return bookList;
     }
 
+    static public String getAuthorFromISBN(String isbn) {
+        DefaultHttpClient defaultClient = new DefaultHttpClient();
+        HttpGet httpGetRequest = new HttpGet(apiAuthorURL + isbn);
+        Log.e("Searching...", apiURL + isbn);
+
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = defaultClient.execute(httpGetRequest);
+        } catch (IOException e) {
+            Log.e("JSONPrint", "IOerror...");
+            e.printStackTrace();
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
+            receivedJSON = reader.readLine();
+
+            JSONObject jsonObject = new JSONObject(receivedJSON);
+            JSONArray jArray = jsonObject.getJSONArray("items");
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                return volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("JSONPrint", "Error1...");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSONPrint", "Error2...");
+
+        }
+
+        return " ";
+    }
 
 
 }
