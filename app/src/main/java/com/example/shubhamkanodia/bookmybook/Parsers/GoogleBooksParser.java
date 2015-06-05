@@ -29,9 +29,12 @@ public class GoogleBooksParser {
     final static String apiURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=intitle:";
     final static String apiAuthorURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(authors))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&projection=lite&prettyPrint=false&q=isbn:";
 
+    final static String apiTitleURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=isbn:";
+
+
     static String receivedJSON;
 
-    public static ArrayList<BookItem> getBookAutocompleteJSON(String query){
+    public static ArrayList<BookItem> getBookAutocompleteJSON(String query) {
 
         DefaultHttpClient defaultClient = new DefaultHttpClient();
         HttpGet httpGetRequest = new HttpGet(apiURL + query.replaceAll("[ \n]+", "+"));
@@ -55,8 +58,7 @@ public class GoogleBooksParser {
             JSONObject jsonObject = new JSONObject(receivedJSON);
             JSONArray jArray = jsonObject.getJSONArray("items");
 
-            for (int i=0; i < jArray.length(); i++)
-            {
+            for (int i = 0; i < jArray.length(); i++) {
                 try {
                     JSONObject oneObject = jArray.getJSONObject(i);
                     JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
@@ -64,7 +66,7 @@ public class GoogleBooksParser {
 
                     BookItem toInsert = new BookItem();
                     toInsert.book_name = volumeInfo.getString("title");
-                    toInsert.book_author  = volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
+                    toInsert.book_author = volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
 
                     JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                     toInsert.book_cover_URL = imageLinks.getString("smallThumbnail");
@@ -72,9 +74,8 @@ public class GoogleBooksParser {
                     JSONObject industryIdentifiers = volumeInfo.getJSONArray("industryIdentifiers").getJSONObject(1);
                     toInsert.book_ISBN_13 = industryIdentifiers.getString("identifier");
 
-                    if(!bookList.contains(toInsert) && toInsert.book_name.length() < 70)
+                    if (!bookList.contains(toInsert) && toInsert.book_name.length() < 70)
                         bookList.add(toInsert);
-
 
 
                 } catch (JSONException e) {
@@ -121,6 +122,7 @@ public class GoogleBooksParser {
                 JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
                 return volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
 
+
             } catch (JSONException e) {
                 Log.e("JSONPrint", "JSOnExc...");
 
@@ -139,5 +141,49 @@ public class GoogleBooksParser {
         return " ";
     }
 
+    static public String getTitleFromISBN(String isbn) {
+        DefaultHttpClient defaultClient = new DefaultHttpClient();
+        HttpGet httpGetRequest = new HttpGet(apiTitleURL + isbn);
+        Log.e("Searching...", apiTitleURL + isbn);
+
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = defaultClient.execute(httpGetRequest);
+        } catch (IOException e) {
+            Log.e("JSONPrint", "IOerror...");
+            e.printStackTrace();
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
+            receivedJSON = reader.readLine();
+
+            JSONObject jsonObject = new JSONObject(receivedJSON);
+            JSONArray jArray = jsonObject.getJSONArray("items");
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                Log.e("title", volumeInfo.getString("title"));
+                return volumeInfo.getString("title");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("JSONPrint", "Error1...");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSONPrint", "Error2...");
+
+        }
+
+        return " ";
+    }
 
 }

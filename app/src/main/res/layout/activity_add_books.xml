@@ -131,7 +131,7 @@
 
             <fragment
                 android:id="@+id/scanner_fragment"
-                android:name="com.example.shubhamkanodia.bookmybook.ScannerFragment"
+                android:name="com.example.shubhamkanodia.bookmybook.AddBooksActivity$ScannerFragmentTest"
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1" />
