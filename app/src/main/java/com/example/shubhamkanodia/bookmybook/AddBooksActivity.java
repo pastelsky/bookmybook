@@ -403,7 +403,7 @@ public class AddBooksActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Log.e("in async", params[0]);
             bookTitle = GoogleBooksParser.getTitleFromISBN(params[0]);
-            //bookAuthor = GoogleBooksParser.getAuthorFromISBN(params[0]);
+            bookAuthor = GoogleBooksParser.getAuthorFromISBN(params[0]);
             return bookTitle;
 
         }
@@ -413,7 +413,7 @@ public class AddBooksActivity extends AppCompatActivity {
             // might want to change "executed" for the returned string passed
             // into onPostExecute() but that is upto you
             etBookName.setText(bookTitle);
-            //etBookAuthor.setText(bookAuthor);
+            etBookAuthor.setText(bookAuthor);
         }
 
         @Override
