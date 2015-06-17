@@ -1,5 +1,6 @@
 package com.example.shubhamkanodia.bookmybook;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,6 +33,7 @@ public class IntroductionActivity extends FragmentActivity implements
     ViewPager vpIntro;
 
     private PagerAdapter mPagerAdapter;
+    Fragment signInFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,27 @@ public class IntroductionActivity extends FragmentActivity implements
             vpIntro.setCurrentItem(vpIntro.getCurrentItem() - 1);
         }
 }
+
+    @Override
+    public void onActivityResult(int requestCode, int responseCode,
+                                 Intent intent) {
+
+        Log.e("Resolved in main", "G+");
+
+        signInFragment.onActivityResult(requestCode, responseCode, intent);
+        super.onActivityResult(requestCode, responseCode, intent);
+//        if (requestCode == RC_SIGN_IN) {
+//            if (responseCode != getActivity().RESULT_OK) {
+//                mSignInClicked = false;
+//            }
+//
+//            mIntentInProgress = false;
+//
+//            if (!mGoogleApiClient.isConnecting()) {
+//                mGoogleApiClient.connect();
+//            }
+//        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,7 +150,8 @@ public class IntroductionActivity extends FragmentActivity implements
             switch (position){
                 case 0: return new IntroFragment();
 
-                case 1: return new IntroPage2Fragment();
+                case 1: signInFragment = new IntroPage2Fragment();
+                    return signInFragment;
 
                 default: return new IntroPage2Fragment();
 

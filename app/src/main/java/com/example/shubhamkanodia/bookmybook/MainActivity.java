@@ -20,7 +20,6 @@ import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
-import com.firebase.client.Firebase;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -74,9 +73,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         tabBar = (TabLayout) findViewById(R.id.tabBar);
 
         Helper.setAndroidContext(this);
-        Firebase.setAndroidContext(this);
         lvBooks.setScrollViewCallbacks(this);
-        Firebase myFirebaseRef = new Firebase("https://intense-torch-2456.firebaseio.com/android/books");
         ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 

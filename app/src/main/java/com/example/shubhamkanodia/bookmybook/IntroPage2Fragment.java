@@ -89,6 +89,12 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
 
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+
+
     }
 
     @Override
@@ -101,10 +107,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         tvHeading = (TextView) v.findViewById(R.id.tvHeading);
         bGoogle = (Button) v.findViewById(R.id.bGoogle);
 
-        tvHeading.setVisibility(View.INVISIBLE);
-        bGoogle.setVisibility(View.INVISIBLE);
-
-
+        bGoogle.setOnClickListener(this);
         Helper.setAndroidContext(getActivity());
 
         double lat = Helper.getLastKnownLocation() != null ? Helper.getLastKnownLocation().getLatitude() : 12.88;
@@ -117,13 +120,6 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         Picasso.with(getActivity()).load(mapURL).transform(new GrayscaleTransformation()).into(ivMapView);
         ivMapView.setColorFilter(new PorterDuffColorFilter(getActivity().getResources().getColor(R.color.color1), PorterDuff.Mode.MULTIPLY));
 
-
-        bGoogle.setOnClickListener(this);
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
         return v;
 
 
@@ -148,6 +144,8 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
+                Log.e("startResolutionForRe", "G+");
+
                 mConnectionResult.startResolutionForResult(getActivity(), RC_SIGN_IN);
             } catch (IntentSender.SendIntentException e) {
                 mIntentInProgress = false;
@@ -182,7 +180,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int responseCode,
                                     Intent intent) {
 
-        Log.e("Resolved", "G+");
+        Log.e("Resolved in frag", "G+");
         if (requestCode == RC_SIGN_IN) {
             if (responseCode != getActivity().RESULT_OK) {
                 mSignInClicked = false;
@@ -256,7 +254,12 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
      */
     private void signInWithGplus() {
         Log.e("Connecting", "g+");
-        if (!mGoogleApiClient.isConnecting()) {
+        if(mGoogleApiClient.isConnected()) {
+            Toast.makeText(getActivity(), "Already connected", Toast.LENGTH_SHORT);
+            Log.e("Already Connecting", "g+");
+
+        }
+        else if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
         }
@@ -319,7 +322,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                     set.setDuration(600);
                     set.play(ObjectAnimator.ofFloat(ivPin, "pivotX", x, x, x, x, x));
                     set.play(ObjectAnimator.ofFloat(ivPin, "pivotY", y, y, y, y, y));
-                    set.play(ObjectAnimator.ofFloat(ivPin, "rotationX", 55, -30, 0));
+                    set.play(ObjectAnimator.ofFloat(ivPin, "rotationX", 85, -30, 0));
                     set.play(ObjectAnimator.ofFloat(ivPin, "alpha", 0, 1));
 
                     set.start();
@@ -335,16 +338,21 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         if (isVisibleToUser) {
 
             if (isFirstTimeVisible) {
-                createPin(5);
-                tvHeading.setVisibility(View.VISIBLE);
-                bGoogle.setVisibility(View.VISIBLE);
 
-                AnimationHelper.showView(tvHeading, true , 500);
-                AnimationHelper.showView(bGoogle, true , 500);
+                AnimationHelper.fadeInDown(tvHeading, 500).addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {}
 
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        createPin(6);
+                    }
 
-
-
+                    @Override
+                    public void onAnimationCancel(Animator animator) {}
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {}
+                });
 
                 isFirstTimeVisible = false;
 

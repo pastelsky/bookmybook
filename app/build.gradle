@@ -83,8 +83,7 @@ dependencies {
     compile "org.androidannotations:androidannotations-api:$AAVersion"
 
     compile ('com.github.ksoichiro:android-observablescrollview:1.5.1')
-    compile 'com.appyvet:materialrangebar:1.0'
-//    compile 'com.quinny898.library.persistentsearch:library:1.0.0-SNAPSHOT'
+
 
     compile 'me.dm7.barcodescanner:zbar:1.7.2'
     compile 'com.sothree.slidinguppanel:library:3.0.0'

@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +17,11 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
-import com.nineoldandroids.view.ViewHelper;
 
 import org.androidannotations.annotations.ViewById;
 
@@ -109,6 +112,39 @@ public class AnimationHelper {
 
         }
 
+    }
+
+    public static AnimatorSet fadeInDown(View v, int duration){
+
+        if (v == null)
+            Log.e("View", "No view found: Null reference");
+
+            ObjectAnimator mover = ObjectAnimator.ofFloat(v, "translationY", -50, 0);
+            ObjectAnimator alphaer = ObjectAnimator.ofFloat(v, "alpha", 0, 1);
+
+            AnimatorSet aSet = new AnimatorSet();
+            aSet.setInterpolator(new AnticipateOvershootInterpolator());
+            aSet.play(mover).with(alphaer);
+            aSet.setDuration(duration);
+
+        aSet.start();
+        return aSet;
+
+    }
+
+    public static AnimatorSet fadeInUp(View v, int duration){
+
+        if (v == null)
+            Log.e("View", "No view found: Null reference");
+
+        ObjectAnimator mover = ObjectAnimator.ofFloat(v, "translationY", 50, 0);
+        ObjectAnimator alphaer = ObjectAnimator.ofFloat(v, "alpha", 0, 1);
+
+        AnimatorSet aSet = new AnimatorSet();
+        aSet.play(mover).with(alphaer);
+        aSet.setDuration(duration);
+
+        return aSet;
     }
 
 
