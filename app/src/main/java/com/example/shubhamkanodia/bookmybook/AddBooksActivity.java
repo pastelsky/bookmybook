@@ -42,8 +42,16 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.TextChange;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
@@ -72,7 +80,16 @@ public class AddBooksActivity extends AppCompatActivity {
     static SlidingUpPanelLayout suPanelLayout;
 
     Button bExpandPanel;
-    private static ZBarScannerView mScannerView;
+
+    static ZBarScannerView mScannerView;
+    static String isbn;
+    static String publishDate;
+    static String categories;
+
+    static JSONArray jArray;
+    static JSONObject jsonObject;
+
+    static String string_json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +97,7 @@ public class AddBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_books);
 
         mScannerView = (ZBarScannerView) findViewById(R.id.scanner_fragment);
-        mScannerView.startCamera();
+//        mScannerView.startCamera();
 
         suPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
@@ -106,14 +123,51 @@ public class AddBooksActivity extends AppCompatActivity {
         bPostAd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseObject gameScore = new ParseObject("Test");
-                gameScore.put("text", etBookName.getText().toString());
-                gameScore.put("author", etBookAuthor.getText().toString());
-                gameScore.put("cover", presentURL);
-                gameScore.saveInBackground();
+                ParseObject book = new ParseObject("book");
 
-                Intent intent = new Intent(AddBooksActivity.this, MainActivity.class);
+                //Getting the author list and categories list and putting it in array.
+                List<String> author_list = Arrays.asList(etBookAuthor.getText().toString().split("\\s*,\\s*"));
+                List<String> categories_list = Arrays.asList(categories.toString().split("\\s*,\\s*"));
+
+
+                for (int i = 0; i < author_list.size(); i++)
+                    Log.e("i", "I  + " + author_list.get(i));
+
+
+                book.addAll("book_authors", author_list);
+                book.addAll("categories", categories_list);
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+
+
+//                Log.e("isbn", isbn);
+//                Log.e("bookname", etBookName.getText().toString());
+//                Log.e("PD", publishDate);
+//
+                book.put("ISBN_13", Integer.parseInt(isbn));
+
+                book.put("book_name", etBookName.getText().toString());
+                try {
+                    book.put("publish_date", formatter.parse(publishDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                book.put("is_isbn_indexed", true);
+                book.saveInBackground();
+
+                ParseObject adlisting = new ParseObject("adlisting");
+                adlisting.put("book", book);
+                adlisting.saveInBackground();
+
+//                ParseObject gameScore = new ParseObject("Test");
+//                gameScore.put("text", etBookName.getText().toString());
+//                gameScore.put("author", etBookAuthor.getText().toString());
+//                gameScore.put("cover", presentURL);
+//                gameScore.saveInBackground();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -152,14 +206,16 @@ public class AddBooksActivity extends AppCompatActivity {
 //    }
 
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        if (suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-//            suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-//        }
-//
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+            mScannerView.stopCamera();
+        } else {
+            mScannerView.stopCamera();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -312,12 +368,13 @@ public class AddBooksActivity extends AppCompatActivity {
 //            r.play();
 //        } catch (Exception e) {}
 //        showMessageDialog("Contents = " + rawResult.getContents() + ", Format = " + rawResult.getBarcodeFormat().getName());
-                Toast.makeText(getActivity(), "sadnese", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "Barcode Detected", Toast.LENGTH_SHORT).show();
                 suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
                 mScannerView.stopCamera();
+                isbn = rawResult.getContents();
                 Log.e("sending to asyn", rawResult.getContents());
-                new GetTitleAsyncTask().execute(rawResult.getContents());
-//                etBookName.setText(GoogleBooksParser.getTitleFromISBN(rawResult.getContents()));
+                new GetBookInfoAsynTask().execute(rawResult.getContents());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -394,7 +451,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
 
     // Asynctask
-    private static class GetTitleAsyncTask extends AsyncTask<String, Void, String> {
+    private static class GetBookInfoAsynTask extends AsyncTask<String, Void, String> {
 
         String bookTitle;
         String bookAuthor;
@@ -402,16 +459,121 @@ public class AddBooksActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             Log.e("in async", params[0]);
-            bookTitle = GoogleBooksParser.getTitleFromISBN(params[0]);
-            bookAuthor = GoogleBooksParser.getAuthorFromISBN(params[0]);
-            return bookTitle;
+//            bookTitle = GoogleBooksParser.getTitleFromISBN(params[0]);
+//            bookAuthor = GoogleBooksParser.getAuthorFromISBN(params[0]);
+//            publishDate = GoogleBooksParser.getPublishDateFromISBN(params[0]);
+            // categories = GoogleBooksParser.getCategoriesFromISBN(params[0]);
+
+            string_json = GoogleBooksParser.getJSONFromUrl(params[0]);
+
+            try {
+                jsonObject = new JSONObject(string_json);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            bookTitle = getTitleFromJsonObject(jsonObject);
+            publishDate = getPublishedDateFromJsonObject(jsonObject);
+            bookAuthor = getAuthorFromJsonObject(jsonObject);
+            categories = getCategoiesFromjArray(jsonObject);
+            return "";
 
         }
+
+
+        public String getAuthorFromJsonObject(JSONObject jsonObject) {
+            JSONArray jArray = null;
+            try {
+                jArray = jsonObject.getJSONArray("items");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                return volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+
+            }
+            return " ";
+        }
+
+
+        public String getTitleFromJsonObject(JSONObject jsonObject) {
+            try {
+                jArray = jsonObject.getJSONArray("items");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                Log.e("title", volumeInfo.getString("title"));
+                return volumeInfo.getString("title");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+            }
+
+            return " ";
+        }
+
+        public String getPublishedDateFromJsonObject(JSONObject jsonObject) {
+            try {
+                jArray = jsonObject.getJSONArray("items");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                Log.e("PD", volumeInfo.getString("publishedDate"));
+                return volumeInfo.getString("publishedDate");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+            }
+
+            return " ";
+        }
+
+
+        public String getCategoiesFromjArray(JSONObject jsonObject) {
+            JSONArray jArray = null;
+            try {
+                jArray = jsonObject.getJSONArray("items");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                JSONObject oneObject = jArray.getJSONObject(0);
+                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
+                return volumeInfo.getJSONArray("categories").join(", ").replaceAll("\"", "");
+
+            } catch (JSONException e) {
+                Log.e("JSONPrint", "JSOnExc...");
+
+            }
+            return " ";
+        }
+
 
         @Override
         protected void onPostExecute(String result) {
             // might want to change "executed" for the returned string passed
             // into onPostExecute() but that is upto you
+
+//            bookAuthor = getAuthorFromjArray(jArray);
+//            bookTitle = getTitleFromjArray(jArray);
+//            publishDate = getPublishDateFromjArray(jArray);
+//            categories = getCategoiesFromjArray(jArray);
             etBookName.setText(bookTitle);
             etBookAuthor.setText(bookAuthor);
         }

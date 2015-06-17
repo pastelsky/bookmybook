@@ -105,7 +105,8 @@
                     android:id="@+id/bExpandPanel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expand Scanner" />
+                    android:text="Expand Scanner"
+                    android:layout_below="@+id/tilBookAuthor"/>
 
             </RelativeLayout>
 
