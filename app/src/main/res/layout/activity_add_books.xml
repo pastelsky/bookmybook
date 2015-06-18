@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoDragView="@+id/dragView"
-    sothree:umanoOverlay="true"
     sothree:umanoPanelHeight="0dp"
-    sothree:umanoParalaxOffset="100dp"
-    sothree:umanoShadowHeight="4dp">
+    sothree:umanoOverlay="true"
+    sothree:umanoParalaxOffset="25dp"
+    sothree:umanoFadeColor="@color/transparent"
+    sothree:umanoShadowHeight="2dp">
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -79,26 +80,11 @@
                         android:textCursorDrawable="@drawable/cursor_color" />
                 </android.support.design.widget.TextInputLayout>
 
-                <!--<fr.ganfra.materialspinner.MaterialSpinner-->
-                <!--android:id="@+id/spinner"-->
-                <!--app:ms_multiline="false"-->
-                <!--app:ms_hint="hint"-->
-                <!--app:ms_floatingLabelText="floating label"-->
-                <!--app:ms_arrowColor="#0000FF"-->
-                <!--app:ms_arrowSize="16dp"-->
-                <!--app:ms_alignLabels="false"-->
-                <!--app:met_floatingLabel="highlight"-->
-                <!--app:ms_floatingLabelColor="#00FF00"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_below="@+id/etBookAuthor"-->
-                <!--android:layout_height="wrap_content" />-->
-
                 <Button
                     android:id="@+id/bPostAd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@id/etBookAuthor"
                     android:text="POST" />
 
                 <Button
@@ -117,18 +103,13 @@
     <LinearLayout
         android:id="@+id/dragView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:background="#ffffff"
         android:clickable="true"
         android:focusable="false"
         android:orientation="vertical">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:orientation="vertical">
+
 
             <fragment
                 android:id="@+id/fScanner"
@@ -137,7 +118,6 @@
                 android:layout_height="0dip"
                 android:layout_weight="1" />
 
-        </LinearLayout>
     </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

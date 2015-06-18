@@ -150,13 +150,19 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
     @Override
     public void onResume() {
         super.onResume();
-    mScannerView.startCamera(mCameraId);
+
+        Log.e("Scanner", "Fragment - initialize - start");
+
+        mScannerView.startCamera(mCameraId);
     mScannerView.setResultHandler(this);
     mScannerView.setFlash(mFlash);
     mScannerView.setAutoFocus(mAutoFocus);
 
-        if(suPanelLayout.getPanelState()!= SlidingUpPanelLayout.PanelState.EXPANDED)
-        mScannerView.stopCamera();
+        if(suPanelLayout.getPanelState()!= SlidingUpPanelLayout.PanelState.EXPANDED) {
+            Log.e("Scanner", "Fragment - initialize - SP Not Expanded - stopping");
+
+            mScannerView.stopCamera();
+        }
 
 
     }
@@ -250,6 +256,8 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
     @Override
     public void onPause() {
         super.onPause();
+        Log.e("Scanner", "Fragment - onPause - stopping");
+
         mScannerView.stopCamera();
         closeMessageDialog();
         closeFormatsDialog();
