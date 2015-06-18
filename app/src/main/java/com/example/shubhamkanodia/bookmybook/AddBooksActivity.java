@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BooksAutocompleteAdapter;
+import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.parse.ParseObject;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -96,21 +97,78 @@ public class AddBooksActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                ScannerFragment fragment = (ScannerFragment) getSupportFragmentManager().findFragmentById(R.id.fScanner);
+            }
+        });
+
+        suPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                fScanner.stopCamera();
+
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
                 fScanner.startCamera();
+
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+                fScanner.stopCamera();
             }
         });
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        fScanner.stopCamera();
+
         if (suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+            suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             fScanner.stopCamera();
-        } else {
-            fScanner.stopCamera();
+
+            Log.e("Scanner", "Back button pressed - stopped");
         }
+        else{
+            fScanner.stopCamera();
+
+            Log.e("Scanner", "Back button pressed - stopped - finish");
+
+            this.finish();
+
+        }
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if(suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            fScanner.startCamera();
+            Log.e("Scanner", "onResume - SP Expanded - start");
+        }
+
+    }
+
+    public void onPause(){
+        super.onPause();
+
+        Log.e("Scanner", "onPause - stop");
+
+        fScanner.stopCamera();
     }
 
     public void doAfterScanResult(String isbn){
