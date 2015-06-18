@@ -1,5 +1,8 @@
 package com.example.shubhamkanodia.bookmybook.Adapters;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by shubhamkanodia on 09/05/15.
  */
@@ -9,6 +12,9 @@ public class BookItem {
     public String book_author;
     public String book_cover_URL;
     public String book_ISBN_13;
+    public Date book_publish_year;
+    public List<String> book_authors;
+    public List<String> book_categories;
 
     public String book_seller_count;
     public String book_min_offer_price;
@@ -62,6 +68,12 @@ public class BookItem {
             capNext = (ACTIONABLE_DELIMITERS.indexOf((int) c) >= 0); // explicit cast not needed
         }
         return sb.toString();
+    }
+
+
+    public String toString(){
+
+        return this.book_name + " is the book!";
     }
 
 }

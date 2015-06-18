@@ -1,1 +1,1 @@
-include ':app', ':cognalys'
+include ':app', ':cognalys', ':core', ':zbar:sample', ':zxing:zxing', ':zxing:sample', ':zbar:zbar'

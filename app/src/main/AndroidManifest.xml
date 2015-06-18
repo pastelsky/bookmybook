@@ -117,7 +117,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".AddBooksActivity"
+            android:name=".AddBooksActivity_"
             android:label="@string/title_activity_add_books"></activity>
     </application>
 

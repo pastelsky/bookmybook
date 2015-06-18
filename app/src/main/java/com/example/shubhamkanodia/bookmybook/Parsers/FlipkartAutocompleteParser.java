@@ -56,7 +56,7 @@ public class FlipkartAutocompleteParser {
                 BookItem toInsert = new BookItem();
                 toInsert.book_ISBN_13 = matcher.group(1);
                 toInsert.book_name = matcher.group(2);
-                toInsert.book_author  = GoogleBooksParser.getAuthorFromISBN(toInsert.book_ISBN_13);
+//                toInsert.book_author  = GoogleBooksParser.getAuthorFromISBN(toInsert.book_ISBN_13);
                 toInsert.book_cover_URL = matcher.group(3).replaceAll("[0-9]{1,3}x[0-9]{1,3}", "100x100").replace("\\/", "/");
                 Log.e("TEST", toInsert.book_cover_URL);
 bookList.add(toInsert);

@@ -1,7 +1,15 @@
 package com.example.shubhamkanodia.bookmybook.Parsers;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 
 import org.androidannotations.annotations.Background;
@@ -25,7 +33,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,12 +51,11 @@ public class GoogleBooksParser {
 
     final static String apiURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=intitle:";
     final static String apiAuthorURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(authors))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&projection=lite&prettyPrint=false&q=isbn:";
-    final static String apiCategoriesURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(categories))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&projection=lite&prettyPrint=false&q=isbn:";
+    final public static String apiISBNURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,publishedDate,categories))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&langRestrict=en&prettyPrint=false&q=isbn:";
 
-    final static String apiTitleURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=isbn:";
-
-    final static String apiPublishedURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,publishedDate,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=isbn:";
     static String receivedJSON;
+    static Context context;
+
 
     static InputStream is = null;
     static JSONObject jObj = null;
@@ -111,229 +125,78 @@ public class GoogleBooksParser {
         return bookList;
     }
 
-    static public String getJSONFromUrl(String isbn) {
-        HttpURLConnection c = null;
-        try {
-            URL u = new URL(URL + isbn);
-            c = (HttpURLConnection) u.openConnection();
-            c.setRequestMethod("GET");
-            c.setRequestProperty("Content-length", "0");
-            c.setUseCaches(false);
-            c.setAllowUserInteraction(false);
-//            c.setConnectTimeout(timeout);
-//            c.setReadTimeout(timeout);
-            c.connect();
-            int status = c.getResponseCode();
 
-            switch (status) {
-                case 200:
-                case 201:
-                    BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    br.close();
-                    return sb.toString();
-            }
-
-        } catch (MalformedURLException ex) {
-        } catch (IOException ex) {
-        } finally {
-            if (c != null) {
-                try {
-                    c.disconnect();
-                } catch (Exception ex) {
-                }
-            }
-        }
-        return null;
+    public static void setAndroidContext(Context c) {
+        context = c;
     }
 
+    public static BookItem getBookFromJSON(JSONObject json) {
 
-    static public String getAuthorFromISBN(String isbn) {
-        DefaultHttpClient defaultClient = new DefaultHttpClient();
-        HttpGet httpGetRequest = new HttpGet(apiAuthorURL + isbn);
-        Log.e("Searching...", apiURL + isbn);
+        BookItem toReturn = new BookItem();
+        toReturn.book_name = "bullshit";
 
-        HttpResponse httpResponse = null;
+
+        JSONArray items = null;
         try {
-            httpResponse = defaultClient.execute(httpGetRequest);
-        } catch (IOException e) {
-            Log.e("JSONPrint", "IOerror...");
-            e.printStackTrace();
-        }
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
-            receivedJSON = reader.readLine();
+            items = json.getJSONArray("items");
 
-            JSONObject jsonObject = new JSONObject(receivedJSON);
-            JSONArray jArray = jsonObject.getJSONArray("items");
-
-            try {
-                JSONObject oneObject = jArray.getJSONObject(0);
-                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
-                return volumeInfo.getJSONArray("authors").join(", ").replaceAll("\"", "");
+            JSONObject volumeInfo = items.getJSONObject(0).getJSONObject("volumeInfo");
+            Log.e("volumeInfo  is " , ": " + volumeInfo);
 
 
-            } catch (JSONException e) {
-                Log.e("JSONPrint", "JSOnExc...");
+            //Book Name
+            toReturn.book_name = volumeInfo.getString("title");
 
+            Log.e("Okay", "Fetched bookname now.....");
+
+
+            //Book Authors
+            JSONArray authors = new JSONArray();
+            authors = volumeInfo.getJSONArray("authors");
+            List<String> author_list = new ArrayList<String>();
+            for (int i = 0; i < authors.length(); i++) {
+                author_list.add(authors.getString(i));
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error1...");
+            toReturn.book_authors = author_list;
+
+            Log.e("Okay", "Fetched authores now.....");
+
+
+            //Book publishedDate
+            String pubYear = volumeInfo.getString("publishedDate").substring(0, 4);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+            try {
+                Date date = formatter.parse(pubYear);
+                toReturn.book_publish_year = date;
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Log.e("Okay", "Fetched pub now.....");
+
+            //Book Categories
+            JSONArray categories = new JSONArray();
+            categories = volumeInfo.getJSONArray("categories");
+            List<String> cat_list = new ArrayList<String>();
+            for (int i = 0; i < categories.length(); i++) {
+                cat_list.add(categories.getString(i));
+            }
+
+            toReturn.book_categories = cat_list;
+            Log.e("Okay", "Returning now.....");
+            return toReturn;
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("JSONPrint", "Error2...");
+            return null;
 
         }
 
-        return " ";
+
+
     }
-
-    static public String getTitleFromISBN(String isbn) {
-        DefaultHttpClient defaultClient = new DefaultHttpClient();
-        HttpGet httpGetRequest = new HttpGet(apiTitleURL + isbn);
-        Log.e("Searching...", apiTitleURL + isbn);
-
-        HttpResponse httpResponse = null;
-        try {
-            httpResponse = defaultClient.execute(httpGetRequest);
-        } catch (IOException e) {
-            Log.e("JSONPrint", "IOerror...");
-            e.printStackTrace();
-        }
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
-            receivedJSON = reader.readLine();
-
-            JSONObject jsonObject = new JSONObject(receivedJSON);
-            JSONArray jArray = jsonObject.getJSONArray("items");
-
-            try {
-                JSONObject oneObject = jArray.getJSONObject(0);
-                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
-                Log.e("title", volumeInfo.getString("title"));
-                return volumeInfo.getString("title");
-
-            } catch (JSONException e) {
-                Log.e("JSONPrint", "JSOnExc...");
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error1...");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error2...");
-
-        }
-
-        return " ";
-    }
-
-    //getting publish date
-    static public String getPublishDateFromISBN(String isbn) {
-        DefaultHttpClient defaultClient = new DefaultHttpClient();
-        HttpGet httpGetRequest = new HttpGet(apiPublishedURL + isbn);
-        Log.e("Searching...", apiPublishedURL + isbn);
-
-        HttpResponse httpResponse = null;
-        try {
-            httpResponse = defaultClient.execute(httpGetRequest);
-        } catch (IOException e) {
-            Log.e("JSONPrint", "IOerror...");
-            e.printStackTrace();
-        }
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
-            receivedJSON = reader.readLine();
-
-            JSONObject jsonObject = new JSONObject(receivedJSON);
-            JSONArray jArray = jsonObject.getJSONArray("items");
-
-            try {
-                JSONObject oneObject = jArray.getJSONObject(0);
-                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
-                Log.e("publishedDate", volumeInfo.getString("publishedDate"));
-                return volumeInfo.getString("publishedDate");
-
-
-            } catch (JSONException e) {
-                Log.e("JSONPrint", "JSOnExc...");
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error1...");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error2...");
-
-        }
-
-        return " ";
-    }
-
-
-    static public String getCategoriesFromISBN(String isbn) {
-        DefaultHttpClient defaultClient = new DefaultHttpClient();
-        HttpGet httpGetRequest = new HttpGet(apiCategoriesURL + isbn);
-        Log.e("Searching...", apiCategoriesURL + isbn);
-
-        HttpResponse httpResponse = null;
-        try {
-            httpResponse = defaultClient.execute(httpGetRequest);
-        } catch (IOException e) {
-            Log.e("JSONPrint", "IOerror...");
-            e.printStackTrace();
-        }
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent(), "UTF-8"));
-            receivedJSON = reader.readLine();
-
-            JSONObject jsonObject = new JSONObject(receivedJSON);
-            JSONArray jArray = jsonObject.getJSONArray("items");
-
-            try {
-                JSONObject oneObject = jArray.getJSONObject(0);
-                JSONObject volumeInfo = oneObject.getJSONObject("volumeInfo");
-                return volumeInfo.getJSONArray("categories").join(", ").replaceAll("\"", "");
-
-
-            } catch (JSONException e) {
-                Log.e("JSONPrint", "JSOnExc...");
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error1...");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("JSONPrint", "Error2...");
-
-        }
-
-        return " ";
-    }
-
-
 }
