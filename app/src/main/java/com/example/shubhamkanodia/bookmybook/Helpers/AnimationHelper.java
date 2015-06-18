@@ -7,8 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;

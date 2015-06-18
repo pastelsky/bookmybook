@@ -13,11 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
-import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
-import com.ToxicBakery.viewpager.transforms.RotateDownTransformer;
-import com.ToxicBakery.viewpager.transforms.ZoomInTransformer;
-import com.ToxicBakery.viewpager.transforms.ZoomOutSlideTransformer;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 
 import org.androidannotations.annotations.EActivity;
@@ -44,26 +39,6 @@ public class IntroductionActivity extends FragmentActivity implements
         mPagerAdapter = new IntroPagerAdapter(getSupportFragmentManager());
         vpIntro.setAdapter(mPagerAdapter);
 
-        vpIntro.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                if(position == 1)
-                {
-                }
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
 

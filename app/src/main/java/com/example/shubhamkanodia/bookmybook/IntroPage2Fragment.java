@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +39,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.squareup.picasso.Picasso;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
@@ -78,6 +78,8 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     @ViewById
     Button bGoogle;
 
+    @ViewById
+    Button bSkipSignup;
 
     ImageView ivPin;
 
@@ -106,6 +108,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         ivMapView = (ImageView) v.findViewById(R.id.ivMapView);
         tvHeading = (TextView) v.findViewById(R.id.tvHeading);
         bGoogle = (Button) v.findViewById(R.id.bGoogle);
+        bSkipSignup = (Button) v.findViewById(R.id.bSkipSignup);
 
         bGoogle.setOnClickListener(this);
         Helper.setAndroidContext(getActivity());
@@ -123,6 +126,12 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         return v;
 
 
+    }
+
+    @Click
+    public void bSkipSignup(){
+        Intent toStartMain = new Intent(getActivity(), MainActivity.class);
+        startActivity(toStartMain);
     }
 
     public void onStart() {
@@ -200,7 +209,12 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     public void onConnected(Bundle arg0) {
         mSignInClicked = false;
         Toast.makeText(getActivity(), "User is connected!", Toast.LENGTH_LONG).show();
+
         getProfileInformation();
+
+
+        Intent toStartMain = new Intent(getActivity(), MainActivity.class);
+        startActivity(toStartMain);
 
     }
 

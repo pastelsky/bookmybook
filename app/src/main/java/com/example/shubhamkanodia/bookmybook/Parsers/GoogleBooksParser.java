@@ -145,48 +145,68 @@ public class GoogleBooksParser {
             Log.e("volumeInfo  is " , ": " + volumeInfo);
 
 
-            //Book Name
-            toReturn.book_name = volumeInfo.getString("title");
+try {
+    //Book Name
+    toReturn.book_name = volumeInfo.getString("title");
+}
+catch (JSONException e) {
+    e.printStackTrace();
+    Log.e("ParseError", "Book Name not found!");
+}
 
-            Log.e("Okay", "Fetched bookname now.....");
+try {
+    //Book Authors
+    JSONArray authors = new JSONArray();
+    authors = volumeInfo.getJSONArray("authors");
+    List<String> author_list = new ArrayList<String>();
+    for (int i = 0; i < authors.length(); i++) {
+        author_list.add(authors.getString(i));
+    }
 
+    toReturn.book_authors = author_list;
+}
 
-            //Book Authors
-            JSONArray authors = new JSONArray();
-            authors = volumeInfo.getJSONArray("authors");
-            List<String> author_list = new ArrayList<String>();
-            for (int i = 0; i < authors.length(); i++) {
-                author_list.add(authors.getString(i));
-            }
+catch (JSONException e) {
+    e.printStackTrace();
+    Log.e("ParseError", "Book Author not found!");
 
-            toReturn.book_authors = author_list;
-
-            Log.e("Okay", "Fetched authores now.....");
-
-
-            //Book publishedDate
-            String pubYear = volumeInfo.getString("publishedDate").substring(0, 4);
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+}
             try {
-                Date date = formatter.parse(pubYear);
-                toReturn.book_publish_year = date;
+                //Book publishedDate
+                String pubYear = volumeInfo.getString("publishedDate").substring(0, 4);
 
-            } catch (ParseException e) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+                try {
+                    Date date = formatter.parse(pubYear);
+                    toReturn.book_publish_year = date;
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            catch (JSONException e) {
                 e.printStackTrace();
+                Log.e("ParseError", "Publish date not found!");
+
             }
 
-            Log.e("Okay", "Fetched pub now.....");
+            try {
+//            Book Categories
+                JSONArray categories = new JSONArray();
+                categories = volumeInfo.getJSONArray("categories");
+                List<String> cat_list = new ArrayList<String>();
+                for (int i = 0; i < categories.length(); i++) {
+                    cat_list.add(categories.getString(i));
+                }
 
-            //Book Categories
-            JSONArray categories = new JSONArray();
-            categories = volumeInfo.getJSONArray("categories");
-            List<String> cat_list = new ArrayList<String>();
-            for (int i = 0; i < categories.length(); i++) {
-                cat_list.add(categories.getString(i));
+                toReturn.book_categories = cat_list;
             }
+            catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("ParseError", "Categories not found!");
 
-            toReturn.book_categories = cat_list;
+            }
             Log.e("Okay", "Returning now.....");
             return toReturn;
 

@@ -4,7 +4,10 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,7 +43,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ObservableScrollViewCallbacks {
+public class MainActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
 
     final String BOOKS_LABEL = "Test";
     final int animDuration = 400;
@@ -52,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
     Toolbar tbMain;
     ObservableListView lvBooks;
     ProgressBar pbLoading;
-    TabLayout tabBar;
+
+    NavigationView nvDrawer;
+    DrawerLayout dlMain;
+
 
     int hideOffset;
     boolean areControlsHidden;
@@ -70,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
         tbMain = (Toolbar) findViewById(R.id.tbMain);
         lvBooks = (ObservableListView) findViewById(R.id.lvBooks);
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
-        tabBar = (TabLayout) findViewById(R.id.tabBar);
+        nvDrawer = (NavigationView) findViewById(R.id.nvDrawer);
+        dlMain = (DrawerLayout) findViewById(R.id.dlMain);
+
 
         Helper.setAndroidContext(this);
         lvBooks.setScrollViewCallbacks(this);
@@ -79,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
 
         AnimationHelper.zoomInView(bAddBook, 700);
         setSupportActionBar(tbMain);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         areControlsHidden = false;
         hideOffset = Helper.getDeviceHeight() / 10;
@@ -90,9 +99,21 @@ public class MainActivity extends AppCompatActivity implements ObservableScrollV
 //        animationAdapter.setAbsListView(lvBooks);
         lvBooks.setAdapter(bAdapter);
 
-        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.add_book));
-        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.ic_action_content_add));
-        tabBar.addTab(tabBar.newTab().setIcon(R.mipmap.ic_search));
+        nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.settings:
+                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                }
+                menuItem.setChecked(true);
+                dlMain.closeDrawers();
+                return true;
+            }
+        });
+
+
         queryBooks();
 
         bAddBook.setOnClickListener(new View.OnClickListener() {
