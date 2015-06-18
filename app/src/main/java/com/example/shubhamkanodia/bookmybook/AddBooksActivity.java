@@ -2,6 +2,7 @@
 
 package com.example.shubhamkanodia.bookmybook;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -66,6 +69,9 @@ public class AddBooksActivity extends AppCompatActivity {
     @ViewById
     ZBarScannerView fScanner;
 
+    @ViewById
+    LinearLayout dragView;
+
     String presentURL = "";
 
 
@@ -100,6 +106,7 @@ public class AddBooksActivity extends AppCompatActivity {
             }
         });
 
+
         suPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
@@ -115,6 +122,7 @@ public class AddBooksActivity extends AppCompatActivity {
             @Override
             public void onPanelExpanded(View view) {
                 fScanner.startCamera();
+
 
             }
 
