@@ -1,1 +1,1 @@
-include ':app', ':cognalys'
+include ':app', ':cognalys', ':backend', ':api_backend'

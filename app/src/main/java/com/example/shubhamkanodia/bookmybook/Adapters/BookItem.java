@@ -19,6 +19,15 @@ public class BookItem {
     public String book_seller_count;
     public String book_min_offer_price;
 
+    public String book_cat_level_1;
+    public String book_cat_level_2;
+    public String book_cat_level_3;
+    public String book_cat_level_4;
+
+    public int book_flipkart_price;
+    public int book_amazon_price;
+
+
 
     public BookItem(String n, String a, String u) {
         this.book_author = a;

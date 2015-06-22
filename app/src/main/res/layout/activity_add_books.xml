@@ -21,8 +21,15 @@
         tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
 
+        <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
+            android:id="@+id/dlvScannedResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
         <ImageView
             android:id="@+id/ivBookCover"
+            android:layout_below="@id/dlvScannedResult"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/color1"

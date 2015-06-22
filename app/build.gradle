@@ -79,17 +79,18 @@ dependencies {
     compile('com.nhaarman.listviewanimations:lib-core:3.1.0@aar') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
+    }
+    compile('com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar') {
+        exclude module: 'support-v4'
+        exclude module: 'appcompat-v7'
+    }
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile("org.androidannotations:androidannotations-api:$AAVersion") {
+        exclude module: 'support-v4'
+        exclude module: 'appcompat-v7'
 
 
     }
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile ("org.androidannotations:androidannotations-api:$AAVersion")
-            {
-                exclude module: 'support-v4'
-                exclude module: 'appcompat-v7'
-
-
-            }
     compile('com.android.support:appcompat-v7:22.2.0') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
@@ -108,17 +109,22 @@ dependencies {
 
 
     }
+    compile('com.github.florent37:materialimageloading:1.0.1@aar') {
+        transitive = true
+        exclude module: 'support-v4'
+
+    }
     compile project(':cognalys')
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile fileTree(dir: 'libs', include: 'android-*.jar')
     compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
-    compile ('com.google.android.gms:play-services-plus:7.5.0'){
+    compile('com.google.android.gms:play-services-plus:7.5.0') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
 
     }
-    compile ('com.parse.bolts:bolts-android:1.+') {
+    compile('com.parse.bolts:bolts-android:1.+') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
@@ -136,7 +142,7 @@ dependencies {
 
 
     }
-    compile ('me.dm7.barcodescanner:zbar:1.7.2') {
+    compile('me.dm7.barcodescanner:zbar:1.7.2') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
@@ -148,28 +154,27 @@ dependencies {
 
 
     }
-    compile ('com.mcxiaoke.volley:library:1.0.+'){
+    compile('com.mcxiaoke.volley:library:1.0.+') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
 
     }
-    compile ('jp.wasabeef:picasso-transformations:1.0.3@aar'){
+    compile('jp.wasabeef:picasso-transformations:1.0.3@aar') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
 
     }
-    compile ('jp.co.cyberagent.android.gpuimage:gpuimage-library:1.2.3@aar'){
+    compile('jp.co.cyberagent.android.gpuimage:gpuimage-library:1.2.3@aar') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 
 
     }
-    compile ('com.daimajia.easing:library:1.0.1@aar') {
+    compile('com.daimajia.easing:library:1.0.1@aar') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
-
 
     }
     compile('com.daimajia.androidanimations:library:1.1.3@aar') {
@@ -178,10 +183,9 @@ dependencies {
 
 
     }
-
-    compile ('com.android.support:appcompat-v7:22.2.0'){
-        exclude module: 'support-v4' } // no exclusion
-
-
-
+    compile('com.android.support:appcompat-v7:22.2.0') {
+        exclude module: 'support-v4'
+    }
+    // no exclusion
+    compile 'com.google.android.gms:play-services:7.5.0'
 }

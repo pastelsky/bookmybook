@@ -1,0 +1,15 @@
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+application: bookmybook-963
+
+handlers:
+- url: /.*
+  script: hello.app
+
+default_expiration: "1d 12h"
+
+libraries:
+- name: lxml
+  version: "2.3.5"

@@ -51,7 +51,7 @@ public class GoogleBooksParser {
 
     final static String apiURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=10&langRestrict=en&projection=lite&prettyPrint=false&q=intitle:";
     final static String apiAuthorURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(authors))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&projection=lite&prettyPrint=false&q=isbn:";
-    final public static String apiISBNURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,publishedDate,categories))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&langRestrict=en&prettyPrint=false&q=isbn:";
+    final public static String apiISBNURL = "https://www.googleapis.com/books/v1/volumes?fields=items(volumeInfo(title,authors,publishedDate,categories,imageLinks(smallThumbnail)))&key=AIzaSyDeA-dg07cO9ygUVkbCFSNqtL5WEIwwOBs&printType=books&maxResults=1&langRestrict=en&prettyPrint=false&q=isbn:";
 
     static String receivedJSON;
     static Context context;
@@ -133,7 +133,6 @@ public class GoogleBooksParser {
     public static BookItem getBookFromJSON(JSONObject json) {
 
         BookItem toReturn = new BookItem();
-        toReturn.book_name = "bullshit";
 
 
         JSONArray items = null;
@@ -142,35 +141,42 @@ public class GoogleBooksParser {
             items = json.getJSONArray("items");
 
             JSONObject volumeInfo = items.getJSONObject(0).getJSONObject("volumeInfo");
-            Log.e("volumeInfo  is " , ": " + volumeInfo);
+            Log.e("volumeInfo  is ", ": " + volumeInfo);
 
 
-try {
-    //Book Name
-    toReturn.book_name = volumeInfo.getString("title");
-}
-catch (JSONException e) {
-    e.printStackTrace();
-    Log.e("ParseError", "Book Name not found!");
-}
+            try {
+                //Book Name
+                toReturn.book_name = volumeInfo.getString("title");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("ParseError", "Book Name not found!");
+            }
 
-try {
-    //Book Authors
-    JSONArray authors = new JSONArray();
-    authors = volumeInfo.getJSONArray("authors");
-    List<String> author_list = new ArrayList<String>();
-    for (int i = 0; i < authors.length(); i++) {
-        author_list.add(authors.getString(i));
-    }
+            try {
+                //Book Authors
+                JSONArray authors = new JSONArray();
+                authors = volumeInfo.getJSONArray("authors");
+                List<String> author_list = new ArrayList<String>();
+                for (int i = 0; i < authors.length(); i++) {
+                    author_list.add(authors.getString(i));
+                }
 
-    toReturn.book_authors = author_list;
-}
+                toReturn.book_authors = author_list;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("ParseError", "Book Author not found!");
 
-catch (JSONException e) {
-    e.printStackTrace();
-    Log.e("ParseError", "Book Author not found!");
+            }
 
-}
+            try {
+                //Book small cover URL
+
+                JSONObject ilinks = volumeInfo.getJSONObject("imageLinks");
+                toReturn.book_cover_URL = ilinks.getString("smallThumbnail");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             try {
                 //Book publishedDate
                 String pubYear = volumeInfo.getString("publishedDate").substring(0, 4);
@@ -184,8 +190,7 @@ catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ParseError", "Publish date not found!");
 
@@ -201,13 +206,11 @@ catch (JSONException e) {
                 }
 
                 toReturn.book_categories = cat_list;
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ParseError", "Categories not found!");
 
             }
-            Log.e("Okay", "Returning now.....");
             return toReturn;
 
         } catch (JSONException e) {
@@ -215,7 +218,6 @@ catch (JSONException e) {
             return null;
 
         }
-
 
 
     }

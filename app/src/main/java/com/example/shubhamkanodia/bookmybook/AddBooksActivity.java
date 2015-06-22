@@ -13,20 +13,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BooksAutocompleteAdapter;
+import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
+import com.example.shubhamkanodia.bookmybook.Parsers.ImportIOParser;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.parse.FunctionCallback;
+import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseObject;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
@@ -35,11 +47,24 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -50,7 +75,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     @ViewById
     AutoCompleteTextView etBookName;
-    
+
     @ViewById
     AutoCompleteTextView etBookAuthor;
 
@@ -60,7 +85,7 @@ public class AddBooksActivity extends AppCompatActivity {
     @ViewById
     Button bPostAd;
 
-    @ViewById 
+    @ViewById
     SlidingUpPanelLayout suPanelLayout;
 
     @ViewById
@@ -72,8 +97,20 @@ public class AddBooksActivity extends AppCompatActivity {
     @ViewById
     LinearLayout dragView;
 
-    String presentURL = "";
+    @ViewById
+    DynamicListView dlvScannedResult;
 
+
+    String presentURL = "";
+    ArrayList<BookItem> booksScanned = new ArrayList<BookItem>();
+    ScannedBooksAdapter sbAdapter;
+
+    BookItem scannedBook_google;
+    BookItem scannedBook_flipkart;
+    BookItem scannedBook;
+
+    boolean isFlipkartRequestComplete = false;
+    boolean isGoogleRequestComplete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,25 +147,20 @@ public class AddBooksActivity extends AppCompatActivity {
         suPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
-
             }
 
             @Override
             public void onPanelCollapsed(View view) {
                 fScanner.stopCamera();
-
             }
 
             @Override
             public void onPanelExpanded(View view) {
                 fScanner.startCamera();
-
-
             }
 
             @Override
             public void onPanelAnchored(View view) {
-
             }
 
             @Override
@@ -136,6 +168,9 @@ public class AddBooksActivity extends AppCompatActivity {
                 fScanner.stopCamera();
             }
         });
+
+        sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
+        dlvScannedResult.setAdapter(sbAdapter);
     }
 
     @Override
@@ -148,8 +183,7 @@ public class AddBooksActivity extends AppCompatActivity {
             fScanner.stopCamera();
 
             Log.e("Scanner", "Back button pressed - stopped");
-        }
-        else{
+        } else {
             fScanner.stopCamera();
 
             Log.e("Scanner", "Back button pressed - stopped - finish");
@@ -161,17 +195,17 @@ public class AddBooksActivity extends AppCompatActivity {
 
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
-        if(suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+        if (suPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             fScanner.startCamera();
             Log.e("Scanner", "onResume - SP Expanded - start");
         }
 
     }
 
-    public void onPause(){
+    public void onPause() {
         super.onPause();
 
         Log.e("Scanner", "onPause - stop");
@@ -179,22 +213,53 @@ public class AddBooksActivity extends AppCompatActivity {
         fScanner.stopCamera();
     }
 
-    public void doAfterScanResult(String isbn){
+    public void doAfterScanResult(final String isbn) {
 
+        RequestQueue google_queue = Volley.newRequestQueue(this);
+        RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
         Log.e("Scanned Result", isbn);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest
-                (Request.Method.GET, GoogleBooksParser.apiISBNURL + isbn, (String)null, new Response.Listener<JSONObject>() {
+
+//        //Google result
+//        JsonObjectRequest jsonRequest_google = new JsonObjectRequest
+//                (Request.Method.GET, GoogleBooksParser.apiISBNURL + isbn, (String) null, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                        Log.e("VOLLEY", GoogleBooksParser.apiISBNURL + isbn);
+//
+//                        scannedBook_google = GoogleBooksParser.getBookFromJSON(response);
+//
+////                        etBookName.setText(scannedBook.book_name);
+//                        booksScanned.add(scannedBook);
+//
+//                        sbAdapter.notifyDataSetChanged();
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                    }
+//                });
+//
+//        jsonRequest_google.setRetryPolicy(new DefaultRetryPolicy(6000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        JsonObjectRequest jsonRequest_flipkart = new JsonObjectRequest
+                (Request.Method.GET, ImportIOParser.makeFlipkartURLFromISBN(isbn), (String) null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.e("Response:", "is " + response);
+                        BookItem scannedBook = ImportIOParser.getFPBookFromJSON(response);
 
+//                        etBookName.setText(scannedBook.book_name);
+                        booksScanned.add(scannedBook);
 
-                        BookItem scannedBook = GoogleBooksParser.getBookFromJSON(response);
+                        sbAdapter.notifyDataSetChanged();
 
-                        Log.e("The book is " , ":"+ GoogleBooksParser.getBookFromJSON(response).book_name);
-                        etBookName.setText(scannedBook.book_name);
                     }
                 }, new Response.ErrorListener() {
 
@@ -204,7 +269,13 @@ public class AddBooksActivity extends AppCompatActivity {
                     }
                 });
 
-        Volley.newRequestQueue(this).add(jsonRequest);
+        jsonRequest_flipkart.setRetryPolicy(new DefaultRetryPolicy(6000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+//        google_queue.add(jsonRequest_google);
+        flipkart_queue.add(jsonRequest_flipkart);
 
     }
 
@@ -224,7 +295,6 @@ public class AddBooksActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }
