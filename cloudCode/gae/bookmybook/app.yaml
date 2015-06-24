@@ -5,8 +5,12 @@ threadsafe: true
 application: bookmybook-963
 
 handlers:
-- url: /.*
+- url: /q
   script: hello.app
+- url: /q2
+  script: hello2.app
+
+
 
 default_expiration: "1d 12h"
 

@@ -33,6 +33,7 @@ import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BooksAutocompleteAdapter;
 import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.ImportIOParser;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
@@ -220,42 +221,12 @@ public class AddBooksActivity extends AppCompatActivity {
 
         Log.e("Scanned Result", isbn);
 
-//        //Google result
-//        JsonObjectRequest jsonRequest_google = new JsonObjectRequest
-//                (Request.Method.GET, GoogleBooksParser.apiISBNURL + isbn, (String) null, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        Log.e("VOLLEY", GoogleBooksParser.apiISBNURL + isbn);
-//
-//                        scannedBook_google = GoogleBooksParser.getBookFromJSON(response);
-//
-////                        etBookName.setText(scannedBook.book_name);
-//                        booksScanned.add(scannedBook);
-//
-//                        sbAdapter.notifyDataSetChanged();
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                    }
-//                });
-//
-//        jsonRequest_google.setRetryPolicy(new DefaultRetryPolicy(6000,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
         JsonObjectRequest jsonRequest_flipkart = new JsonObjectRequest
-                (Request.Method.GET, ImportIOParser.makeFlipkartURLFromISBN(isbn), (String) null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, AppEngineParser.appEngineApiURL + isbn, (String) null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        BookItem scannedBook = ImportIOParser.getFPBookFromJSON(response);
-
-//                        etBookName.setText(scannedBook.book_name);
+                        BookItem scannedBook = AppEngineParser.getBookFromJSON(response);
                         booksScanned.add(scannedBook);
 
                         sbAdapter.notifyDataSetChanged();
@@ -273,8 +244,6 @@ public class AddBooksActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-
-//        google_queue.add(jsonRequest_google);
         flipkart_queue.add(jsonRequest_flipkart);
 
     }

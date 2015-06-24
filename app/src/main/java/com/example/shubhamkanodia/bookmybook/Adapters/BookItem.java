@@ -15,6 +15,8 @@ public class BookItem {
     public Date book_publish_year;
     public List<String> book_authors;
     public List<String> book_categories;
+    public String book_new_edition_URL;
+    public String book_language;
 
     public String book_seller_count;
     public String book_min_offer_price;
@@ -26,6 +28,7 @@ public class BookItem {
 
     public int book_flipkart_price;
     public int book_amazon_price;
+
 
 
 

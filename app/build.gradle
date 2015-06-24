@@ -37,10 +37,6 @@ buildscript {
         maven {
             url 'https://maven.parse.com/repo'
         }
-//        maven {
-//
-//            url "https://oss.sonatype.org/content/repositories/snapshots"
-//        }
 
     }
     dependencies {
