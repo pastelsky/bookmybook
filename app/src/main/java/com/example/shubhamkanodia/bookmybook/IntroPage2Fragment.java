@@ -37,6 +37,9 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Click;
@@ -129,7 +132,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     }
 
     @Click
-    public void bSkipSignup(){
+    public void bSkipSignup() {
         Intent toStartMain = new Intent(getActivity(), MainActivity.class);
         startActivity(toStartMain);
     }
@@ -187,7 +190,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onActivityResult(int requestCode, int responseCode,
-                                    Intent intent) {
+                                 Intent intent) {
 
         Log.e("Resolved in frag", "G+");
         if (requestCode == RC_SIGN_IN) {
@@ -202,7 +205,6 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
             }
         }
     }
-
 
 
     @Override
@@ -236,6 +238,36 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
+                ParseUser user = new ParseUser();
+
+                int index = email.indexOf("@");
+
+                String id_and_password = email.substring(0, index);
+                user.setUsername(id_and_password);
+                user.setEmail(email);
+                user.setPassword(id_and_password);
+
+                user.put("phoneVerified", false);
+
+
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            // Hooray! Let them use the app now.
+                            Toast.makeText(getActivity(),
+                                    "Successfully Signed up, please log in.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            // Sign up didn't succeed. Look at the ParseException
+                            // to figure out what went wrong
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(),
+                                    "Login failed",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
 
             } else {
                 Toast.makeText(getActivity().getApplicationContext(),
@@ -268,12 +300,11 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
      */
     private void signInWithGplus() {
         Log.e("Connecting", "g+");
-        if(mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             Toast.makeText(getActivity(), "Already connected", Toast.LENGTH_SHORT);
             Log.e("Already Connecting", "g+");
 
-        }
-        else if (!mGoogleApiClient.isConnecting()) {
+        } else if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
         }
@@ -355,7 +386,8 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
 
                 AnimationHelper.fadeInDown(tvHeading, 500).addListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animator) {}
+                    public void onAnimationStart(Animator animator) {
+                    }
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
@@ -363,9 +395,12 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animator) {}
+                    public void onAnimationCancel(Animator animator) {
+                    }
+
                     @Override
-                    public void onAnimationRepeat(Animator animator) {}
+                    public void onAnimationRepeat(Animator animator) {
+                    }
                 });
 
                 isFirstTimeVisible = false;
@@ -375,26 +410,26 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         }
     }
 
-        @Override
-        public void onAttach (Activity activity){
-            super.onAttach(activity);
-            try {
-                mListener = (OnFragmentInteractionListener) activity;
-            } catch (ClassCastException e) {
-                throw new ClassCastException(activity.toString()
-                        + " must implement OnFragmentInteractionListener");
-            }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
-
-        @Override
-        public void onDetach () {
-            super.onDetach();
-            mListener = null;
-        }
-
-        public interface OnFragmentInteractionListener {
-            // TODO: Update argument type and name
-            public void onFragmentInteraction(Uri uri);
-        }
-
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(Uri uri);
+    }
+
+}

@@ -1,6 +1,7 @@
 package com.example.shubhamkanodia.bookmybook;
 
 import android.app.ActivityOptions;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +35,7 @@ import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -42,6 +44,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class MainActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
 
@@ -69,6 +72,20 @@ public class MainActivity extends ActionBarActivity implements ObservableScrollV
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
+
+        if (!Prefs.getBoolean("Logged In", false)) {
+            Prefs.putBoolean("Logged In", true);
+            startActivity(new Intent(getApplicationContext(), IntroductionActivity_.class));
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
 
 
@@ -100,7 +117,8 @@ public class MainActivity extends ActionBarActivity implements ObservableScrollV
         lvBooks.setAdapter(bAdapter);
 
         nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override public boolean onNavigationItemSelected(MenuItem menuItem) {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 switch (menuItem.getItemId()) {
                     case R.id.settings:
