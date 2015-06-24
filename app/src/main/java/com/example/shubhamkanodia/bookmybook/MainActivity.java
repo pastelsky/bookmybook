@@ -99,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements ObservableScrollV
 
         Helper.setAndroidContext(this);
         lvBooks.setScrollViewCallbacks(this);
+
         ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 

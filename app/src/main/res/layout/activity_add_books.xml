@@ -30,18 +30,17 @@
 
 
         <Button
-            android:id="@+id/bPostAd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="POST" />
-
-        <Button
             android:id="@+id/bExpandPanel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Expand Scanner"/>
 
+        <Button
+            android:id="@+id/bNextStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Next"/>
 
 
 

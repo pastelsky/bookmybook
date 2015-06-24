@@ -2,6 +2,7 @@
 
 package com.example.shubhamkanodia.bookmybook;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,11 +26,15 @@ import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.ImportIOParser;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONObject;
@@ -54,7 +59,7 @@ public class AddBooksActivity extends AppCompatActivity {
 //    ImageView ivBookCover;
 //
     @ViewById
-    Button bPostAd;
+    Button bNextStep;
 
     @ViewById
     SlidingUpPanelLayout suPanelLayout;
@@ -106,36 +111,26 @@ public class AddBooksActivity extends AppCompatActivity {
 //            }
 //        });
 
-        bPostAd.setVisibility(View.GONE);
+        bNextStep.setVisibility(View.GONE);
 
-        //Posting the add to parse
-        bPostAd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ParseObject toPostBook = new ParseObject("book");
-                toPostBook.put("ISBN_13", scannedBook.book_ISBN_13);
-                toPostBook.put("book_name", scannedBook.book_name);
-                toPostBook.put("publish_date", scannedBook.book_publish_year);
-                toPostBook.put("is_isbn_indexed", true);
-                toPostBook.addAll("book_authors", scannedBook.book_authors);
-
-
-                final ParseObject adlisting = new ParseObject("adlisting");
-
-                adlisting.put("book", toPostBook);
-                adlisting.saveEventually();
-
-//                toPostBook.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(com.parse.ParseException e) {
-//                        adlisting.getRelation("book").add(toPostBook);
-//                        adlisting.saveInBackground();
+//        //Posting the add to parse
+//        bPostAd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final ParseObject toPostBook = new ParseObject("book");
+//                toPostBook.put("ISBN_13", scannedBook.book_ISBN_13);
+//                toPostBook.put("book_name", scannedBook.book_name);
+//                toPostBook.put("publish_date", scannedBook.book_publish_year);
+//                toPostBook.put("is_isbn_indexed", true);
+//                toPostBook.addAll("book_authors", scannedBook.book_authors);
 //
-//                    }
-//                });
-
-            }
-        });
+//
+//                final ParseObject adlisting = new ParseObject("adlisting");
+//
+//                adlisting.put("book", toPostBook);
+//                adlisting.saveEventually();
+//            }
+//        });
 
 
         bExpandPanel.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +170,23 @@ public class AddBooksActivity extends AppCompatActivity {
         dlvScannedResult.setAdapter(sbAdapter);
     }
 
+    @Click
+    public void bNextStep(){
+        int PLACE_PICKER_REQUEST = 1;
+
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+        Context context = getApplicationContext();
+        try {
+            startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -218,7 +230,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     public void doAfterScanResult(final String isbn) {
         bExpandPanel.setVisibility(View.GONE);
-        bPostAd.setVisibility(View.VISIBLE);
+        bNextStep.setVisibility(View.VISIBLE);
         RequestQueue google_queue = Volley.newRequestQueue(this);
         RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
