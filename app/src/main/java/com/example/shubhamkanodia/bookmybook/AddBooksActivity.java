@@ -11,6 +11,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -25,6 +26,7 @@ import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.ImportIOParser;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -116,6 +118,13 @@ public class AddBooksActivity extends AppCompatActivity {
                 toPostBook.put("publish_date", scannedBook.book_publish_year);
                 toPostBook.put("is_isbn_indexed", true);
                 toPostBook.addAll("book_authors", scannedBook.book_authors);
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser != null) {
+                    toPostBook.add("ad_poster", currentUser);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Not signed in", Toast.LENGTH_SHORT).show();
+                }
 
 
                 final ParseObject adlisting = new ParseObject("adlisting");

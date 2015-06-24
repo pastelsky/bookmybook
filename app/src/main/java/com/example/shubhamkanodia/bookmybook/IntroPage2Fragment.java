@@ -38,6 +38,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.squareup.picasso.Picasso;
@@ -248,7 +249,10 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                 user.setPassword(id_and_password);
 
                 user.put("phoneVerified", false);
-
+                user.put("age", currentPerson.getAgeRange().getMin());
+                user.put("gender", currentPerson.getGender() > 0 ? (currentPerson.getGender() == 1 ? "female" : "other") : "male");
+                user.put("name", personName);
+                user.put("installation", ParseInstallation.getCurrentInstallation());
 
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
@@ -267,6 +271,8 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                         }
                     }
                 });
+
+                ParseInstallation.getCurrentInstallation().saveInBackground();
 
 
             } else {
