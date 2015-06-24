@@ -119,28 +119,18 @@ public class AddBooksActivity extends AppCompatActivity {
                 toPostBook.put("is_isbn_indexed", true);
                 toPostBook.addAll("book_authors", scannedBook.book_authors);
 
+
+                final ParseObject adlisting = new ParseObject("adlisting");
+
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 if (currentUser != null) {
-                    toPostBook.add("ad_poster", currentUser);
+                    adlisting.put("ad_poster", currentUser);
                 } else {
                     Toast.makeText(getApplicationContext(), "Not signed in", Toast.LENGTH_SHORT).show();
                 }
 
-
-                final ParseObject adlisting = new ParseObject("adlisting");
-
                 adlisting.put("book", toPostBook);
                 adlisting.saveEventually();
-
-//                toPostBook.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(com.parse.ParseException e) {
-//                        adlisting.getRelation("book").add(toPostBook);
-//                        adlisting.saveInBackground();
-//
-//                    }
-//                });
-
             }
         });
 
