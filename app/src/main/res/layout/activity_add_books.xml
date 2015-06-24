@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:umanoDragView="@+id/dragView"
-    sothree:umanoPanelHeight="0dp"
-    sothree:umanoOverlay="true"
-    sothree:umanoParalaxOffset="25dp"
     sothree:umanoFadeColor="@color/transparent"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="0dp"
+    sothree:umanoParalaxOffset="25dp"
     sothree:umanoShadowHeight="2dp">
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
@@ -21,10 +21,13 @@
         tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
 
+
+
         <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:id="@+id/dlvScannedResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
 
         <Button
             android:id="@+id/bPostAd"
@@ -37,8 +40,7 @@
             android:id="@+id/bExpandPanel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Expand Scanner"
-            android:layout_below="@+id/tilBookAuthor"/>
+            android:text="Expand Scanner"/>
 
 
 
@@ -63,6 +65,7 @@
                 <!--</android.support.design.widget.TextInputLayout>-->
     </RelativeLayout>
 
+
     <!--Sliding Layout-->
     <LinearLayout
         android:id="@+id/dragView"
@@ -74,13 +77,12 @@
         android:orientation="vertical">
 
 
-
-            <fragment
-                android:id="@+id/fScanner"
-                android:name="com.example.shubhamkanodia.bookmybook.ScannerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:layout_weight="1" />
+        <fragment
+            android:id="@+id/fScanner"
+            android:name="com.example.shubhamkanodia.bookmybook.ScannerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

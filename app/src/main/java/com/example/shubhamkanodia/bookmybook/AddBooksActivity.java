@@ -2,70 +2,40 @@
 
 package com.example.shubhamkanodia.bookmybook;
 
-import android.animation.Animator;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
-import com.android.volley.AuthFailureError;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
-import com.example.shubhamkanodia.bookmybook.Adapters.BooksAutocompleteAdapter;
 import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
 import com.example.shubhamkanodia.bookmybook.Parsers.ImportIOParser;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
-import com.parse.FunctionCallback;
-import com.parse.Parse;
-import com.parse.ParseCloud;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
-import java.io.StringReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -74,15 +44,15 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 public class AddBooksActivity extends AppCompatActivity {
 
 
-    @ViewById
-    AutoCompleteTextView etBookName;
-
-    @ViewById
-    AutoCompleteTextView etBookAuthor;
-
-    @ViewById
-    ImageView ivBookCover;
-
+    //    @ViewById
+//    AutoCompleteTextView etBookName;
+//
+//    @ViewById
+//    AutoCompleteTextView etBookAuthor;
+//
+//    @ViewById
+//    ImageView ivBookCover;
+//
     @ViewById
     Button bPostAd;
 
@@ -123,16 +93,47 @@ public class AddBooksActivity extends AppCompatActivity {
         GoogleBooksParser.setAndroidContext(this);
 
 
-        etBookName.setAdapter(new BooksAutocompleteAdapter(this, android.R.layout.simple_list_item_1));
+//        etBookName.setAdapter(new BooksAutocompleteAdapter(this, android.R.layout.simple_list_item_1));
+//
+//        etBookName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(position);
+//                etBookName.setText(clickedItem.book_name);
+//                etBookAuthor.setText(clickedItem.book_author);
+//                Picasso.with(AddBooksActivity.this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
+//                presentURL = clickedItem.book_cover_URL;
+//            }
+//        });
 
-        etBookName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        bPostAd.setVisibility(View.GONE);
+
+        //Posting the add to parse
+        bPostAd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BookItem clickedItem = (BookItem) etBookName.getAdapter().getItem(position);
-                etBookName.setText(clickedItem.book_name);
-                etBookAuthor.setText(clickedItem.book_author);
-                Picasso.with(AddBooksActivity.this).load(clickedItem.book_cover_URL.replaceAll("[0-9]{1,3}x[0-9]{1,3}", "400x400")).into(ivBookCover);
-                presentURL = clickedItem.book_cover_URL;
+            public void onClick(View v) {
+                final ParseObject toPostBook = new ParseObject("book");
+                toPostBook.put("ISBN_13", scannedBook.book_ISBN_13);
+                toPostBook.put("book_name", scannedBook.book_name);
+                toPostBook.put("publish_date", scannedBook.book_publish_year);
+                toPostBook.put("is_isbn_indexed", true);
+                toPostBook.addAll("book_authors", scannedBook.book_authors);
+
+
+                final ParseObject adlisting = new ParseObject("adlisting");
+
+                adlisting.put("book", toPostBook);
+                adlisting.saveEventually();
+
+//                toPostBook.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(com.parse.ParseException e) {
+//                        adlisting.getRelation("book").add(toPostBook);
+//                        adlisting.saveInBackground();
+//
+//                    }
+//                });
+
             }
         });
 
@@ -173,6 +174,7 @@ public class AddBooksActivity extends AppCompatActivity {
         sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
         dlvScannedResult.setAdapter(sbAdapter);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -215,7 +217,8 @@ public class AddBooksActivity extends AppCompatActivity {
     }
 
     public void doAfterScanResult(final String isbn) {
-
+        bExpandPanel.setVisibility(View.GONE);
+        bPostAd.setVisibility(View.VISIBLE);
         RequestQueue google_queue = Volley.newRequestQueue(this);
         RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
@@ -240,13 +243,14 @@ public class AddBooksActivity extends AppCompatActivity {
                     }
                 });
 
-        jsonRequest_flipkart.setRetryPolicy(new DefaultRetryPolicy(6000,
+        jsonRequest_flipkart.setRetryPolicy(new DefaultRetryPolicy(10000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         flipkart_queue.add(jsonRequest_flipkart);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

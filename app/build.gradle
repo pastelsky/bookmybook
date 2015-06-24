@@ -182,6 +182,14 @@ dependencies {
     compile('com.android.support:appcompat-v7:22.2.0') {
         exclude module: 'support-v4'
     }
+
+    compile('com.pixplicity.easyprefs:library:1.5') {
+        exclude module: 'support-v4'
+        exclude module: 'appcompat-v7'
+
+
+    }
+
     // no exclusion
-    compile 'com.google.android.gms:play-services:7.5.0'
+//    compile 'com.google.android.gms:play-services:7.5.0'
 }
