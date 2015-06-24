@@ -216,7 +216,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         getProfileInformation();
 
 
-        Intent toStartMain = new Intent(getActivity(), MainActivity.class);
+        Intent toStartMain = new Intent(getActivity(), MainActivity_.class);
         startActivity(toStartMain);
 
     }
