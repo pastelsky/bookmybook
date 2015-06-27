@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ibFlashControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
+            android:clickable="true"
+            android:src="@mipmap/ic_action_image_flash_off" />
+
+
+        <ImageButton
+            android:id="@+id/ibAutofocus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
+            android:layout_toLeftOf="@id/ibFlashControl"
+            android:clickable="true"
+            android:src="@mipmap/ic_action_auto_focus_on" />
+    </RelativeLayout>
+

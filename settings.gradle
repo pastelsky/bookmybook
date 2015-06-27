@@ -1,1 +1,1 @@
-include ':app', ':cognalys', ':backend', ':api_backend'
+include ':app', ':cognalys', ':backend', ':api_backend', ':ripplebutton'

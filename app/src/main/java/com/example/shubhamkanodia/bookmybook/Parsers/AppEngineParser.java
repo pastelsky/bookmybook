@@ -39,14 +39,13 @@ BookItem toReturn = new BookItem();
         toReturn.book_new_edition_URL = json.getString("new_edition_url");
         toReturn.book_language = json.getString("language");
 
-            Log.e("lang done", "yeah");
-
         toReturn.book_cat_level_1 = json.getString("cat_level_1");
         toReturn.book_cat_level_2 = json.getString("cat_level_2");
         toReturn.book_cat_level_3 = json.getString("cat_level_3");
         toReturn.book_cat_level_4 = json.getString("cat_level_4");
 
         toReturn.book_flipkart_price =Integer.parseInt(json.getString("flipkart_price"));
+            toReturn.book_mrp = Integer.parseInt(json.getString("mrp"));
 
             return toReturn;
         }

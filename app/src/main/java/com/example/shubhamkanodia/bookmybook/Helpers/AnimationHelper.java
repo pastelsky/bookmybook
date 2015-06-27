@@ -1,5 +1,7 @@
 package com.example.shubhamkanodia.bookmybook.Helpers;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -19,9 +22,12 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 
 
 import org.androidannotations.annotations.ViewById;
+
+import java.util.logging.Handler;
 
 /**
  * Created by shubhamkanodia on 21/05/15.
@@ -144,6 +150,42 @@ public class AnimationHelper {
 
         return aSet;
     }
+
+    public static void fadeOut(final View v, int duration){
+
+        if (v == null) {
+            Log.e("View", "No view found: Null reference");
+            return;
+        }
+
+        v.animate().setDuration(duration).alpha(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                v.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    public static void fadeIn(final View v, int duration){
+
+        if (v == null) {
+            Log.e("View", "No view found: Null reference");
+            return;
+        }
+
+        v.setVisibility(View.VISIBLE);
+        v.setAlpha(0);
+
+        v.animate().setDuration(duration).alpha(1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                v.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
 
 
     public static void statusBarColorTransition(int newclr, int duration) {

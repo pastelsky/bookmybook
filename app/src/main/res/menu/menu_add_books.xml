@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
+
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_addmore"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Scan more"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_post"
+        android:orderInCategory="100"
+        android:title="Post"
+        app:showAsAction="always" />
+
 </menu>

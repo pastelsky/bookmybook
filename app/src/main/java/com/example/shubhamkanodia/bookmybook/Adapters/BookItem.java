@@ -1,5 +1,7 @@
 package com.example.shubhamkanodia.bookmybook.Adapters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +30,9 @@ public class BookItem {
 
     public int book_flipkart_price;
     public int book_amazon_price;
+    public int book_mrp;
 
-
-
+    public LatLng geoPoint;
 
     public BookItem(String n, String a, String u) {
         this.book_author = a;
