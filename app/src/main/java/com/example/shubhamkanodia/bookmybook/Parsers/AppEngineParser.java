@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class AppEngineParser {
 
-    public static String appEngineApiURL = "http://bookmybook-963.appspot.com/q?isbn=";
+    public static String appEngineApiURL = "http://bookmybook-963.appspot.com/q2?isbn=";
 
     public static BookItem getBookFromJSON(JSONObject json){
 

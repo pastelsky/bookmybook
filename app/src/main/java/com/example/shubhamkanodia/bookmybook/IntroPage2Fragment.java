@@ -36,6 +36,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.parse.ParseException;
@@ -63,7 +64,6 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     final static String staticMapsURL = "https://maps.googleapis.com/maps/api/staticmap?"; //center=40.714728,-73.998672&zoom=14&size=452x800
     static boolean isFirstTimeVisible = true;
 
-    private OnFragmentInteractionListener mListener;
     private static final int RC_SIGN_IN = 0;
     private static final int PROFILE_PIC_SIZE = 400;
     private GoogleApiClient mGoogleApiClient;
@@ -99,12 +99,14 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN).build();
 
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -432,7 +434,6 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -442,12 +443,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
 
 }

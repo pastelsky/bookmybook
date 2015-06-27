@@ -12,6 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.pixplicity.easyprefs.library.Prefs;
 
@@ -38,8 +41,12 @@ public class MainActivity extends AppCompatActivity {
         String id_and_pw = Prefs.getString("id_and_pw", "");
 
 
-        //Logging the user in everytime he opens the app.
+        Helper.setAndroidContext(this);
+        lvBooks.setScrollViewCallbacks(this);
+
         ParseUser.logInInBackground(id_and_pw, id_and_pw);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);

@@ -34,6 +34,7 @@
             android:text="POST" />
 
 
+
         <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:id="@+id/dlvScannedResult"
             android:layout_width="match_parent"

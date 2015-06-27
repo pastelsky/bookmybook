@@ -20,7 +20,7 @@ import org.androidannotations.annotations.ViewById;
 
 @EActivity
 public class IntroductionActivity extends FragmentActivity implements
-        IntroFragment.OnFragmentInteractionListener, IntroPage2Fragment.OnFragmentInteractionListener{
+        IntroFragment.OnFragmentInteractionListener{
 
     private static final int NUM_PAGES = 2;
 
