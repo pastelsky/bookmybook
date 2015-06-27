@@ -21,9 +21,6 @@
 
     <uses-permission android:name="com.example.shubhamkanodia.bookmybook.permission.C2D_MESSAGE" />
 
-    <permission
-        android:name="com.example.gcm.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
 
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
@@ -125,6 +122,15 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
+
+        <activity
+            android:name=".MyAdsActivity"
+            android:label="@string/title_activity_my_ads"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.shubhamkanodia.bookmybook.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
