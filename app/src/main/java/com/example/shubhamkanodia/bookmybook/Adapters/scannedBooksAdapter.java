@@ -43,7 +43,6 @@ import android.widget.Toast;
 import com.appyvet.rangebar.RangeBar;
 import com.daimajia.easing.quad.QuadEaseInOut;
 import com.example.shubhamkanodia.bookmybook.AddBooksActivity;
-import com.example.shubhamkanodia.bookmybook.AddBooksActivity_;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.R;
@@ -142,7 +141,7 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
                 try {
-                    ((AddBooksActivity_) context).clickedListPosition = position;
+                    ((AddBooksActivity) context).clickedListPosition = position;
                     ((Activity) context).startActivityForResult(builder.build(context), PLACE_PICKER_REQUEST);
 
                 } catch (GooglePlayServicesRepairableException e) {

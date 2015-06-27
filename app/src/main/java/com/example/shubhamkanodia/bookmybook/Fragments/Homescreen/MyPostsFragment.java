@@ -1,4 +1,4 @@
-package com.example.shubhamkanodia.bookmybook;
+package com.example.shubhamkanodia.bookmybook.Fragments.Homescreen;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.MyPostsAdapter;
 import com.example.shubhamkanodia.bookmybook.Adapters.MyPostsAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.example.shubhamkanodia.bookmybook.R;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;

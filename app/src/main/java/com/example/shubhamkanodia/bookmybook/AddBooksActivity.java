@@ -65,8 +65,6 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 @EActivity
 public class AddBooksActivity extends AppCompatActivity {
 
-    @ViewById
-    Button bNextStep;
 
     @ViewById
     SlidingUpPanelLayout suPanelLayout;
@@ -78,7 +76,7 @@ public class AddBooksActivity extends AppCompatActivity {
     ZBarScannerView fScanner;
 
     @ViewById
-    LinearLayout dragView;
+    RelativeLayout dragView;
 
     @ViewById
     DynamicListView dlvScannedResult;
@@ -125,7 +123,6 @@ public class AddBooksActivity extends AppCompatActivity {
 
         suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         fScanner.stopCamera();
-        bNextStep.setVisibility(View.GONE);
 
         //Posting the add to parse
 //        bPostAd.setOnClickListener(new View.OnClickListener() {
@@ -217,14 +214,6 @@ public class AddBooksActivity extends AppCompatActivity {
 
     }
 
-    @Click
-    public void bNextStep() {
-
-        Intent intent = new Intent(this, PlacePickerActivity_.class);
-        startActivity(intent);
-
-    }
-
 
     @Click
     public void ibAutofocus() {
@@ -309,7 +298,6 @@ public class AddBooksActivity extends AppCompatActivity {
         cvLoading.setVisibility(View.VISIBLE);
 
         bExpandPanel.setVisibility(View.GONE);
-        bNextStep.setVisibility(View.VISIBLE);
         RequestQueue google_queue = Volley.newRequestQueue(this);
         RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
@@ -388,8 +376,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     public void setUpAfterSuccesslScan() {
 
-        getSupportActionBar().setTitle("Scanned books");
-        getSupportActionBar().setSubtitle(sbAdapter.getItemCount() == 1 ? sbAdapter.getItemCount() + " item" : sbAdapter.getItemCount() + " items");
+        getSupportActionBar().setTitle(sbAdapter.getItemCount() == 1 ? "Scanned Item (" + sbAdapter.getItemCount() + ")" : "Scanned Items (" + sbAdapter.getItemCount() + " )");
 
         postButton.setVisible(true);
         addMoreButton.setVisible(true);

@@ -1,4 +1,4 @@
-package com.example.shubhamkanodia.bookmybook;
+package com.example.shubhamkanodia.bookmybook.Fragments.Introduction;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -30,6 +30,8 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.example.shubhamkanodia.bookmybook.MainActivity;
+import com.example.shubhamkanodia.bookmybook.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -221,7 +223,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         getProfileInformation();
 
 
-        Intent toStartMain = new Intent(getActivity(), MainActivity_.class);
+        Intent toStartMain = new Intent(getActivity(), MainActivity.class);
         startActivity(toStartMain);
 
     }

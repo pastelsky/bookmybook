@@ -23,11 +23,7 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.example.shubhamkanodia.bookmybook.permission.C2D_MESSAGE" />
-<<<<<<< HEAD
 
-
-=======
->>>>>>> Redesigned scanning step
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
     <!--
@@ -49,17 +45,10 @@
             android:value="AIzaSyDhYFHGbswCr4RbBQX71RaaDy3GAhNJJbY" />
 
         <activity
-<<<<<<< HEAD
             android:name=".MainActivity_"
             android:label="@string/app_name">
-
-=======
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
->>>>>>> Redesigned scanning step
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,4 +1,4 @@
-package com.example.shubhamkanodia.bookmybook;
+package com.example.shubhamkanodia.bookmybook.Fragments;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -15,6 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.example.shubhamkanodia.bookmybook.AddBooksActivity;
+import com.example.shubhamkanodia.bookmybook.CameraSelectorDialogFragment;
+import com.example.shubhamkanodia.bookmybook.FormatSelectorDialogFragment;
+import com.example.shubhamkanodia.bookmybook.MessageDialogFragment;
+import com.example.shubhamkanodia.bookmybook.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -182,7 +187,7 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
             mp.start();
             mScannerView.stopCamera();
 
-            ((AddBooksActivity_)getActivity()).doAfterScanResult(rawResult.getContents());
+            ((AddBooksActivity)getActivity()).doAfterScanResult(rawResult.getContents());
 
         } catch (Exception e) {
             e.printStackTrace();

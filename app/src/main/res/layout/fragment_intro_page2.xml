@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/flp2"
-    tools:context="com.example.shubhamkanodia.bookmybook.IntroPage2Fragment"
+    tools:context="com.example.shubhamkanodia.bookmybook.Fragments.Introduction.IntroPage2Fragment"
     android:background="@color/color1">
 
 

@@ -1,4 +1,4 @@
-package com.example.shubhamkanodia.bookmybook;
+package com.example.shubhamkanodia.bookmybook.Fragments.Homescreen;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
+
+import com.example.shubhamkanodia.bookmybook.R;
 
 /**
  * Created by Chirag Shenoy on 25-Jun-15.

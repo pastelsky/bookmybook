@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.shubhamkanodia.bookmybook.Fragments.Introduction.IntroFragment;
+import com.example.shubhamkanodia.bookmybook.Fragments.Introduction.IntroPage2Fragment;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 
 import org.androidannotations.annotations.EActivity;

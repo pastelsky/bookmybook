@@ -1,4 +1,4 @@
-package com.example.shubhamkanodia.bookmybook;
+package com.example.shubhamkanodia.bookmybook.Fragments.Homescreen;
 
 /**
  * Created by Chirag Shenoy on 24-Jun-15.
@@ -25,8 +25,14 @@ import android.support.v4.app.Fragment;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
+import com.example.shubhamkanodia.bookmybook.AddBooksActivity;
+import com.example.shubhamkanodia.bookmybook.AddBooksActivity_;
+import com.example.shubhamkanodia.bookmybook.DisplayBookListing;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.example.shubhamkanodia.bookmybook.IntroductionActivity;
+import com.example.shubhamkanodia.bookmybook.R;
+import com.example.shubhamkanodia.bookmybook.SettingsActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -80,7 +86,7 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
 
         if (!Prefs.getBoolean("Logged In", false)) {
             Prefs.putBoolean("Logged In", true);
-            startActivity(new Intent(getActivity(), IntroductionActivity_.class));
+            startActivity(new Intent(getActivity(), IntroductionActivity.class));
             getActivity().finish();
         }
         View view = inflater.inflate(R.layout.fragment_main_activity,
