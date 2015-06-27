@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.shubhamkanodia.bookmybook.PlacePickerActivity">
+
+
+    <item android:id="@+id/action_search" android:title="Search for places"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_search"></item>
+
+    <item android:id="@+id/action_post" android:title="Post"
+        app:showAsAction="always"></item>
+</menu>

@@ -39,6 +39,9 @@ class MainPage(webapp2.RequestHandler):
             resultBook.book_cat_level_3 = ''.join(tree.xpath('//div[contains(concat(" ", normalize-space(@class), " "), " breadcrumb-wrap ")]//ul//li[position()=5]//a/text()')).strip(' \t\n\r')
             resultBook.book_cat_level_4 = ''.join(tree.xpath('//div[contains(concat(" ", normalize-space(@class), " "), " breadcrumb-wrap ")]//ul//li[position()=6]//a/text()')).strip(' \t\n\r')
             resultBook.book_flipkart_price = ''.join(tree.xpath('//div[contains(concat(" ", normalize-space(@class), " "), " shop-section ")]//meta[@itemprop="price"][1]/@content')).strip(' \t\n\r')
+            resultBook.book_mrp = ''.join(tree.xpath('//div[contains(concat(" ", normalize-space(@class), " "), " shop-section ")]//span[contains(concat(" ", normalize-space(@class), " "), " price ")]/text()')).strip(' \t\n\r')
+            resultBook.book_mrp = re.search(r'\d+', resultBook.book_mrp).group()
+            # resultBook.book_mrp = re.search('(\d*)', resultBook.book_mrp).group(0)
             resultBook.key = ndb.Key('BookItem', isbn)
             if(resultBook.isValid()):
                 print "Storing it in DB....."
@@ -71,6 +74,7 @@ class BookItem(ndb.Model):
     book_cat_level_3 = ndb.StringProperty()
     book_cat_level_4 = ndb.StringProperty()
 
+    book_mrp = ndb.StringProperty()
     book_flipkart_price = ndb.StringProperty()
     book_amazon_price = ndb.StringProperty()
 
@@ -78,7 +82,7 @@ class BookItem(ndb.Model):
         super(BookItem, self).__init__()
 
     def __repr__(self):
-        return '{"pub_year":"%s", "isbn":"%s", "language":"%s", "name":"%s", "author":"%s", "flipkart_price":"%s",  "new_edition_url":"%s", "cover_url":"%s", "cat_level_1":"%s", "cat_level_2":"%s", "cat_level_3":"%s", "cat_level_4":"%s"}' % (self.book_publish_year, self.book_ISBN_13, self.book_language, self.book_name, self.book_authors, self.book_flipkart_price, self.book_new_edition_URL, self.book_cover_URL, self.book_cat_level_1, self.book_cat_level_2, self.book_cat_level_3, self.book_cat_level_4)
+        return '{"pub_year":"%s", "isbn":"%s", "language":"%s", "name":"%s", "author":"%s", "flipkart_price":"%s", "mrp" : "%s", "new_edition_url":"%s", "cover_url":"%s", "cat_level_1":"%s", "cat_level_2":"%s", "cat_level_3":"%s", "cat_level_4":"%s"}' % (self.book_publish_year, self.book_ISBN_13, self.book_language, self.book_name, self.book_authors, self.book_flipkart_price, self.book_mrp,self.book_new_edition_URL, self.book_cover_URL, self.book_cat_level_1, self.book_cat_level_2, self.book_cat_level_3, self.book_cat_level_4)
         
     def isValid(self):
         return self.book_name != '' and self.book_authors != '' and self.book_flipkart_price != ''

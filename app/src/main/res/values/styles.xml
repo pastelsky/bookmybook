@@ -9,6 +9,11 @@
         <item name="android:colorPrimary">@color/color1</item>
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="android:colorPrimaryDark">@color/color2</item>
+
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/color1</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/color2</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/color3</item>
 
@@ -19,6 +24,9 @@
         <item name="colorControlNormal">#c5c5c5</item>
         <item name="colorControlActivated">@color/color3</item>
         <item name="colorControlHighlight">@color/color3</item>
+
+        <item name="android:windowActionBarOverlay">true</item>
+
 
     </style>
 

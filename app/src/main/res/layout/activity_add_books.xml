@@ -1,5 +1,28 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tbMain"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color1"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
     android:id="@+id/suPanelLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,33 +37,123 @@
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
 
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cvLoading"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="1dp"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="@dimen/activityMargin"
+            card_view:cardElevation="2dp">
+
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/color2"
+                android:indeterminateTintMode="src_in"/>
+
+        </android.support.v7.widget.CardView>
 
 
         <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
             android:id="@+id/dlvScannedResult"
+            android:layout_below="@id/cvLoading"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/activityMargin"
+            android:drawSelectorOnTop="true"
+            android:paddingBottom="20dp"
+            android:paddingTop="16dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:transitionName="bookCover"
+            android:layout_height="wrap_content"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
 
-
-        <Button
-            android:id="@+id/bExpandPanel"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/rvEmptyLv"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
             android:layout_height="wrap_content"
-            android:text="Expand Scanner"/>
+>
 
-        <Button
-            android:id="@+id/bNextStep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Next"/>
+            <ImageView
+                android:id="@+id/ivEmptyBooks"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/ic_barcode_" />
+
+            <View
+                android:layout_width="180dp"
+                android:layout_height="2dp"
+                android:background="@color/red_600"
+                android:layout_below="@id/ivEmptyBooks"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-100dp"
+                android:id="@+id/vLaser"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivEmptyBooks"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:id="@+id/tvEmptyBook"
+                android:singleLine="false"
+                android:lineSpacingMultiplier="1.2"
+                android:text="Putting your old books up for sale  is as easy as scanning it's barcode  with your camera!"
+                android:textAlignment="center"
+                android:textColor="@color/grey_800"
+                android:textSize="16sp" />
+
+            <com.example.shubhamkanodia.bookmybook.UI.widget.RippleButton
+                android:id="@+id/bExpandPanel"
+                android:layout_width="160dp"
+                android:layout_height="55dp"
+                android:padding="40dp"
+                app:buttonColor="@color/red_500"
+                app:rippleColorIs="@color/red_700"
+                android:textColor="@color/white"
+                android:layout_below="@id/tvEmptyBook"
+                android:layout_marginTop="45dp"
+                android:layout_centerInParent="true"
+                android:text="Scan now"/>
+
+
+
+            <Button
+                android:id="@+id/bNextStep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                android:text="Next"/>
+
+        </RelativeLayout>
+
+
+
+
+
+
 
 
 
@@ -69,20 +182,66 @@
     <LinearLayout
         android:id="@+id/dragView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:background="#ffffff"
         android:clickable="true"
         android:focusable="false"
         android:orientation="vertical">
 
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/flScan"
+            >
+
         <fragment
             android:id="@+id/fScanner"
             android:name="com.example.shubhamkanodia.bookmybook.ScannerFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" />
+            android:layout_height="match_parent" />
+
+
+            <RelativeLayout
+                android:background="@color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="20dp"
+                android:padding="12dp"
+                android:layout_height="wrap_content">
+
+
+                <ImageButton
+                    android:id="@+id/ibAutofocus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_light"
+                    android:layout_alignParentRight="true"
+                    android:padding="8dp"
+                    android:clickable="true"
+                    android:longClickable="true"
+                    android:contentDescription="Enable / Disable Autofocus"
+                    android:src="@mipmap/ic_action_auto_focus_on" />
+
+                <ImageButton
+                    android:id="@+id/ibFlashControl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_light"
+                    android:clickable="true"
+                    android:padding="8dp"
+                    android:longClickable="true"
+                    android:contentDescription="Enable / Disable Flash"
+                    android:layout_toLeftOf="@id/ibAutofocus"
+                    android:src="@mipmap/ic_action_image_flash_off" />
+
+
+            </RelativeLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</LinearLayout>

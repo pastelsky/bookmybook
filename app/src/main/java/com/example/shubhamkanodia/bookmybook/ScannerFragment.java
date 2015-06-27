@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,8 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
-import com.example.shubhamkanodia.bookmybook.Parsers.GoogleBooksParser;
+
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -46,7 +44,6 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
         mScannerView = new ZBarScannerView(getActivity());
-
 
         if (state != null) {
             mFlash = state.getBoolean(FLASH_STATE, false);
@@ -88,27 +85,27 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem menuItem;
-
-        if (mFlash) {
-            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.flash_on);
-        } else {
-            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.flash_off);
-        }
-        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-
-        if (mAutoFocus) {
-            menuItem = menu.add(Menu.NONE, R.id.menu_auto_focus, 0, R.string.auto_focus_on);
-        } else {
-            menuItem = menu.add(Menu.NONE, R.id.menu_auto_focus, 0, R.string.auto_focus_off);
-        }
-        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        menuItem = menu.add(Menu.NONE, R.id.menu_formats, 0, R.string.formats);
-        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        menuItem = menu.add(Menu.NONE, R.id.menu_camera_selector, 0, R.string.select_camera);
-        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
+//
+//        if (mFlash) {
+//            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.flash_on);
+//        } else {
+//            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.flash_off);
+//        }
+//        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
+//
+//
+//        if (mAutoFocus) {
+//            menuItem = menu.add(Menu.NONE, R.id.menu_auto_focus, 0, R.string.auto_focus_on);
+//        } else {
+//            menuItem = menu.add(Menu.NONE, R.id.menu_auto_focus, 0, R.string.auto_focus_off);
+//        }
+//        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
+//
+//        menuItem = menu.add(Menu.NONE, R.id.menu_formats, 0, R.string.formats);
+//        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
+//
+//        menuItem = menu.add(Menu.NONE, R.id.menu_camera_selector, 0, R.string.select_camera);
+//        MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
