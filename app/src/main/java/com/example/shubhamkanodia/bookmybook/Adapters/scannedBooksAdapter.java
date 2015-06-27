@@ -42,7 +42,6 @@ import android.widget.Toast;
 
 import com.appyvet.rangebar.RangeBar;
 import com.daimajia.easing.quad.QuadEaseInOut;
-import com.example.shubhamkanodia.bookmybook.AddBooksActivity;
 import com.example.shubhamkanodia.bookmybook.AddBooksActivity_;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;

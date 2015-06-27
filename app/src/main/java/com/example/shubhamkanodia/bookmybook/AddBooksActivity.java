@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,6 +42,9 @@ import com.example.shubhamkanodia.bookmybook.UI.widget.RippleButton;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -63,8 +65,6 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 @EActivity
 public class AddBooksActivity extends AppCompatActivity {
 
-    @ViewById
-    Button bNextStep;
 
     @ViewById
     SlidingUpPanelLayout suPanelLayout;
@@ -76,7 +76,7 @@ public class AddBooksActivity extends AppCompatActivity {
     ZBarScannerView fScanner;
 
     @ViewById
-    LinearLayout dragView;
+    RelativeLayout dragView;
 
     @ViewById
     DynamicListView dlvScannedResult;
@@ -134,6 +134,37 @@ public class AddBooksActivity extends AppCompatActivity {
 
         setBlinkingLaser(true);
 
+        //Posting the add to parse
+//        bPostAd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final ParseObject toPostBook = new ParseObject("book");
+//                toPostBook.put("ISBN_13", scannedBook.book_ISBN_13);
+//                toPostBook.put("book_name", scannedBook.book_name);
+//                toPostBook.put("publish_date", scannedBook.book_publish_year);
+//                toPostBook.put("is_isbn_indexed", true);
+//                toPostBook.put("book_cover_url", scannedBook.book_cover_URL);
+//                toPostBook.put("book_authors", scannedBook.book_author);
+//
+//
+//                final ParseObject adlisting = new ParseObject("adlisting");
+//
+//                ParseUser currentUser = ParseUser.getCurrentUser();
+//                if (currentUser != null) {
+//                    adlisting.put("ad_poster", currentUser);
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Not signed in", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                adlisting.put("book", toPostBook);
+//                adlisting.saveEventually();
+//            }
+//        });
+
+
+
+        setBlinkingLaser(true);
+
         dlvScannedResult.setEmptyView(rvEmptyLv);
 
         bExpandPanel.setOnClickListener(new View.OnClickListener() {
@@ -183,14 +214,6 @@ public class AddBooksActivity extends AppCompatActivity {
 
         dlvScannedResult.setAdapter(sbAdapter);
 
-
-    }
-
-    @Click
-    public void bNextStep() {
-
-        Intent intent = new Intent(this, PlacePickerActivity_.class);
-        startActivity(intent);
 
     }
 
@@ -278,7 +301,6 @@ public class AddBooksActivity extends AppCompatActivity {
         cvLoading.setVisibility(View.VISIBLE);
 
         bExpandPanel.setVisibility(View.GONE);
-        bNextStep.setVisibility(View.VISIBLE);
         RequestQueue google_queue = Volley.newRequestQueue(this);
         RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
@@ -357,8 +379,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     public void setUpAfterSuccesslScan() {
 
-        getSupportActionBar().setTitle("Scanned books");
-        getSupportActionBar().setSubtitle(sbAdapter.getItemCount() == 1 ? sbAdapter.getItemCount() + " item" : sbAdapter.getItemCount() + " items");
+        getSupportActionBar().setTitle(sbAdapter.getItemCount() == 1 ? "Scanned Item (" + sbAdapter.getItemCount() + ")" : "Scanned Items (" + sbAdapter.getItemCount() + " )");
 
         postButton.setVisible(true);
         addMoreButton.setVisible(true);

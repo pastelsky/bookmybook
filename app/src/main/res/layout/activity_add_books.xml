@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,19 +25,37 @@
 
 <com.sothree.slidinguppanel.SlidingUpPanelLayout
     android:id="@+id/suPanelLayout"
+=======
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+>>>>>>> myBranch
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:umanoDragView="@+id/dragView"
-    sothree:umanoFadeColor="@color/transparent"
-    sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="0dp"
-    sothree:umanoParalaxOffset="25dp"
-    sothree:umanoShadowHeight="2dp">
+    android:orientation="vertical">
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tbMain"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color1"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/suPanelLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+<<<<<<< HEAD
         tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
 
 
@@ -187,8 +206,114 @@
         android:clickable="true"
         android:focusable="false"
         android:orientation="vertical">
+=======
+        android:gravity="bottom"
+        sothree:umanoDragView="@+id/dragView"
+        sothree:umanoFadeColor="@color/transparent"
+        sothree:umanoOverlay="true"
+        sothree:umanoPanelHeight="0dp"
+        sothree:umanoParalaxOffset="25dp"
+        sothree:umanoShadowHeight="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.shubhamkanodia.bookmybook.AddBooksActivity">
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cvLoading"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginBottom="@dimen/activityMargin"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="1dp"
+                card_view:cardElevation="2dp">
 
 
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/color2"
+                    android:indeterminateTintMode="src_in" />
+
+            </android.support.v7.widget.CardView>
+
+
+            <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
+                android:id="@+id/dlvScannedResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cvLoading"
+                android:clipToPadding="false"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/activityMargin"
+                android:drawSelectorOnTop="true"
+                android:paddingBottom="20dp"
+                android:paddingTop="16dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:transitionName="bookCover" />
+
+
+            <RelativeLayout
+                android:id="@+id/rvEmptyLv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/ivEmptyBooks"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/ic_barcode_" />
+
+                <View
+                    android:id="@+id/vLaser"
+                    android:layout_width="180dp"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/ivEmptyBooks"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-100dp"
+                    android:background="@color/red_600" />
+
+                <TextView
+                    android:id="@+id/tvEmptyBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ivEmptyBooks"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:lineSpacingMultiplier="1.2"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:singleLine="false"
+                    android:text="Putting your old books up for sale  is as easy as scanning it's barcode  with your camera!"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_800"
+                    android:textSize="16sp" />
+>>>>>>> myBranch
+
+                <com.example.shubhamkanodia.bookmybook.UI.widget.RippleButton
+                    android:id="@+id/bExpandPanel"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_below="@id/tvEmptyBook"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="45dp"
+                    android:padding="40dp"
+                    android:text="Scan now"
+                    android:textColor="@color/white"
+                    app:buttonColor="@color/red_500"
+                    app:rippleColorIs="@color/red_700" />
+
+<<<<<<< HEAD
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -239,9 +364,81 @@
             </RelativeLayout>
 
         </FrameLayout>
+=======
 
-    </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
 
+
+        <!--Sliding Layout-->
+        <RelativeLayout
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation="vertical">
+
+
+            <FrameLayout
+                android:id="@+id/flScan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <fragment
+                    android:id="@+id/fScanner"
+                    android:name="com.example.shubhamkanodia.bookmybook.Fragments.ScannerFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/transparent"
+                    android:padding="12dp">
+
+
+                    <ImageButton
+                        android:id="@+id/ibAutofocus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/ripple_light"
+                        android:clickable="true"
+                        android:contentDescription="Enable / Disable Autofocus"
+                        android:longClickable="true"
+                        android:padding="8dp"
+                        android:src="@mipmap/ic_action_auto_focus_on" />
+
+                    <ImageButton
+                        android:id="@+id/ibFlashControl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/ibAutofocus"
+                        android:background="@drawable/ripple_light"
+                        android:clickable="true"
+                        android:contentDescription="Enable / Disable Flash"
+                        android:longClickable="true"
+                        android:padding="8dp"
+                        android:src="@mipmap/ic_action_image_flash_off" />
+
+
+                </RelativeLayout>
+
+            </FrameLayout>
+
+        </RelativeLayout>
+>>>>>>> myBranch
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+<<<<<<< HEAD
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
+=======
+>>>>>>> myBranch
 </LinearLayout>
