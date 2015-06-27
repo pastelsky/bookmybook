@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -41,11 +42,13 @@ import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.util.Random;
 
@@ -248,6 +251,15 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                 user.setEmail(email);
                 user.setPassword(id_and_password);
 
+                new Prefs.Builder()
+                        .setContext(getActivity())
+                        .setMode(ContextWrapper.MODE_PRIVATE)
+                        .setPrefsName(getActivity().getPackageName())
+                        .setUseDefaultSharedPreference(true)
+                        .build();
+
+                Prefs.putString("id_and_pw", id_and_password);
+                
                 user.put("phoneVerified", false);
                 user.put("age", currentPerson.getAgeRange().getMin());
                 user.put("gender", currentPerson.getGender() > 0 ? (currentPerson.getGender() == 1 ? "female" : "other") : "male");

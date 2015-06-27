@@ -20,7 +20,7 @@ import java.util.List;
 public class ImportIOParser {
 
 
-    public static String makeFlipkartURLFromISBN(String isbn){
+    public static String makeFlipkartURLFromISBN(String isbn) {
 
 
         String madeURL = "https://api.import.io/store/data/9d957326-4d5c-4ed4-829d-945d04b1392e/_query?input/isbn=" + isbn + "&_user=47b7f8ed-a6d8-42f7-911b-2fd994b14ee1&_apikey=47b7f8ed-a6d8-42f7-911b-2fd994b14ee1%3AYHRKdkH%2BPEBK4Hztw3OSMpdZ6mwchcoLSDVI%2Bz3nADMUxtFEQQAzqjvbceeYqHS4%2BB7%2FhiUcugH0KLt42BL%2B1w%3D%3D";
@@ -65,50 +65,42 @@ public class ImportIOParser {
 
             }
 
-            try{
+            try {
                 toReturn.book_name = result.getString("title");
-            }
-
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ImportIO", "Invalid Book Name");
 
             }
 
-            try{
+            try {
                 toReturn.book_flipkart_price = Integer.parseInt(result.getString("price"));
-            }
-
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ImportIO", "Invalid Price");
 
             }
 
-            try{
+            try {
                 toReturn.book_cover_URL = result.getString("cover_url");
-            }
-
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ImportIO", "Invalid Cover");
 
             }
 
-            try{
+            try {
 
-                String authorList[] = result.getString("author").split(",");
-                List<String> authors = new ArrayList<String>();
+//                String authorList[] = result.getString("author").split(",");
+//                List<String> authors = new ArrayList<String>();
+//
+//                for(int i =0; i < authorList.length; i++)
+//                {
+//                    authors.add(i, authorList[i]);
+//                }
 
-                for(int i =0; i < authorList.length; i++)
-                {
-                    authors.add(i, authorList[i]);
-                }
-
-                toReturn.book_authors = authors;
-            }
-
-            catch (JSONException e) {
+                toReturn.book_author = result.getString("author");
+            } catch (JSONException e) {
                 e.printStackTrace();
                 Log.e("ImportIO", "Invalid Author");
 

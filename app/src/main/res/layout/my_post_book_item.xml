@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rvBookCard"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/card_height"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:transitionName="tExpandCard"
+    card_view:cardCornerRadius="1dp"
+    card_view:cardElevation="1dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/ivBookCover"
+            android:layout_width="@dimen/book_cover_width"
+            android:layout_height="@dimen/card_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@color/grey_200"
+            android:scaleType="center"
+            android:src="@drawable/sample_cover10"
+            android:transitionName="bookCover" />
+
+        <View
+            android:id="@+id/vColorBar"
+            android:layout_width="5dp"
+            android:layout_height="@dimen/card_height"
+            android:layout_toRightOf="@id/ivBookCover"
+            android:background="@color/grey_400" />
+
+
+        <RelativeLayout
+            android:id="@+id/rvBookInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/vColorBar"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/tvBookName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:minLines="1"
+                android:text="Sample"
+                android:textColor="@color/grey_800"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:transitionName="tBookName" />
+
+            <TextView
+                android:id="@+id/tvBookAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvBookName"
+                android:text="Author"
+                android:textColor="@color/grey_600"
+                android:textSize="14dp"
+                android:transitionName="tBookAuthor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/rvBookInfo"
+            android:layout_toRightOf="@id/vColorBar"
+            android:background="@color/grey_200">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deal Date"
+                    android:textColor="@color/color2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tcdealdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="-4dp"
+                    android:text="0"
+                    android:textColor="@color/color2"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llPriceBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of requets"
+                    android:textColor="@color/color2"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="-4dp"
+                    android:text="0"
+                    android:textColor="@color/color2"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toRightOf="@id/llPriceBox"
+                android:background="@color/grey_300" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

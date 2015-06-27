@@ -117,7 +117,8 @@ public class AddBooksActivity extends AppCompatActivity {
                 toPostBook.put("book_name", scannedBook.book_name);
                 toPostBook.put("publish_date", scannedBook.book_publish_year);
                 toPostBook.put("is_isbn_indexed", true);
-                toPostBook.addAll("book_authors", scannedBook.book_authors);
+                toPostBook.put("book_cover_url", scannedBook.book_cover_URL);
+                toPostBook.put("book_authors", scannedBook.book_author);
 
 
                 final ParseObject adlisting = new ParseObject("adlisting");
