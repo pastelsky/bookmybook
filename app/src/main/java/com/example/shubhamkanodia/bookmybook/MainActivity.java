@@ -1,6 +1,7 @@
 package com.example.shubhamkanodia.bookmybook;
 
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -34,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout lvBooks;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activity);
+
 
         new Prefs.Builder()
                 .setContext(getApplication())
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
                 .setPrefsName(getApplication().getPackageName())
                 .setUseDefaultSharedPreference(true)
                 .build();
+
+        if (!Prefs.getBoolean("Logged In", false)) {
+            Prefs.putBoolean("Logged In", true);
+            startActivity(new Intent(getApplicationContext(), IntroductionActivity_.class));
+            finish();
+        }
 
         String id_and_pw = Prefs.getString("id_and_pw", "");
 
@@ -75,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
     private static String makeFragmentName(int viewId, int index) {
         return "android:switcher:" + viewId + ":" + index;
     }
-
-
 
 
     public class SectionPagerAdapter extends FragmentPagerAdapter {

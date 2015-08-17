@@ -12,6 +12,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -20,8 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.support.v4.app.Fragment;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookListingAdapter;
@@ -30,6 +35,7 @@ import com.example.shubhamkanodia.bookmybook.AddBooksActivity_;
 import com.example.shubhamkanodia.bookmybook.DisplayBookListing;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
+import com.example.shubhamkanodia.bookmybook.Helpers.Metaphone;
 import com.example.shubhamkanodia.bookmybook.IntroductionActivity;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.example.shubhamkanodia.bookmybook.SettingsActivity;
@@ -58,6 +64,8 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
     AlphaInAnimationAdapter animationAdapter;
 
     FloatingActionButton bAddBook;
+    FloatingActionButton bSearch;
+
     Toolbar tbMain;
     ObservableListView lvBooks;
     ProgressBar pbLoading;
@@ -69,7 +77,8 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
     int hideOffset;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;
-
+    Toolbar toolbar;
+    EditText etSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,16 +100,16 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
         }
         View view = inflater.inflate(R.layout.fragment_main_activity,
                 container, false);
-//        setContentView(R.layout.activity_main_activity);
-
 
         bAddBook = (FloatingActionButton) view.findViewById(R.id.bAddBook);
-//        tbMain = (Toolbar) findViewById(R.id.tbMain);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        etSearch = (EditText) view.findViewById(R.id.etSearch);
+        bAddBook = (FloatingActionButton) view.findViewById(R.id.bAddBook);
         lvBooks = (ObservableListView) view.findViewById(R.id.lvBooks);
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
         nvDrawer = (NavigationView) view.findViewById(R.id.nvDrawer);
         dlMain = (DrawerLayout) view.findViewById(R.id.dlMain);
-
+        bSearch = (FloatingActionButton) view.findViewById(R.id.bSearch);
 
         Helper.setAndroidContext(getActivity());
         lvBooks.setScrollViewCallbacks(this);
@@ -173,6 +182,42 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
                     startActivity(intent);
             }
         });
+
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                Log.e("Search query", s.toString());
+            }
+        });
+
+
+        bSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Metaphone m = new Metaphone();
+                m.setMaxCodeLen(20);
+                String s = etSearch.getText().toString();
+
+
+//                Toast.makeText(getActivity(), m.metaphone(s), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getActivity(), "size" + m.getMaxCodeLen(), Toast.LENGTH_LONG).show();
+
+
+                if (m.metaphone("Data Structures and program design in C").contains(m.metaphone(s)))
+                    Toast.makeText(getActivity(), "EQUAL", Toast.LENGTH_LONG).show();
+            }
+        });
+
         return view;
     }
 

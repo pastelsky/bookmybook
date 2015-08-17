@@ -31,6 +31,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.MainActivity;
+import com.example.shubhamkanodia.bookmybook.MainActivity_;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -41,8 +42,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -53,6 +57,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import java.util.List;
 import java.util.Random;
 
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation;
@@ -72,7 +77,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
 
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
-
+    private Boolean existingCustomer = false;
     private ConnectionResult mConnectionResult;
 
     @ViewById
@@ -223,7 +228,7 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
         getProfileInformation();
 
 
-        Intent toStartMain = new Intent(getActivity(), MainActivity.class);
+        Intent toStartMain = new Intent(getActivity(), MainActivity_.class);
         startActivity(toStartMain);
 
     }
@@ -246,50 +251,70 @@ public class IntroPage2Fragment extends Fragment implements View.OnClickListener
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
-                ParseUser user = new ParseUser();
 
+                //Stripping @gmail.com
                 int index = email.indexOf("@");
+                final String id_and_password = email.substring(0, index);
 
-                String id_and_password = email.substring(0, index);
-                user.setUsername(id_and_password);
-                user.setEmail(email);
-                user.setPassword(id_and_password);
 
-                new Prefs.Builder()
-                        .setContext(getActivity())
-                        .setMode(ContextWrapper.MODE_PRIVATE)
-                        .setPrefsName(getActivity().getPackageName())
-                        .setUseDefaultSharedPreference(true)
-                        .build();
+                //Check if user is Existing -
 
-                Prefs.putString("id_and_pw", id_and_password);
-                
-                user.put("phoneVerified", false);
-                user.put("age", currentPerson.getAgeRange().getMin());
-                user.put("gender", currentPerson.getGender() > 0 ? (currentPerson.getGender() == 1 ? "female" : "other") : "male");
-                user.put("name", personName);
-                user.put("installation", ParseInstallation.getCurrentInstallation());
-
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(ParseException e) {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+                query.whereEqualTo("username", id_and_password);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> scoreList, ParseException e) {
                         if (e == null) {
-                            // Hooray! Let them use the app now.
-                            Toast.makeText(getActivity(),
-                                    "Successfully Signed up, please log in.",
-                                    Toast.LENGTH_LONG).show();
+                            Log.d("user status :", "existing");
+                            existingCustomer = true;
+                            ParseUser.logInInBackground(id_and_password, id_and_password);
                         } else {
-                            // Sign up didn't succeed. Look at the ParseException
-                            // to figure out what went wrong
-                            e.printStackTrace();
-                            Toast.makeText(getActivity(),
-                                    "Login failed",
-                                    Toast.LENGTH_LONG).show();
+                            Log.d("score", "Error: " + e.getMessage());
                         }
                     }
                 });
 
-                ParseInstallation.getCurrentInstallation().saveInBackground();
 
+                if (!existingCustomer) {
+                    //Case of New User.
+                    ParseUser user = new ParseUser();
+
+
+                    user.setUsername(id_and_password);
+                    user.setEmail(email);
+                    user.setPassword(id_and_password);
+
+                    new Prefs.Builder()
+                            .setContext(getActivity())
+                            .setMode(ContextWrapper.MODE_PRIVATE)
+                            .setPrefsName(getActivity().getPackageName())
+                            .setUseDefaultSharedPreference(true)
+                            .build();
+
+                    Prefs.putString("id_and_pw", id_and_password);
+
+                    user.put("phoneVerified", false);
+                    user.put("age", currentPerson.getAgeRange().getMin());
+                    user.put("gender", currentPerson.getGender() > 0 ? (currentPerson.getGender() == 1 ? "female" : "other") : "male");
+                    user.put("name", personName);
+                    user.put("installation", ParseInstallation.getCurrentInstallation());
+
+                    user.signUpInBackground(new SignUpCallback() {
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                // Hooray! Let them use the app now.
+                                Toast.makeText(getActivity(),
+                                        "Successfully Signed up, please log in.",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                // Sign up didn't succeed. Look at the ParseException
+                                // to figure out what went wrong
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    ParseInstallation.getCurrentInstallation().saveInBackground();
+                }
 
             } else {
                 Toast.makeText(getActivity().getApplicationContext(),

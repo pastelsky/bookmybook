@@ -31,6 +31,7 @@ public class BookItem {
     public int book_flipkart_price;
     public int book_amazon_price;
     public int book_mrp;
+    public int book_selling_price;
 
     public LatLng geoPoint;
 
@@ -41,24 +42,24 @@ public class BookItem {
 
     }
 
-    public BookItem(){
+    public BookItem() {
 
     }
 
     @Override
-    public boolean equals(Object b){
-            if (b == this) {
-                return true;
-            }
-            if (!(b instanceof BookItem)) {
-                return false;
-            }
-            BookItem c = (BookItem) b;
+    public boolean equals(Object b) {
+        if (b == this) {
+            return true;
+        }
+        if (!(b instanceof BookItem)) {
+            return false;
+        }
+        BookItem c = (BookItem) b;
 
         return book_name.equals(c.book_name) && book_author.equals(c.book_author);
-        }
+    }
 
-    public void normalize(){
+    public void normalize() {
 
         this.book_name = toTitleCase(this.book_name);
         this.book_name = this.book_name.replaceAll("[(]?[pP]aper[bB]ack[)]?", "");
@@ -85,7 +86,7 @@ public class BookItem {
     }
 
 
-    public String toString(){
+    public String toString() {
 
         return this.book_name + " is the book!";
     }

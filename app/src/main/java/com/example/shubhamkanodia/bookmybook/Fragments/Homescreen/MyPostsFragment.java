@@ -116,6 +116,9 @@ public class MyPostsFragment extends Fragment implements ObservableScrollViewCal
         ParseQuery<ParseObject> query = ParseQuery.getQuery("adlisting");
         query.whereEqualTo("ad_poster", ParseUser.getCurrentUser());
 
+        if (ParseUser.getCurrentUser() != null)
+            Log.e("err", ParseUser.getCurrentUser().toString());
+
         if (!Helper.isNetworkOnline())
             query.fromLocalDatastore();
 

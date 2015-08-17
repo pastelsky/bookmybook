@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,13 +36,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
-import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
+import com.example.shubhamkanodia.bookmybook.Adapters.scannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
+import com.example.shubhamkanodia.bookmybook.Helpers.Metaphone;
 import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
 import com.example.shubhamkanodia.bookmybook.UI.widget.RippleButton;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -105,7 +108,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     String presentURL = "";
     ArrayList<BookItem> booksScanned = new ArrayList<BookItem>();
-    ScannedBooksAdapter sbAdapter;
+    scannedBooksAdapter sbAdapter;
 
     boolean isAutofocus = true;
     boolean isFlash = false;
@@ -115,6 +118,13 @@ public class AddBooksActivity extends AppCompatActivity {
 
     MenuItem postButton;
     MenuItem addMoreButton;
+    BookItem scannedBook;
+
+    public int bookCounter = 0;
+
+    Metaphone metaphone;
+
+    ArrayList<ParseObject> pareseObjectArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +133,8 @@ public class AddBooksActivity extends AppCompatActivity {
 
         suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         fScanner.stopCamera();
+
+        metaphone = new Metaphone();
 
         List<BarcodeFormat> formats = new ArrayList<BarcodeFormat>();
 
@@ -160,7 +172,6 @@ public class AddBooksActivity extends AppCompatActivity {
 //                adlisting.saveEventually();
 //            }
 //        });
-
 
 
         setBlinkingLaser(true);
@@ -210,7 +221,7 @@ public class AddBooksActivity extends AppCompatActivity {
             }
         });
 
-        sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
+        sbAdapter = new scannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
 
         dlvScannedResult.setAdapter(sbAdapter);
 
@@ -311,9 +322,9 @@ public class AddBooksActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        BookItem scannedBook = AppEngineParser.getBookFromJSON(response);
+                        scannedBook = AppEngineParser.getBookFromJSON(response);
                         cvLoading.setVisibility(View.GONE);
-                        booksScanned.add(0, scannedBook);
+                        booksScanned.add(bookCounter++, scannedBook);
                         sbAdapter.notifyDataSetChanged();
                         setUpAfterSuccesslScan();
 
@@ -408,6 +419,48 @@ public class AddBooksActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_post) {
+            for (int i = 0; i < booksScanned.size(); i++) {
+
+                final ParseObject toPostBook = new ParseObject("book");
+                toPostBook.put("ISBN_13", booksScanned.get(i).book_ISBN_13);
+                toPostBook.put("book_name", booksScanned.get(i).book_name);
+                toPostBook.put("publish_date", booksScanned.get(i).book_publish_year);
+                toPostBook.put("is_isbn_indexed", true);
+                toPostBook.put("book_cover_url", booksScanned.get(i).book_cover_URL);
+                toPostBook.put("book_authors", booksScanned.get(i).book_author);
+
+
+                final ParseObject adlisting = new ParseObject("adlisting");
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser != null) {
+                    adlisting.put("ad_poster", currentUser);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Not signed in", Toast.LENGTH_SHORT).show();
+                }
+
+                adlisting.put("book", toPostBook);
+                adlisting.put("book_name_encoded", metaphone.metaphone(booksScanned.get(i).book_name));
+
+                Log.e("name : ", metaphone.metaphone(booksScanned.get(i).book_name));
+                Log.e("Author : ", metaphone.metaphone(booksScanned.get(i).book_author));
+
+                adlisting.put("book_author_encoded", metaphone.metaphone(booksScanned.get(i).book_author));
+                pareseObjectArray.add(adlisting);
+
+//                adlisting.saveEventually();
+            }
+
+
+            //Posting Multiple Ads at one ago.
+            try {
+                ParseObject.saveAll(pareseObjectArray);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
