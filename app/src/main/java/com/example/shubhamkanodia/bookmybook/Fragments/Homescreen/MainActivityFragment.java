@@ -210,7 +210,7 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
 
 //                Toast.makeText(getActivity(), m.metaphone(s), Toast.LENGTH_LONG).show();
 
-                Toast.makeText(getActivity(), "size" + m.getMaxCodeLen(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), "size" + m.getMaxCodeLen(), Toast.LENGTH_LONG).show();
 
 
                 if (m.metaphone("Data Structures and program design in C").contains(m.metaphone(s)))
