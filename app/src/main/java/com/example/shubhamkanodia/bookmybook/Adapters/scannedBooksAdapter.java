@@ -65,7 +65,7 @@ import java.util.HashMap;
  */
 
 
-public class scannedBooksAdapter extends ArrayAdapter<BookItem>{
+public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
 
     private ArrayList<BookItem> books;
     Context context;
@@ -75,7 +75,7 @@ public class scannedBooksAdapter extends ArrayAdapter<BookItem>{
 
     DynamicListView dlvScannedResults;
 
-    public scannedBooksAdapter(Context context, int textViewResourceId, ArrayList<BookItem> objects) {
+    public ScannedBooksAdapter(Context context, int textViewResourceId, ArrayList<BookItem> objects) {
         super(context, textViewResourceId, objects);
         this.context = context;
         books = objects;

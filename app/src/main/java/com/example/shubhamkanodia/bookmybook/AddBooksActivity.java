@@ -36,7 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
-import com.example.shubhamkanodia.bookmybook.Adapters.scannedBooksAdapter;
+import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Metaphone;
 import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
@@ -108,7 +108,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
     String presentURL = "";
     ArrayList<BookItem> booksScanned = new ArrayList<BookItem>();
-    scannedBooksAdapter sbAdapter;
+    ScannedBooksAdapter sbAdapter;
 
     boolean isAutofocus = true;
     boolean isFlash = false;
@@ -221,7 +221,7 @@ public class AddBooksActivity extends AppCompatActivity {
             }
         });
 
-        sbAdapter = new scannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
+        sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
 
         dlvScannedResult.setAdapter(sbAdapter);
 
