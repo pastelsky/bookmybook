@@ -26,9 +26,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -71,7 +78,6 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
     Context context;
     ViewHolder holder;
     static int toAnimate = 0;
-    HashMap<BookItem, Integer> mIdMap = new HashMap<BookItem, Integer>();
 
     DynamicListView dlvScannedResults;
 
@@ -90,7 +96,7 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView,final ViewGroup parent) {
 
         if (convertView == null)
 
@@ -98,7 +104,6 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
             convertView = vi.inflate(R.layout.scanned_book_item, null);
-//            dlvScannedResults = (DynamicListView) parent;
 
             holder = new ViewHolder();
 
@@ -131,7 +136,6 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
         holder.tvBookAuthor.setText(book.book_author);
         holder.tvMRPPrice.setText("\u20B9" + book.book_mrp);
         holder.tvfpPrice.setText("\u20B9" + book.book_flipkart_price);
-        holder.tvLabel1.setText("#" + getItemCount());
 
         holder.rlPlacePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,10 +158,46 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
 
         holder.ibRemove.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
 
-                books.remove(view.getTag());
-                notifyDataSetChanged();
+                AnimationSet fadeSlide = new AnimationSet(true);
+
+                Animation fade = new AlphaAnimation(1,0);
+                Animation slide = new TranslateAnimation(Animation.RELATIVE_TO_SELF, Helper.getDeviceWidth(), Animation.RELATIVE_TO_SELF, Animation.RELATIVE_TO_SELF);
+
+                fadeSlide.addAnimation(fade);
+                fadeSlide.addAnimation(slide);
+                fadeSlide.setInterpolator(new FastOutSlowInInterpolator());
+                fadeSlide.setDuration(500);
+
+                final int curPos = (int) view.getTag() -
+                        ( (DynamicListView) parent).getFirstVisiblePosition();
+
+                final View v = parent.getChildAt(curPos);
+
+                v.startAnimation(fadeSlide);
+
+                fadeSlide.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                        books.remove((int) view.getTag());
+                        notifyDataSetChanged();
+
+                        ((AddBooksActivity_) context).setUpAfterSuccesslScan();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
             }
         });
 
@@ -170,27 +210,25 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
             @Override
             public void onGlobalLayout() {
 
-                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     holder.rangeBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-                else {
+                } else {
                     holder.rangeBar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
 
                 holder.rangeBar.setMax(MRP);
 
                 int rangeBarWidth = holder.rangeBar.getWidth() - holder.rangeBar.getPaddingRight() - Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics()));
-                int adjustedWidthFP = rangeBarWidth -  holder.lvFlipHint.getWidth() / 2;
-                int adjustedWidthMRP = rangeBarWidth -  holder.lvMRPHint.getWidth() / 2 + Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, context.getResources().getDisplayMetrics()));
-
+                int adjustedWidthFP = rangeBarWidth - holder.lvFlipHint.getWidth() / 2;
+                int adjustedWidthMRP = rangeBarWidth - holder.lvMRPHint.getWidth() / 2 + Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, context.getResources().getDisplayMetrics()));
 
 
                 Log.e("FP", fpPrice + "");
                 Log.e("MRP", MRP + "");
                 Log.e("rangeBarWidth", rangeBarWidth + "");
 
-                float toMoveMRP =adjustedWidthMRP;
-                float toMoveFP = (float)fpPrice / MRP * adjustedWidthFP ;
+                float toMoveMRP = adjustedWidthMRP;
+                float toMoveFP = (float) fpPrice / MRP * adjustedWidthFP;
 
                 Log.e("toMoveFP", toMoveFP + "");
 
@@ -221,7 +259,6 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
                 mH.tvMRPPrice.animate().setDuration(200).translationY(-8).alpha(1).start();
 
 
-
             }
 
             @Override
@@ -232,10 +269,9 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
                 mH.tvMRPPrice.animate().setDuration(200).translationY(0).alpha(0).start();
 
 
-
                 int curProgress = seekBar.getProgress();
 
-                if( curProgress > book.book_mrp * 0.95  && curProgress < book.book_mrp *1.05 ){
+                if (curProgress > book.book_mrp * 0.95 && curProgress < book.book_mrp * 1.05) {
 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
@@ -245,9 +281,7 @@ public class ScannedBooksAdapter extends ArrayAdapter<BookItem>{
 
                         }
                     });
-                }
-
-                else if( curProgress > book.book_flipkart_price * 0.95  && curProgress < book.book_flipkart_price *1.05 ){
+                } else if (curProgress > book.book_flipkart_price * 0.95 && curProgress < book.book_flipkart_price * 1.05) {
 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override

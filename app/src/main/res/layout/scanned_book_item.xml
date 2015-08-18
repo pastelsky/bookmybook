@@ -24,6 +24,7 @@
             android:layout_marginLeft="12dp"
             tools:text="#1"
             android:textAllCaps="true"
+            android:visibility="invisible"
             android:textColor="@color/grey_600"
             android:textSize="18dp" />
 
@@ -33,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="-6dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/ripple"
             android:clickable="true"
             android:contentDescription="Cancel ad"
@@ -43,7 +45,7 @@
             android:id="@+id/rlHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvLabel1"
+            android:layout_below="@id/ibRemove"
             android:background="@color/white"
             android:padding="@dimen/activity_horizontal_margin">
 
@@ -70,9 +72,10 @@
                 android:ellipsize="middle"
                 android:fontFamily="sans-serif"
                 android:hint="What's the name?"
-                android:lines="2"
+                android:minLines="2"
                 android:singleLine="false"
                 android:textSize="16sp"
+                android:inputType="textNoSuggestions"
                 tools:text="Java Complete Reference A Guide to Adventure and misgivingg about this beautiful" />
 
 
@@ -86,6 +89,7 @@
                 android:hint="Who wrote the book?"
                 android:maxLines="2"
                 android:singleLine="false"
+                android:inputType="textNoSuggestions"
                 android:textSize="16dp"
                 tools:text="Herbert Schilt" />
 
@@ -141,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-2dp"
+                        android:clickable="false"
                         android:orientation="vertical">
 
                         <TextView
@@ -176,6 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-2dp"
+                        android:clickable="false"
                         android:orientation="vertical">
 
                         <TextView

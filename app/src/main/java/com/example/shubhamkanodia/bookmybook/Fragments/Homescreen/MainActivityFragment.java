@@ -31,6 +31,7 @@ import com.example.shubhamkanodia.bookmybook.DisplayBookListing;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.IntroductionActivity;
+import com.example.shubhamkanodia.bookmybook.IntroductionActivity_;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.example.shubhamkanodia.bookmybook.SettingsActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
@@ -86,7 +87,7 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
 
         if (!Prefs.getBoolean("Logged In", false)) {
             Prefs.putBoolean("Logged In", true);
-            startActivity(new Intent(getActivity(), IntroductionActivity.class));
+            startActivity(new Intent(getActivity(), IntroductionActivity_.class));
             getActivity().finish();
         }
         View view = inflater.inflate(R.layout.fragment_main_activity,

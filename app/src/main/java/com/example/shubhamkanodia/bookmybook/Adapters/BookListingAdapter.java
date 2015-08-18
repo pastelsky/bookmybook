@@ -114,7 +114,6 @@ public class BookListingAdapter extends ArrayAdapter<BookItem> {
 
                 if (lineCnt > 1 && holder.bCover!=null && v !=null)
                      holder.bCover.getLayoutParams().height = v.getLayoutParams().height;
-                Log.e("Linecount:", "is " + Helper.pxToDp(120));
 
                 // Perform any actions you want based on the line count here.
             }
