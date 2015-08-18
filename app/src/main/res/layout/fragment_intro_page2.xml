@@ -41,7 +41,7 @@
         android:textColor="@color/colorLight"
         android:gravity="center"
         android:textSize="18sp"
-        android:layout_margin="@dimen/snackbar_padding_vertical"
+        android:layout_margin="16sp"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
         android:id="@+id/tvHeading"

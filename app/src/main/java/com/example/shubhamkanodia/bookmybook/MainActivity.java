@@ -2,6 +2,7 @@ package com.example.shubhamkanodia.bookmybook;
 
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -63,16 +64,10 @@ public class MainActivity extends AppCompatActivity {
         ParseInstallation.getCurrentInstallation().saveInBackground();
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setTabTextColors(Color.parseColor("#44ffffff"), Color.parseColor("#ffffff"));
         ViewPager viewPager = (ViewPager) findViewById(R.id.vpIntro);
 
-//        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-//        }
-
-//        mPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
-//        viewPager.setAdapter(mPagerAdapter);
         viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
