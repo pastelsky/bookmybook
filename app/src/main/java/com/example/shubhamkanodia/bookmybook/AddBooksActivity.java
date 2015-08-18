@@ -2,10 +2,13 @@
 
 package com.example.shubhamkanodia.bookmybook;
 
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -39,10 +42,13 @@ import com.example.shubhamkanodia.bookmybook.Adapters.BookItem;
 import com.example.shubhamkanodia.bookmybook.Adapters.ScannedBooksAdapter;
 import com.example.shubhamkanodia.bookmybook.Helpers.AnimationHelper;
 import com.example.shubhamkanodia.bookmybook.Helpers.Metaphone;
+import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
 import com.example.shubhamkanodia.bookmybook.Parsers.AppEngineParser;
 import com.example.shubhamkanodia.bookmybook.UI.widget.RippleButton;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -50,6 +56,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.androidannotations.annotations.Click;
@@ -58,6 +65,7 @@ import org.androidannotations.annotations.LongClick;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,13 +114,13 @@ public class AddBooksActivity extends AppCompatActivity {
     CardView cvLoading;
 
 
-    String presentURL = "";
     ArrayList<BookItem> booksScanned = new ArrayList<BookItem>();
     ScannedBooksAdapter sbAdapter;
 
     boolean isAutofocus = true;
     boolean isFlash = false;
     boolean didUserScan = false;
+    boolean areBooksAvailable = false;
     public static int clickedListPosition;
     private AnimationSet blinkMove;
 
@@ -132,10 +140,9 @@ public class AddBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_books);
 
         suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-        fScanner.stopCamera();
 
         metaphone = new Metaphone();
-
+        fScanner.stopCamera();
         List<BarcodeFormat> formats = new ArrayList<BarcodeFormat>();
 
         formats.add(BarcodeFormat.EAN13);
@@ -178,22 +185,17 @@ public class AddBooksActivity extends AppCompatActivity {
 
         dlvScannedResult.setEmptyView(rvEmptyLv);
 
-        bExpandPanel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-
-                AnimationHelper.fadeOut((View) rvEmptyLv, 200);
-
-            }
-        });
+        new Prefs.Builder()
+                .setContext(this)
+                .setMode(ContextWrapper.MODE_PRIVATE)
+                .setPrefsName(getPackageName())
+                .setUseDefaultSharedPreference(true)
+                .build();
 
 
         suPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
-            public void onPanelSlide(View view, float v) {
-
-            }
+            public void onPanelSlide(View view, float v) {}
 
             @Override
             public void onPanelCollapsed(View view) {
@@ -212,20 +214,23 @@ public class AddBooksActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPanelAnchored(View view) {
-            }
+            public void onPanelAnchored(View view) {}
 
             @Override
-            public void onPanelHidden(View view) {
-                fScanner.stopCamera();
-            }
+            public void onPanelHidden(View view) {fScanner.stopCamera();}
         });
 
-        sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
-
-        dlvScannedResult.setAdapter(sbAdapter);
 
 
+
+    }
+
+
+    @Click
+    public void bExpandPanel(){
+
+        suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        AnimationHelper.fadeOut((View) rvEmptyLv, 200);
     }
 
 
@@ -296,6 +301,27 @@ public class AddBooksActivity extends AppCompatActivity {
             Log.e("Scanner", "onResume - SP Expanded - start");
         }
 
+
+        //Code to restore data from previous scans
+        Type type = new TypeToken<List<BookItem>>(){}.getType();
+        Gson gson = new Gson();
+        String toRestore = Prefs.getString("saved_scanned_books", "");
+        ArrayList<BookItem> temp = new ArrayList<BookItem>();
+        temp = gson.fromJson(toRestore, type);
+
+        if(toRestore != "" && temp.size() > 0) {
+
+                booksScanned = temp;
+                areBooksAvailable = true;
+                sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
+                dlvScannedResult.setAdapter(sbAdapter);
+        }
+        else {
+            sbAdapter = new ScannedBooksAdapter(this, R.layout.scanned_book_item, booksScanned);
+            dlvScannedResult.setAdapter(sbAdapter);
+        }
+        setUpAfterSuccesslScan();
+
     }
 
     public void onPause() {
@@ -308,14 +334,31 @@ public class AddBooksActivity extends AppCompatActivity {
 
     public void doAfterScanResult(final String isbn) {
 
+        if( !Helper.validateIsbn13(isbn))
+        {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("The camera moved too fast. Try enabling flash if you're in low lighting conditions.")
+                .setCancelable(true)
+                .setPositiveButton("Scan Again", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        suPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                    }
+                })
+                .setTitle("Oops, could'nt catch that!")
+        .setIcon(R.mipmap.ic_barcode_);
+        final AlertDialog alert = builder.create();
+        alert.show();
+            return;
+        }
+
         didUserScan = true;
         cvLoading.setVisibility(View.VISIBLE);
 
         bExpandPanel.setVisibility(View.GONE);
-        RequestQueue google_queue = Volley.newRequestQueue(this);
         RequestQueue flipkart_queue = Volley.newRequestQueue(this);
 
         Log.e("Scanned Result", isbn);
+        Log.e("Requesting:" , AppEngineParser.appEngineApiURL + isbn);
 
         JsonObjectRequest jsonRequest_flipkart = new JsonObjectRequest
                 (Request.Method.GET, AppEngineParser.appEngineApiURL + isbn, (String) null, new Response.Listener<JSONObject>() {
@@ -388,12 +431,45 @@ public class AddBooksActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        Log.e("Stopping", "now");
+        Gson toSave = new Gson();
+        String toSaveString = toSave.toJson(booksScanned);
+        Log.e("TAG","jsonBooks = " + toSaveString);
+
+        Prefs.putString("saved_scanned_books", toSaveString);
+
+    }
+
     public void setUpAfterSuccesslScan() {
 
-        getSupportActionBar().setTitle(sbAdapter.getItemCount() == 1 ? "Scanned Item (" + sbAdapter.getItemCount() + ")" : "Scanned Items (" + sbAdapter.getItemCount() + " )");
+        if(booksScanned.size() > 0) {
 
-        postButton.setVisible(true);
-        addMoreButton.setVisible(true);
+            getSupportActionBar().setTitle(sbAdapter.getItemCount() == 1 ? "Scanned Item (" + sbAdapter.getItemCount() + ")" : "Scanned Items (" + sbAdapter.getItemCount() + " )");
+
+            if(postButton != null && addMoreButton!= null) {
+
+                postButton.setVisible(true);
+                addMoreButton.setVisible(true);
+            }
+        }
+
+        else {
+
+            getSupportActionBar().setTitle("Post an ad");
+
+            if(postButton != null && addMoreButton!= null) {
+
+                postButton.setVisible(false);
+                addMoreButton.setVisible(false);
+            }
+
+            setBlinkingLaser(true);
+
+        }
 
     }
 
@@ -404,8 +480,11 @@ public class AddBooksActivity extends AppCompatActivity {
 
         postButton = menu.findItem(R.id.action_post);
         addMoreButton = menu.findItem(R.id.action_addmore);
-        postButton.setVisible(false);
-        addMoreButton.setVisible(false);
+
+        if(!areBooksAvailable) {
+            postButton.setVisible(false);
+            addMoreButton.setVisible(false);
+        }
 
         return true;
     }
