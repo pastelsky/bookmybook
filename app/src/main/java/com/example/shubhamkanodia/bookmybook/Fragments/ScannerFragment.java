@@ -2,9 +2,9 @@ package com.example.shubhamkanodia.bookmybook.Fragments;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,9 +32,8 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
 /**
  * Created by shubhamkanodia on 18/06/15.
  */
-public class ScannerFragment extends Fragment implements MessageDialogFragment.MessageDialogListener,
-        ZBarScannerView.ResultHandler, FormatSelectorDialogFragment.FormatSelectorDialogListener,
-        CameraSelectorDialogFragment.CameraSelectorDialogListener {
+public class ScannerFragment extends Fragment implements
+        ZBarScannerView.ResultHandler {
     private static final String FLASH_STATE = "FLASH_STATE";
     private static final String AUTO_FOCUS_STATE = "AUTO_FOCUS_STATE";
     private static final String SELECTED_FORMATS = "SELECTED_FORMATS";
@@ -77,7 +76,6 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
 
     public void stopCameraFromFragment(){
         mScannerView.stopCamera();
-        closeMessageDialog();
     }
 
     @Override
@@ -115,38 +113,39 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.menu_flash:
-                mFlash = !mFlash;
-                if (mFlash) {
-                    item.setTitle(R.string.flash_on);
-                } else {
-                    item.setTitle(R.string.flash_off);
-                }
-                mScannerView.setFlash(mFlash);
-                return true;
-            case R.id.menu_auto_focus:
-                mAutoFocus = !mAutoFocus;
-                if (mAutoFocus) {
-                    item.setTitle(R.string.auto_focus_on);
-                } else {
-                    item.setTitle(R.string.auto_focus_off);
-                }
-                mScannerView.setAutoFocus(mAutoFocus);
-                return true;
-            case R.id.menu_formats:
-                DialogFragment fragment = FormatSelectorDialogFragment.newInstance(this, mSelectedIndices);
-                fragment.show(getActivity().getSupportFragmentManager(), "format_selector");
-                return true;
-            case R.id.menu_camera_selector:
-                mScannerView.stopCamera();
-                DialogFragment cFragment = CameraSelectorDialogFragment.newInstance(this, mCameraId);
-                cFragment.show(getActivity().getSupportFragmentManager(), "camera_selector");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        // Handle presses on the action bar items
+//        switch (item.getItemId()) {
+//            case R.id.menu_flash:
+//                mFlash = !mFlash;
+//                if (mFlash) {
+//                    item.setTitle(R.string.flash_on);
+//                } else {
+//                    item.setTitle(R.string.flash_off);
+//                }
+//                mScannerView.setFlash(mFlash);
+//                return true;
+//            case R.id.menu_auto_focus:
+//                mAutoFocus = !mAutoFocus;
+//                if (mAutoFocus) {
+//                    item.setTitle(R.string.auto_focus_on);
+//                } else {
+//                    item.setTitle(R.string.auto_focus_off);
+//                }
+//                mScannerView.setAutoFocus(mAutoFocus);
+//                return true;
+//            case R.id.menu_formats:
+//                DialogFragment fragment = FormatSelectorDialogFragment.newInstance(this, mSelectedIndices);
+//                fragment.show(getActivity().getSupportFragmentManager(), "format_selector");
+//                return true;
+//            case R.id.menu_camera_selector:
+//                mScannerView.stopCamera();
+//                DialogFragment cFragment = CameraSelectorDialogFragment.newInstance(this, mCameraId);
+//                cFragment.show(getActivity().getSupportFragmentManager(), "camera_selector");
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -158,7 +157,7 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
         mScannerView.startCamera(mCameraId);
     mScannerView.setResultHandler(this);
     mScannerView.setFlash(mFlash);
-    mScannerView.setAutoFocus(mAutoFocus);
+        mScannerView.setAutoFocus(mAutoFocus);
 
         if(suPanelLayout.getPanelState()!= SlidingUpPanelLayout.PanelState.EXPANDED) {
             Log.e("Scanner", "Fragment - initialize - SP Not Expanded - stopping");
@@ -195,49 +194,6 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
     }
 
 
-    public void showMessageDialog(String message) {
-        DialogFragment fragment = MessageDialogFragment.newInstance("Scan Results", message, this);
-        fragment.show(getActivity().getSupportFragmentManager(), "scan_results");
-    }
-
-    public void closeMessageDialog() {
-        closeDialog("scan_results");
-    }
-
-    public void closeFormatsDialog() {
-        closeDialog("format_selector");
-    }
-
-    public void closeDialog(String dialogName) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        DialogFragment fragment = (DialogFragment) fragmentManager.findFragmentByTag(dialogName);
-        if (fragment != null) {
-            fragment.dismiss();
-        }
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        // Resume the camera
-        mScannerView.startCamera(mCameraId);
-        mScannerView.setFlash(mFlash);
-        mScannerView.setAutoFocus(mAutoFocus);
-    }
-
-    @Override
-    public void onFormatsSaved(ArrayList<Integer> selectedIndices) {
-        mSelectedIndices = selectedIndices;
-        setupFormats();
-    }
-
-    @Override
-    public void onCameraSelected(int cameraId) {
-        mCameraId = cameraId;
-        mScannerView.startCamera(mCameraId);
-        mScannerView.setFlash(mFlash);
-        mScannerView.setAutoFocus(mAutoFocus);
-    }
-
     public void setupFormats() {
         List<BarcodeFormat> formats = new ArrayList<BarcodeFormat>();
         if (mSelectedIndices == null || mSelectedIndices.isEmpty()) {
@@ -261,8 +217,6 @@ public class ScannerFragment extends Fragment implements MessageDialogFragment.M
         Log.e("Scanner", "Fragment - onPause - stopping");
 
         mScannerView.stopCamera();
-        closeMessageDialog();
-        closeFormatsDialog();
     }
 
 }

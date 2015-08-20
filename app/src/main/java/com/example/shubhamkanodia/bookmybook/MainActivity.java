@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
-import com.example.shubhamkanodia.bookmybook.Fragments.Homescreen.MainActivityFragment;
+import com.example.shubhamkanodia.bookmybook.Fragments.Homescreen.MainActivityFragment_;
 import com.example.shubhamkanodia.bookmybook.Fragments.Homescreen.MyPostsFragment;
 import com.example.shubhamkanodia.bookmybook.Fragments.Homescreen.MyRequestsFragment;
 import com.example.shubhamkanodia.bookmybook.Helpers.Helper;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new MyPostsFragment();
                 case 1:
-                    return new MainActivityFragment();
+                    return new MainActivityFragment_();
                 case 2:
                     return new MyRequestsFragment();
 

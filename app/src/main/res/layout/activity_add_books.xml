@@ -154,7 +154,7 @@
 
                 <fragment
                     android:id="@+id/fScanner"
-                    android:name="com.example.shubhamkanodia.bookmybook.Fragments.ScannerFragment"
+                    class="com.example.shubhamkanodia.bookmybook.Fragments.ScannerFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.support.v4.app.Fragment;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import com.example.shubhamkanodia.bookmybook.IntroductionActivity;
 import com.example.shubhamkanodia.bookmybook.IntroductionActivity_;
 import com.example.shubhamkanodia.bookmybook.R;
 import com.example.shubhamkanodia.bookmybook.SettingsActivity;
+import com.example.shubhamkanodia.bookmybook.UI.SearchBooksActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -53,9 +55,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FocusChange;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@EFragment(R.layout.fragment_main_activity)
 public class MainActivityFragment extends Fragment implements ObservableScrollViewCallbacks {
 
     final String BOOKS_LABEL = "Test";
@@ -64,71 +71,46 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
     BookListingAdapter bAdapter;
     AlphaInAnimationAdapter animationAdapter;
 
+    @ViewById
     FloatingActionButton bAddBook;
-    FloatingActionButton bSearch;
 
-    Toolbar tbMain;
+    @ViewById
     ObservableListView lvBooks;
+
+    @ViewById
     ProgressBar pbLoading;
 
+    @ViewById
     NavigationView nvDrawer;
+
+
+    @ViewById
     DrawerLayout dlMain;
+
+    @ViewById
+    RelativeLayout rvEmptyLv;
 
 
     int hideOffset;
     boolean areControlsHidden;
     boolean verticalThresholdExceeded;
-    Toolbar toolbar;
+
+    @ViewById
     EditText etSearch;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
 
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        new Prefs.Builder()
-                .setContext(getActivity())
-                .setMode(ContextWrapper.MODE_PRIVATE)
-                .setPrefsName(getActivity().getPackageName())
-                .setUseDefaultSharedPreference(true)
-                .build();
-
-        if (!Prefs.getBoolean("Logged In", false)) {
-            Prefs.putBoolean("Logged In", true);
-            startActivity(new Intent(getActivity(), IntroductionActivity_.class));
-            getActivity().finish();
-        }
-        View view = inflater.inflate(R.layout.fragment_main_activity,
-                container, false);
-
-        bAddBook = (FloatingActionButton) view.findViewById(R.id.bAddBook);
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        etSearch = (EditText) view.findViewById(R.id.etSearch);
-        bAddBook = (FloatingActionButton) view.findViewById(R.id.bAddBook);
-        lvBooks = (ObservableListView) view.findViewById(R.id.lvBooks);
-        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
-        nvDrawer = (NavigationView) view.findViewById(R.id.nvDrawer);
-        dlMain = (DrawerLayout) view.findViewById(R.id.dlMain);
-        bSearch = (FloatingActionButton) view.findViewById(R.id.bSearch);
-
-        Helper.setAndroidContext(getActivity());
-        lvBooks.setScrollViewCallbacks(this);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-        ParseAnalytics.trackAppOpenedInBackground(getActivity().getIntent());
-
         AnimationHelper.zoomInView(bAddBook, 700);
-//        setSupportActionBar(tbMain);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         areControlsHidden = false;
         hideOffset = Helper.getDeviceHeight() / 10;
         verticalThresholdExceeded = false;
 
-        lvBooks.setEmptyView(view.findViewById(R.id.rvEmptyLv));
+        lvBooks.setEmptyView(rvEmptyLv);
         bAdapter = new BookListingAdapter(getActivity(), R.layout.book_item, books);
-//        animationAdapter = new AlphaInAnimationAdapter(bAdapter);
-//        animationAdapter.setAbsListView(lvBooks);
         lvBooks.setAdapter(bAdapter);
 
         nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -184,77 +166,50 @@ public class MainActivityFragment extends Fragment implements ObservableScrollVi
             }
         });
 
-
-        etSearch.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-            }
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                Log.e("Search query", s.toString());
-            }
-        });
+//        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    Toast.makeText(getActivity(), "got the focus", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getActivity(), "lost the focus", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
 
 
-        bSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Metaphone m = new Metaphone();
-                m.setMaxCodeLen(20);
-                String s = etSearch.getText().toString();
+
+//        bSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Metaphone m = new Metaphone();
+//                m.setMaxCodeLen(20);
+//                String s = etSearch.getText().toString();
+//
+//
+////                Toast.makeText(getActivity(), m.metaphone(s), Toast.LENGTH_LONG).show();
+//
+////                Toast.makeText(getActivity(), "size" + m.getMaxCodeLen(), Toast.LENGTH_LONG).show();
+//
+//
+//                if (m.metaphone("Data Structures and program design in C").contains(m.metaphone(s)))
+//                    Toast.makeText(getActivity(), "EQUAL", Toast.LENGTH_LONG).show();
+//            }
+//        });
 
 
-//                Toast.makeText(getActivity(), m.metaphone(s), Toast.LENGTH_LONG).show();
-
-//                Toast.makeText(getActivity(), "size" + m.getMaxCodeLen(), Toast.LENGTH_LONG).show();
 
 
-                if (m.metaphone("Data Structures and program design in C").contains(m.metaphone(s)))
-                    Toast.makeText(getActivity(), "EQUAL", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        return view;
     }
 
-    /* Click Handlers */
+    @FocusChange
+    public void etSearch(View v, boolean hasFocus){
 
-//    @Click
-//    void bAddBook() {
-//        Intent intent = new Intent(this, AddBooksActivity_.class);
-//        startActivity(intent);
-//    }
+        Intent intent = new Intent(getActivity(), SearchBooksActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(0, 0);
 
-//    @ItemClick
-//    void lvBooks(int pos) {
-//        Intent intent = new Intent(this, DisplayBookListing_.class);
-//        intent.putExtra("bookCover", bAdapter.getCoverByPosition(pos));
-//
-//        View clickedview = bAdapter.getViewByPosition(pos);
-//        intent.putExtra("bookName", bAdapter.getItem(pos).book_name);
-//        intent.putExtra("bookAuthor", bAdapter.getItem(pos).book_author);
-//
-//        if (Helper.isLollipop()) {
-//
-//            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-//
-//            ActivityOptions options = ActivityOptions.
-//                    makeSceneTransitionAnimation(MainActivity.this,
-//                            Pair.create(clickedview.findViewById(R.id.ivBookCover), "bookCover"),
-//                            Pair.create(clickedview.findViewById(R.id.tvBookName), "tBookName"),
-//                            Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-//
-//            startActivity(intent, options.toBundle());
-//
-//        } else
-//            startActivity(intent);
-//    }
-
+    }
 
     public void queryBooks() {
 

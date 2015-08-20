@@ -151,7 +151,7 @@ dependencies {
 
 
     }
-    compile('me.dm7.barcodescanner:zbar:1.8.2') {
+    compile('me.dm7.barcodescanner:zbar:1.7.2') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
 

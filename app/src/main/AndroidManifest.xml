@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.shubhamkanodia.bookmybook">
+    package="com.example.shubhamkanodia.bookmybook" >
 
     <uses-sdk tools:overrideLibrary="com.xgc1986.ripplebutton" />
 
@@ -32,10 +32,10 @@
     <application
         android:name=".Application"
         android:allowBackup="true"
-        tools:replace="icon, label"
         android:icon="@mipmap/ic_color_book"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:replace="icon, label" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -44,11 +44,11 @@
             android:value="AIzaSyDhYFHGbswCr4RbBQX71RaaDy3GAhNJJbY" />
 
         <activity
-
             android:name=".MainActivity_"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -74,8 +74,8 @@
         </activity>
         <activity
             android:name=".AddBooksActivity_"
-            android:windowSoftInputMode="adjustPan"
-            android:label="@string/title_activity_add_books" />
+            android:label="@string/title_activity_add_books"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".IntroductionActivity_"
             android:label="@string/title_activity_introduction" >
@@ -124,7 +124,6 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-
         <activity
             android:name=".MyAdsActivity"
             android:label="@string/title_activity_my_ads"
@@ -136,6 +135,10 @@
         <activity
             android:name=".PlacePickerActivity_"
             android:label="@string/title_activity_place_picker" >
+        </activity>
+        <activity
+            android:name=".UI.SearchBooksActivity"
+            android:label="@string/title_activity_search_books" >
         </activity>
     </application>
 
